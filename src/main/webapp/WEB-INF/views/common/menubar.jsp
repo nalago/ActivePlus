@@ -21,9 +21,11 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 		</div>
 		<div class="sidenav">
 			<c:url var="goCal" value="calendar.ap"/>
+
 			<c:url var="goMail" value="mail.ap"/>
+			<c:url var="goTask" value="diagnosisList.ap"/>
 			<a href="${ goCal }">일정관리</a>
-			<a href="#">업무관리</a>
+			<a href="${ goTask }">업무관리</a>
 			<a href="#">게시판</a>
 			<a href="#">메신저</a> 
 			<a href="${ goMail }">메일</a>
