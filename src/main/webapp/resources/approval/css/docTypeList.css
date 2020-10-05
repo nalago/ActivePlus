@@ -1,0 +1,55 @@
+#doctypeList{
+    width: 200px;
+    height: 93.5vh;
+    display: inline-block;
+    background-color: rgb(236, 228, 228);
+}
+#listButtonclose, #listButtonopen{
+    width: 30px;
+    height: 30px;
+    float: right;
+    cursor: pointer;
+}
+#listButtonopen{
+    float: none;
+    position: absolute;
+    margin-top: 3px;
+    display: none;
+}
+#listTop{
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+
+.tree{
+  color:#393939;
+}
+.tree, .tree ul{
+  list-style: none;
+  padding-left:17px;
+}
+.tree *:before{
+  width:17px;
+  height:17px;
+  display:inline-block;
+}
+.tree label{
+  cursor: pointer;
+}
+.tree label:before{
+  content:'\f115';
+  font-family: fontello;
+}
+
+
+.tree input[type="checkbox"] {
+  display: none;
+}
+.tree input[type="checkbox"]:checked~ul {
+  display: none;
+}
+.tree input[type="checkbox"]:checked+label:before{
+  content:'\f114';
+  font-family: fontello;
+}
