@@ -7,7 +7,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js" 
 integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Active Plus</title>
 <link rel="stylesheet" href="${ contextPath }/resources/css/basic.css"/>
 </head>
 <body>
@@ -21,15 +21,14 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 		</div>
 		<div class="sidenav">
 			<c:url var="goCal" value="calendar.ap"/>
-
 			<c:url var="goMail" value="mail.ap"/>
 			<c:url var="goTask" value="diagnosisList.ap"/>
 			<a href="${ goCal }">일정관리</a>
-			<a href="${ goTask }">업무관리</a>
+			<a href="${ goTask }">전자결재</a>
 			<a href="#">게시판</a>
 			<a href="#">메신저</a> 
 			<a href="${ goMail }">메일</a>
-			<a href="#">라이브러리</a>
+			<a href="#">인사관리</a>
 		</div>
 </body>
 </html>
