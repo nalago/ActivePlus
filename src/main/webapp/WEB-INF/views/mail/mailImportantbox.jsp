@@ -7,67 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="${ contextPath }/resources/css/mail/mail.css"/>
-<style>
-#clearBtn{
-	width:70px;
-	height:30px;
-}
 
-.mailSend {
-  float:left; 
-  margin-left:15px;
-  width:7%; height:70px;
-  position:fixed;
-  background:#afd3b3;
-  font-size:22px;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  display: inline-block;
-  line-height: 1em;
-  outline: none;
-  position: fixed;
-  text-transform: uppercase;
-}
-.mailSend:before,
-.mailSend:after {
-  border-color: transparent;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
-  border-style: solid;
-  border-width: 0;
-  content: "";
-  height: 24px;
-  position: absolute;
-  width: 24px;
-}
-.mailSend:before {
-  border-color: #63ab68;
-  border-right-width: 2px;
-  border-top-width: 2px;
-  right: -5px;
-  top: -5px;
-}
-.mailSend:after {
-  border-bottom-width: 2px;
-  border-color: #63ab68;
-  border-left-width: 2px;
-  bottom: -5px;
-  left: -5px;
-}
-.mailSend:hover,
-.mailSend.hover {
-  background-color: #63ab68;
-}
-.mailSend:hover:before,
-.mailSend.hover:before,
-.mailSend:hover:after,
-.mailSend.hover:after {
-  height: 100%;
-  width: 100%;
-}
-
-</style>
 </head>
 <body>
 	<nav id="side">
@@ -88,10 +28,10 @@
 			<div id="buttonDiv">
 				<input type="checkbox" id="allCheck" class="check" value="all" name="allCheck">
 				 <label for="allCheck" >전체선택</label>
-				<button id="deleteBtn" class="btn">삭제</button>
+				<button id="deleteBtn" class="btn red">삭제</button>
 				<button id="deliverBtn" class="btn" >전달</button>
 				<button id="sendBtn" class="btn" >답장</button>
-				<button id="clearBtn" class="btn" >보관해제</button>
+				<button id="clearBtn" class="long" >보관해제</button>
 			</div>
 			<div id="mailTable">
 				<table width="90%" >
@@ -108,7 +48,7 @@
 					</thead>
 					<tbody align="center">
 						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
+							<td><input type="checkbox" value="1" class="check" name="checkList"></td>
 							<td>최나라</td>
 							<td>김낑깡</td>
 							<td>보관함 입니다. 계춘할망 슬픈데 빡치는 영화.. 할망 너무 안타까워 가나다라마바사아자차카타파하</td>
@@ -205,17 +145,8 @@
 			</div>
 		</div>
 	</section>
-	<script>
-		var all = $("allCheck");
-		$("#allCheck").on("click", function(){
-			if($("#allCheck").prop("checked"))
-				$("input[type=checkbox]").prop("checked", true);
-			else 
-				$("input[type=checkbox]").prop("checked", false);
-				
-		});
-	
-	</script>
+		<script type="text/javascript" src="${ contextPath }/resources/js/mail/mail.js"></script>
+
 
 </body>
 </html>

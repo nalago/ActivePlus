@@ -5,6 +5,7 @@
 	font-weight: normal; 
 	font-style: normal; 
 }
+/* 버튼 */
 #buttonDiv{
 	width:90%;
 	height:35px;
@@ -18,24 +19,35 @@
 	border:1px solid #113f36;
 	border-radius:5px;
 	background: white;
+}
+.long{
+	width:70px;
+	height:30px;
+	font-size:12px;
+	float:right;
+	margin-right:5px;
+	border:1px solid #113f36;
+	border-radius:5px;
+	background: white;
 	color:#113f36;
 	cursor:pointer;
 }
-.btn:hover{
+.red{
+	color:red;
+	border-color:red;
+	
+}
+.btn:hover, .long:hover{
 	background:#113f36;
 	color:#ffffff;
 	cursor:pointer;
 }
-#deleteBtn{
-	color:red;
-	border-color:red;
-	cursor:pointer;
-}
-#deleteBtn:hover{
+.red:hover{
 	background:red;
 	color:white;
 	cursor:pointer;
-}
+} 
+
 
 
 /*테이블*/
@@ -61,6 +73,7 @@ td{
 	font-size:15px; 
 	font-family: "S-CoreDream-3Light", serif;	
 } 
+
 
 /* 메일 쓰기 버튼 */
 .mailSend {

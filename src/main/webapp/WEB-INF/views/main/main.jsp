@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 <style>
 #userInfo {
-	margin-left:70px;
+	margin-left:300px;
 	width: 300px;
 	height: 600px;
 	border: 1px solid black;
@@ -16,18 +16,20 @@
 
 #mainT {
 	margin: 30px;
-	margin-left:370px;
+	margin-left:700px;
 }
 h3{
-	margin-left:50px;
+	margin-top:70px;
 }
 .mainT{
-	width:500px;
+	width:700px;
 }
 tbody{
 	text-align:center;
+	color:#8d8d8d;
 }
-
+thead {
+}
 </style>
 </head>
 <body>
@@ -36,6 +38,10 @@ tbody{
 	</nav>
 	<section>
 		<div id="userInfo">
+			<div id="basic">
+				<div id="picture"></div>
+				<div id="user">${ emp.team } ${ emp.dept }, ${ emp.name }님</div>
+			</div>
 		</div>
 		<div id="mainT">
 			<h3>메일</h3>
