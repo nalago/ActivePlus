@@ -1,0 +1,112 @@
+@charset "UTF-8";
+
+@font-face {
+     font-family: "S-CoreDream-5Medium";
+     src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff") format("woff");
+     font-weight: normal;
+     font-style: normal;
+}
+@font-face { 
+	font-family: 'S-CoreDream-3Light'; 
+	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff'); 
+	font-weight: normal; 
+	font-style: normal; 
+}
+*{
+	font-family: "S-CoreDream-5Medium", serif; 
+	box-sizing: border-box; 
+}
+
+/* ========== menubar =========== */
+#user{
+    padding-left: 10px;
+    width: 120px;
+    font-size: 13px;
+    color : black;
+    
+}
+
+#logo{
+    box-sizing: border-box;
+    height: 50px;
+    width: 170px;
+    float: right;
+    margin-right: 20px;
+}
+#info{
+    margin-left: 15px;
+    text-decoration: none;
+    color : black;
+    font-size: 11px;
+}
+
+#profile{
+	width: 100%;
+	/* border: 1px solid black; */
+    height: 55px;
+}
+#profile span{
+	/* border: 1px solid green; */
+	margin: auto;
+}
+.sidenav {
+	overflow-x: hidden;
+	background-color: #63ab68;
+	width: 150px;
+	height: 100vh;
+	display: inline-block;
+	padding-right:20px;
+	float: left;
+}
+
+.sidenav a {
+	color: white;
+	width: 100%;
+	font-size: 18px;
+	text-align: right;
+	text-decoration: none;
+	display: block;
+	margin-top: 50px;
+}
+
+.sidenav a:hover {
+	color: #f1f1f1;
+}
+
+/* === content ===*/
+
+section{
+	/* border: solid 1px blue; */
+	margin-left:150px;
+	width : 90%;
+	height : 100%;
+}
+
+#subMenu{
+	border-bottom: 2px solid #63ab68;
+}
+	
+#submenuTitle{
+	/* border: 1px solid yellow; */
+	font-size: 20px;
+	margin-top: 30px;
+	margin-left: 50px;
+	font-size:20px;
+	width: 95%;
+	height: 5%;
+	
+}
+#contentDiv{
+	margin: 50px;
+	/* border: solid 1px red; */
+	width: 95%;
+	height: 100%;
+	
+}
+.menu{
+	text-decoration: none;
+	margin-left: 50px;
+	color : #232425;
+	
+}
+
