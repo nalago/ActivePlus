@@ -1,0 +1,59 @@
+@charset "UTF-8";
+/* 문서 */
+    #docwrap {
+        width: 885px;
+        height: 93.5vh;
+        display: inline-block;
+        float: right;
+       
+    }
+    #doc{
+        width: 700px;
+        height: 100%;
+        border: 1px solid lightgray;
+        overflow-y: scroll;
+    }
+    .signaturewrap{
+        padding: 0;
+        width: 100px;
+        height: 150px;
+        float: right;
+        display: inline-block;
+    }
+    .signature{
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        width: 100%;
+    }
+    .sign{
+        height: 60%;
+        border: 1px solid black;
+        border-bottom: 0px;
+    }
+    .name, .date, .job{
+        height: 16%;
+        border: 1px solid black;
+    }
+    .name, .job{
+        border-bottom: 0px;
+    }
+    #sign_title{
+        width: 80%;
+        height: 50px;
+        font-size: 20px;
+        font-weight: 500;
+        border: 0;
+    }
+    #job, #name, #sign_date{
+        float: right;
+        background-color: rgb(248, 248, 248);
+        border: 0;
+        box-sizing: content-box;
+        margin-right: 5px;
+        
+    }
+    #editor{
+        width: 100%;
+        height: 600px;
+    }
