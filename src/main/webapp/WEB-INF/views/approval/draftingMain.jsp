@@ -13,62 +13,7 @@
     
 <title>Insert title here</title>
 <style>
-#doctypeList{
-        width: 200px;
-        height: 93.5vh;
-        display: inline-block;
-        background-color: rgb(236, 228, 228);
-    }
-    #listButtonclose, #listButtonopen{
-        width: 30px;
-        height: 30px;
-        float: right;
-        cursor: pointer;
-    }
-    #listButtonopen{
-        float: none;
-        position: absolute;
-        margin-top: 3px;
-        display: none;
-    }
-    #listTop{
-        margin-top: 3px;
-        margin-left: 3px;
-    }
-   
 
-    .tree{
-      color:#393939;
-    }
-    .tree, .tree ul{
-      list-style: none;
-      padding-left:17px;
-    }
-    .tree *:before{
-      width:17px;
-      height:17px;
-      display:inline-block;
-    }
-    .tree label{
-      cursor: pointer;
-    }
-    .tree label:before{
-      content:'\f115';
-      font-family: fontello;
-    }
-    
-    
-    .tree input[type="checkbox"] {
-      display: none;
-    }
-    .tree input[type="checkbox"]:checked~ul {
-      display: none;
-    }
-    .tree input[type="checkbox"]:checked+label:before{
-      content:'\f114';
-      font-family: fontello;
-    }
-    
     #ListWrap{
         display: inline-block;
         width: 65%;
@@ -110,46 +55,9 @@
 </style>
 </head>
 <body>
-<div id="profile">
-        <span id="user" class="profile">###님</span>
-        <span ><a id="info" class="profile" href="#">개인정보</a></span>
-        <a href="main.ap">
-        <img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">
-        </a>
-    </div>
-    <div class="sidenav">
-			<c:url var="goCal" value="calendar.ap"/>
-			<c:url var="goMail" value="mail.ap"/>
-			<c:url var="goApproval" value="approvalMain.ap"/>
-			<a href="${ goCal }">일정관리</a>
-			<a href="${ goApproval }">전자결재</a>
-			<a href="#">게시판</a>
-			<a href="#">메신저</a> 
-			<a href="${ goMail }">메일</a>
-			<a href="#">인사관리</a>
-		</div>
+<jsp:include page="../common/menubar.jsp"/>
 <section>
-        <div id="subMenu">
-            <ul class="navi">
-                <li>
-                <c:url var="goDrafting" value="draftingMain.ap"/>
-                    <a class="menu" href="${goDrafting }">기안</a>
-                    <ul>
-                        <li><a class="menu" href="${goDrafting }">문서 양식</a></li>
-                        <li><a class="menu" href="#">임시 문서</a></li>
-                        <li><a class="menu" href="#">개인 양식</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="menu" href="#">결재</a>
-                    <ul>
-                        <li><a class="menu" href="#">결재 받을 문서</a></li>
-                        <li><a class="menu" href="#">결재 예정 문서</a></li>
-                        <li><a class="menu" href="#">결재 완료 양식</a></li>
-                    </ul>
-                </li>
-            </ul>
-            </div>
+        <jsp:include page="submenu/topMenu.jsp"/>
             <script>
                 $(function(){
                     $("#listButtonopen").on("click",function(){
@@ -164,37 +72,7 @@
                     });
                 });
             </script>
-            <div id="doctypeList">
-                <div id="listTop">
-                        <svg id="listButtonclose" viewBox="0 0 15 15" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
-                    <h5>문서 카테고리</h5>
-                </div>
-                <hr>
-                <div id="treewrap">
-                    <nav class="tree">
-                        <ul>
-                            <li><input type="checkbox" id="publicdoc">
-                                <label for="publicdoc">공통양식</label>
-                                <ul>
-                                    <li><input type="checkbox" id="personal">
-                                        <label for="personal">인사</label></li>
-                                    <li><input type="checkbox" id="task">
-                                        <label for="task">업무</label></li>
-                                    <li><input type="checkbox" id="report">
-                                        <label for="report">보고</label></li>
-                                </ul>
-                            </li>
-                            <li><input type="checkbox" id="privatedoc">
-                                <label for="privatedoc">개인양식</label></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>            
-                    <svg id="listButtonopen" viewBox="0 0 15 15" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                    </svg>
+            <jsp:include page="submenu/docTypeList.jsp"/>
            <div id="ListWrap">
                <br>
                <h3>공통 양식</h3>
@@ -205,7 +83,8 @@
                         <th class="doccontent">설명</th>
                     </tr>
                     <tr>
-                        <td class="doctitle">휴가신청서</td>
+                    <c:url var="docDetail" value="docDetail.ap"/>
+                        <td class="doctitle"><a href="${docDetail }">휴가신청서</a></td>
                         <td class="doccontent">휴가 작성 양식</td>
                     </tr>
                 </table>
@@ -217,6 +96,9 @@
                  <a class="paging" href="#">></a>
              </div>
            </div>
+           <script>
+           		
+           </script>
     </section>
 
 </body>

@@ -13,4 +13,8 @@ public class ApprovalController {
 	public String goDrafting() {
 		return "approval/draftingMain";
 	}
+	@RequestMapping("docDetail.ap")
+	public String docDetail() {
+		return "approval/drafting";
+	}
 }
