@@ -48,27 +48,8 @@
 			<a href="#">인사관리</a>
 		</div>
     <section>
-            <div id="subMenu">
-            <ul class="navi">
-                <li>
-                <c:url var="goDrafting" value="draftingMain.ap"/>
-                    <a class="menu" href="${goDrafting }">기안</a>
-                    <ul>
-                        <li><a class="menu" href="${goDrafting }">문서 양식</a></li>
-                        <li><a class="menu" href="#">임시 문서</a></li>
-                        <li><a class="menu" href="#">개인 양식</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="menu" href="#">결재</a>
-                    <ul>
-                        <li><a class="menu" href="#">결재 받을 문서</a></li>
-                        <li><a class="menu" href="#">결재 예정 문서</a></li>
-                        <li><a class="menu" href="#">결재 완료 양식</a></li>
-                    </ul>
-                </li>
-            </ul>
-            </div>
+            <jsp:include page="submenu/topMenu.jsp"/>
+            
         <br><br><br><br>
         
         <div class="temporaryList Wrap">

@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/base.css"/>
+<link rel="stylesheet" href="${contextPath }/resources/approval/css/sign-table.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/doc.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/submenu.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/fontello/css/fontello.css">
@@ -177,27 +178,43 @@
             <jsp:include page="submenu/apvMenu.jsp"/>
             <div id="docwrap">
                 <div id="doc">
-                	<div id="docTop">
-                    <div class="signaturewrap">
-                        <div class="signature job">관리자</div>
-                        <div class="signature sign"></div>
-                        <div class="signature name">윤영관</div>
-                        <div class="signature date"></div>
-                    </div>
-                    <br><br><br><br><br><br><br>
-                    <hr>
-                    &nbsp;
-                    <input type="text" id="sign_title" placeholder="기안 제목">
-                    <hr>&nbsp;
-                    직위/직책 <input type="text" id="job" readonly placeholder="관리자">
-                    <hr>&nbsp;
-                    작성자명 <input type="text" id="name" readonly placeholder="윤영관">
-                    <hr>&nbsp;
-                    작성일 <input type="text" id="sign_date" readonly>
-                    <hr>&nbsp;
-                    기안 내용
+                <!-- 기안 문서 양식 예 -->
+                	<div id="docContent">
+                        <div id="sign-table-wrapper">
+                            <div id="table-wrap">
+                                <table id="sign-table">
+                                    <tr>
+                                        <td>관리자</td>
+                                    </tr>
+                                    <tr>
+                                        <td><img id="sign" src="resources/images/sign.png"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>이름</td>
+                                    </tr>
+                                    <tr>
+                                        <td>날짜</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                       
+                        <hr>
+                        &nbsp;
+                        <input type="text" id="sign_title" placeholder="기안 제목">
+                        <hr>&nbsp;
+                        직위/직책 <input type="text" id="job" readonly placeholder="관리자">
+                        <hr>&nbsp;
+                        작성자명 <input type="text" id="name" readonly placeholder="윤영관">
+                        <hr>&nbsp;
+                        작성일 <input type="text" id="sign_date" readonly>
+                        <hr>&nbsp;
+                        기안 내용
+                        <br><br>
+
                     </div>
                     <textarea id="editor">
+                    <!-- 양식작성란 -->
                         <p>&nbsp;</p>
 
 <table cellspacing="0" style="border-collapse:collapse; width:596px">
@@ -318,9 +335,12 @@
 			<td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
 		</tr>
 		<tr>
-			<td colspan="10" rowspan="3" style="border-bottom:.7px solid black; border-left:1px solid black; border-right:.7px solid black; border-top:none; height:50px; text-align:center; vertical-align:middle; white-space:nowrap"></td>
+			<td colspan="10" rowspan="5" style="border-bottom:.7px solid black; border-left:1px solid black; border-right:.7px solid black; border-top:none; height:154px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:24px"><strong><span style="font-family:돋움,monospace">주식회사 회사명</span></strong></span></td>
 		</tr>
-		
+		<tr>
+		</tr>
+		<tr>
+		</tr>
 		<tr>
 		</tr>
 		<tr>
@@ -329,6 +349,8 @@
 </table>
 
                     </textarea>
+                </div>
+                
                 </div>
                 
                 <script>
@@ -381,7 +403,7 @@
                     <h5>&nbsp;알림</h5>
                 </div>
                 <div id="confirmcontent">
-                    <h4>승인하시겠습니까?</h4>
+                    <h4>기안하시겠습니까?</h4>
                     <button id="confirmOk">OK</button>
                     <button id="confirmCancel" onclick="closeconfirm();">CANCEL</button>
                 </div>

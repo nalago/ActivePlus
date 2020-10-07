@@ -118,15 +118,12 @@
         display: inline-block;
         position: fixed;
     }
-    #doc_acceptButton, #doc_cancelButton{
-        width: 177px;
+    #approvalCancel{
+        width: 100%;
+        height: 50px;
         border: 0;
-        border-radius: 5%;
-    }
-
-    #doc_acceptButton{
-        color: snow;
-        background-color: rgb(62, 142, 218) ;
+        border-radius: 7px;
+        background-color: rgb(204, 202, 202);
     }
     #apvprocedure{
         border: 1px solid black;
@@ -195,7 +192,7 @@
             <jsp:include page="submenu/docTypeList.jsp"/>
             
             <div id="docListwrap">
-                <h4>결재 예정 문서</h4>
+                <h4>결재 완료 문서</h4>
                 <table id="docList">
                     <tr>
                         <th id="doctitle">문서명</th>
@@ -404,24 +401,14 @@
 </table>               
                 </div>
                 <div id="docmenu">
-                    <!--승인 버튼 -->
-                    <button id="doc_acceptButton" onclick="confirm();">
-                        <svg width="40px" color="snow" viewBox="0 0 16 16" class="bi bi-file-earmark-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 0h5.5v1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h1V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/>
-                            <path d="M9.5 3V0L14 4.5h-3A1.5 1.5 0 0 1 9.5 3z"/>
-                            <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-                        </svg>
-                        승인
-                    </button>
-                    <!--반려 버튼-->
-                    <button id="doc_cancelButton">
+                    <!--결재 취소 버튼-->
+                    <button id="approvalCancel">
                         <svg width="40px" color="gray" viewBox="0 0 16 16" class="bi bi-file-earmark-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4 0h5.5v1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h1V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/>
                             <path d="M9.5 3V0L14 4.5h-3A1.5 1.5 0 0 1 9.5 3z"/>
                             <path fill-rule="evenodd" d="M6.146 7.146a.5.5 0 0 1 .708 0L8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 0 1 0-.708z"/>                            
                         </svg>
-                        반려
-                    </button>
+                        결재 취소</button>
                     <div id="apvprocedure">
                         결재 순서
                     </div>
@@ -441,7 +428,7 @@
                 <h5>&nbsp;알림</h5>
             </div>
             <div id="confirmcontent">
-                <h4>승인하시겠습니까?</h4>
+                <h4>취소하시겠습니까?</h4>
                 <button id="confirmOk">OK</button>
                 <button id="confirmCancel">CANCEL</button>
             </div>
@@ -449,11 +436,9 @@
     </div>
  
     <script>
-    function confirm(msg){
-        $("#confirmwrap").css("display","block");
-       document.getElementById("msg").innerHTML="<h4>"+msg+"하시겠습니까?<h4>";
-        console.log(msg);
-    }
+        function confirm(){
+            $("#confrimwrap").css("display","block");
+        }
         /* modal창 닫기 */
         $(function(){
             $("#modalclose").on("click",function(){
