@@ -80,16 +80,25 @@
                             <li><input type="checkbox" id="publicdoc">
                                 <label for="publicdoc">공통양식</label>
                                 <ul>
-                                    <li><input type="checkbox" id="personal">
-                                        <label for="personal">인사</label></li>
-                                    <li><input type="checkbox" id="task">
-                                        <label for="task">업무</label></li>
-                                    <li><input type="checkbox" id="report">
-                                        <label for="report">보고</label></li>
+                                    <li><input type="checkbox" id="personal" checked>
+                                        <label for="personal">인사</label>
+                                        <ul>
+                                        	<li>휴가 신청서</li>
+                                        	<li>병가 신청서</li>
+                                        	<li>퇴직 신청서</li>
+                                        </ul>
+                                    </li>
+                                    <li><input type="checkbox" id="task" checked>
+                                        <label for="task">업무</label>
+                                    </li>
+                                    <li><input type="checkbox" id="report" checked>
+                                        <label for="report">보고</label>
+                                    </li>
                                 </ul>
                             </li>
                             <li><input type="checkbox" id="privatedoc">
-                                <label for="privatedoc">개인양식</label></li>
+                                <label for="privatedoc">개인양식</label>
+                            </li>
                         </ul>
                     </nav>
                 </div>
