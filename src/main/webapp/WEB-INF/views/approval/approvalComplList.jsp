@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/base.css"/>
+<link rel="stylesheet" href="${contextPath }/resources/approval/css/doc.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/sign-table.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/submenu.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/fontello/css/fontello.css">
@@ -73,7 +74,7 @@
         height: 100%;
         background: rgba(0,0,0,0.5);
         position: fixed;
-        display: none;
+        
 }
 #modal{
     width: 1200px;
@@ -241,7 +242,7 @@
                                     <td>관리자</td>
                                 </tr>
                                 <tr>
-                                    <td><img id="sign" src="resources/images/sign.png"></td>
+                                    <td><img id="sign" src="${contextPath }/resources/approval/images/sign.png"></td>
                                 </tr>
                                 <tr>
                                     <td>이름</td>

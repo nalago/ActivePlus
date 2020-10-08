@@ -83,7 +83,7 @@
                         <th class="doccontent">설명</th>
                     </tr>
                     <tr>
-                    <c:url var="docDetail" value="docDetail.ap"/>
+                    <c:url var="docDetail" value="tempDocDetail.ap"/>
                         <td class="doctitle"><a href="${docDetail }">휴가신청서</a></td>
                         <td class="doccontent">휴가 작성 양식</td>
                     </tr>

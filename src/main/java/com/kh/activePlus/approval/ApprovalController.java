@@ -37,5 +37,9 @@ public class ApprovalController {
 	public String goApprovalCompleteList() {
 		return "approval/approvalComplList";
 	}
+	@RequestMapping("tempDocDetail.ap")
+	public String goTempDocDetail() {
+		return "approval/tempDoc";
+	}
 	
 }
