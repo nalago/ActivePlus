@@ -73,7 +73,7 @@
         height: 100%;
         background: rgba(0,0,0,0.5);
         position: fixed;
-        display: none;
+        
 }
 #modal{
     width: 1200px;
@@ -241,7 +241,7 @@
                                     <td>관리자</td>
                                 </tr>
                                 <tr>
-                                    <td><img id="sign" src="resources/images/sign.png"></td>
+                                    <td><img id="sign" src="${contextPath }/resources/approval/images/sign.png"></td>
                                 </tr>
                                 <tr>
                                     <td>이름</td>
