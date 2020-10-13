@@ -13,8 +13,16 @@
 		<typeAlias type="com.kh.spring.notice.model.vo.Notice" alias="Notice"/>
 		
 	</typeAliases> -->
+	<typeAliases>
+		<typeAlias type="com.kh.activePlus.approval.model.vo.Doc" alias="Doc"/>
+		<typeAlias type="com.kh.activePlus.approval.model.vo.ApvDoc" alias="ApvDoc"/>
+		<typeAlias type="com.kh.activePlus.approval.model.vo.Approval" alias="Approval"/>
+		<typeAlias type="com.kh.activePlus.approval.model.vo.ApprovalSearch" alias="ApprovalSearch"/>
+	</typeAliases>
 
-
+		<mappers>
+			<mapper resource="mappers/approval-mapper.xml"/>
+		</mappers>
 	<!-- <mappers>
 		<mapper resource="mappers/member-mapper.xml"/>
 		<mapper resource="mappers/board-mapper.xml"/>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="approvalMapper">
+
+	<resultMap id="DocResultSet" type="Doc">
+		<id property="DocNo" column="DOCNO"/>
+		<result property="docTitle" column="DOCTITLE"/>
+		<result property="docContent" column="DOCCONTENT"/>
+		<result property="docStatus" column="DOCSTATUS"/>
+		<result property="docType" column="DOCTYPE"/>
+	</resultMap>
+
+	<resultMap id="ApvDocResultSet" type="ApvDoc">
+		<id property="apvDocNo" column="APVDOCNO"/>
+		<result property="apvDocTitle" column="APVDOCTITLE"/>
+		<result property="apvDocContent" column="APVDOCCONTENT"/>
+		<result property="apvDocStatus" column="APVDOCSTATUS"/>
+		<result property="apdCreateDate" column="APV_CREATE_DATE"/>
+		<result property="apdModifyDate" column="APV_MODIFY_DATE"/>
+		<result property="apdStep" column="APDSTEP"/>
+		<result property="apdPath" column="APDPATH"/>
+		<result property="docNo" column="DOCNO"/>
+		<result property="empId" column="EMP_ID"/>
+		<result property="apvDocFileCount" column="APVDOCFILECOUNT"/>
+	</resultMap>
+
+	<resultMap id="ApprovalResultSet" type="Approval">
+		<id property="apvNo" column="APVNO"/>
+		<result property="apvDocNo" column="APVDOCNO"/>
+		<result property="apvStep" column="APVSTEP"/>
+		<result property="apvType" column="APVTYPE"/>
+		<result property="apvResult" column="APVRESULT"/>
+		<result property="apvComment" column="APVCOMMNET"/>
+		<result property="apvCompDate" column="APV_COMP_DATE"/>
+		<result property="reciveDate" column="RECIVE_DATE"/>
+		<result property="empId" column="EMP_ID"/>
+	</resultMap>
+	
+	
+
+	<select id="selectApvDocList" parameterType="String" resultMap="ApvDocResultSet">
+		SELECT * 
+		FROM APV_DOC
+		WHERE APVDOCSTATUS = #{apvDocStatus}
+		AND EMP_ID = #{empId}
+		ORDER BY APVDOCNO DESC
+	</select>
+
+
+
+
+
+
+
+
+
+
+</mapper>

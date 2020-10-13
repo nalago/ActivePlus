@@ -26,27 +26,13 @@
         margin-top: 100px;
     }
 
+	#temporaryList{
+		text-align:center;
+	}
 </style>
 </head>
 <body>
-    <div id="profile">
-        <span id="user" class="profile">###님</span>
-        <span ><a id="info" class="profile" href="#">개인정보</a></span>
-        <a href="main.ap">
-        <img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">
-        </a>
-    </div>
-    <div class="sidenav">
-			<c:url var="goCal" value="calendar.ap"/>
-			<c:url var="goMail" value="mail.ap"/>
-			<c:url var="goApproval" value="approvalMain.ap"/>
-			<a href="${ goCal }">일정관리</a>
-			<a href="${ goApproval }">전자결재</a>
-			<a href="#">게시판</a>
-			<a href="#">메신저</a> 
-			<a href="${ goMail }">메일</a>
-			<a href="#">인사관리</a>
-		</div>
+    <jsp:include page="../common/menubar.jsp"/>
     <section>
             <jsp:include page="submenu/topMenu.jsp"/>
             
@@ -55,7 +41,20 @@
         <div class="temporaryList Wrap">
             <h4 class="title">임시 저장 문서</h4>
             <div id="temporaryList">
-
+				<c:if test="${ empty tempDocList }">
+					<h3>저장 된 임시 문서가 없습니다.</h3>
+				</c:if>
+				<c:if test="${ !empty tempDocList }">
+					<c:forEach var="d" items="${ tempDocList }" begin="0" end="5">
+						<table>
+							<tr>
+								<td width="50">${ d.apvDocNo }</td>
+								<td width="200">${ d.apvDocTitle }</td>
+								<td width="200">${ d.apvCreateDate }</td>
+							</tr>
+						</table>
+					</c:forEach>
+				</c:if>
             </div>
         </div>
 
