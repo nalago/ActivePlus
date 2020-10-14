@@ -19,6 +19,7 @@
         width: 65%;
         height: 70%;
         margin-left: 50px;
+        margin-top:100px;
         position: absolute;
         border: 1px solid black;
     }
@@ -73,6 +74,7 @@
                 });
             </script>
             <jsp:include page="submenu/docTypeList.jsp"/>
+            
            <div id="ListWrap">
                <br>
                <h3>공통 양식</h3>

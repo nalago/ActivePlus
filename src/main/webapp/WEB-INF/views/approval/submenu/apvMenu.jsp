@@ -40,6 +40,8 @@
         float: right;
         border-radius: 7px;
         border: 0;
+        height:30px;
+        width:50px;
     }
     #selectLine{
         width: 250px;

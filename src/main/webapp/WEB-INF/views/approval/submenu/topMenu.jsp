@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="${contextPath }/resources/approval/css/submenu.css"/>
 <title>Insert title here</title>
 </head>
 <body>

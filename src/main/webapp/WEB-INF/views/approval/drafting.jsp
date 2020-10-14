@@ -9,10 +9,10 @@
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/base.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/sign-table.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/doc.css"/>
-<link rel="stylesheet" href="${contextPath }/resources/approval/css/submenu.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/fontello/css/fontello.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script src="${contextPath }/resources/approval/ckeditor/ckeditor.js"></script>
+<script src="${contextPath }/resources/approval/ckeditor/config.js"></script>
 <title>Insert title here</title>
 <style>
     
@@ -187,7 +187,7 @@
                                         <td>관리자</td>
                                     </tr>
                                     <tr>
-                                        <td><img id="sign" src="resources/images/sign.png"></td>
+                                        <td><img id="sign" src="${contextPath }/resources/approval/images/sign.png"></td>
                                     </tr>
                                     <tr>
                                         <td>이름</td>
@@ -216,7 +216,6 @@
                     <textarea id="editor">
                     <!-- 양식작성란 -->
                         <p>&nbsp;</p>
-
 <table cellspacing="0" style="border-collapse:collapse; width:596px">
 	<tbody>
 		<tr>
@@ -335,7 +334,7 @@
 			<td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
 		</tr>
 		<tr>
-			<td colspan="10" rowspan="5" style="border-bottom:.7px solid black; border-left:1px solid black; border-right:.7px solid black; border-top:none; height:154px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:24px"><strong><span style="font-family:돋움,monospace">주식회사 회사명</span></strong></span></td>
+			<td colspan="10" rowspan="5" style="border-bottom:.7px solid black; border-left:1px solid black; border-right:.7px solid black; border-top:none; height:54px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:24px"></span></td>
 		</tr>
 		<tr>
 		</tr>
@@ -347,7 +346,6 @@
 		</tr>
 	</tbody>
 </table>
-
                     </textarea>
                 </div>
                 
@@ -355,10 +353,11 @@
                 
                 <script>
                     CKEDITOR.replace("editor",{
-                        extraPlugins:"confighelper"
+                       
                     });
                 </script>
                 </div>
+              
         </section>
         <div id="apvmodalwrap">
             <div id="apvmodal">
