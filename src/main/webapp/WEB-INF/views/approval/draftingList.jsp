@@ -52,6 +52,10 @@
     color:black;
     text-decoration: none;
 }
+ td{
+ 	cursor:pointer;
+ }
+ 
     
 </style>
 </head>
@@ -79,27 +83,74 @@
                <br>
                <h3>공통 양식</h3>
                <br>
+               <c:url var="docDetail" value="docDetail.ap">
+               	<c:param name="docNo" value="${doc.docNo }"/>
+               	<c:param name="page" value="${pi.currentPage }"/>
+               </c:url>
                 <table id="docList">
+                <thead>
                     <tr>
                         <th class="doctitle">양식명</th>
                         <th class="doccontent">설명</th>
                     </tr>
+                 <thead>
+                    <tbody>
+                    <c:if test="${ empty dList }">
                     <tr>
-                    <c:url var="docDetail" value="docDetail.ap"/>
-                        <td class="doctitle"><a href="${docDetail }">휴가신청서</a></td>
-                        <td class="doccontent">휴가 작성 양식</td>
-                    </tr>
+                    	<td colspan="2">양식이 없습니다.</td>
+                    <tr>
+                    </c:if>
+                    <c:if test="${ !empty dList }">
+                    	<c:forEach var="d" items="${ dList }">
+                    	<tr>
+                    		<td>${d.docTitle }</td>
+                    		<td>${d.docExplantion }</td>
+                    	<tr>
+                    	</c:forEach>
+                    </c:if>
+                    </tbody>
                 </table>
                 <br><br>
                 <div class="pagingwrap">
-                 <a class="paging" href="#"><</a>
-                 <a class="paging" href="#">1</a>
-                 <a class="paging" href="#">2</a>
-                 <a class="paging" href="#">></a>
+                <c:if test="${pi.currentPage <= 1 }">                
+                	&lt;
+                </c:if>
+                <c:if test="${pi.currentPage < 1 }">
+                	<c:url var="before" value="draftingList.ap">
+                		<c:param name="page" value="${ pi.currentPage - 1 }"/>
+                	</c:url>                
+	                 <a class="paging" href="${ before }">&lt;</a>
+                </c:if>
+                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+                	<c:if test="${ p eq pi.currentPage }">
+                	<font color="green" size="4">${ p }</font>
+                	</c:if>
+                	<c:if test="${ p ne pi.currentPage }">
+                		<c:url var="pagination" value="draftingList.ap">
+                			<c:param name="page" value="${ p }"/>
+                		</c:url>
+                		<a href="${pagination }">${ p }</a>
+                	</c:if>
+                </c:forEach>
+                 <c:if test="${ pi.endPage <= pi.maxPage }">
+                 	&gt;
+                 </c:if>
+                 <c:if test="${ pi.endPage < pi.maxPage }">
+                 	<c:url var="after" value="draftingList.ap">
+                 		<c:param name="page" value="${ pi.currentPage + 1 }"/>
+                 	</c:url>
+	                 <a class="paging" href="${ after }">&gt;</a>                 
+                 </c:if>
              </div>
            </div>
            <script>
-           		
+           		$(function(){
+           			$("td").on("click", function(){
+           				var docTitle = $(this).siblings().text();
+           				console.log(docTitle);
+           				location.href="selectDoc.ap?docTitle="+docTitle;
+           			});
+           		});
            </script>
     </section>
 

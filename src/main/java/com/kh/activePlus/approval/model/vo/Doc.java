@@ -17,6 +17,7 @@ public class Doc {
 	private String docContent;
 	private String docStatus;
 	private String docType;
+	private String docExplantion;
 	
 	
 	

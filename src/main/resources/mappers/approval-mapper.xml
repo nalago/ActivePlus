@@ -5,11 +5,12 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 <mapper namespace="approvalMapper">
 
 	<resultMap id="DocResultSet" type="Doc">
-		<id property="DocNo" column="DOCNO"/>
+		<id property="docNo" column="DOCNO"/>
 		<result property="docTitle" column="DOCTITLE"/>
 		<result property="docContent" column="DOCCONTENT"/>
 		<result property="docStatus" column="DOCSTATUS"/>
 		<result property="docType" column="DOCTYPE"/>
+		<result property="docExplantion" column="DOCEXPLANTION"/>
 	</resultMap>
 
 	<resultMap id="ApvDocResultSet" type="ApvDoc">
@@ -38,7 +39,26 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="empId" column="EMP_ID"/>
 	</resultMap>
 	
+	<resultMap id="EmployeeResultSet" type="Employee">
+		<id property="ID" column="EMP_ID"/>
+		<result property="userPwd" column="PWD"/>
+		<result property="userName" column="NAME"/>
+		<result property="userTeam" column="CATEGORY"/>
+		<result property="department" column="DEPARTMENT"/>
+		<result property="job" column="JOB_GRADE"/>
+	</resultMap>
 	
+	<select id="selectAllDocTypeListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM DOC_TYPE
+		WHERE DOCSTATUS = 'Y'
+	</select>
+	<select id="selectAllDocTypeList" resultMap="DocResultSet">
+		SELECT * 
+		FROM DOC_TYPE
+		WHERE DOCSTATUS = 'Y'
+		ORDER BY DOCTITLE
+	</select>
 
 	<select id="selectApvDocList" parameterType="String" resultMap="ApvDocResultSet">
 		SELECT * 
@@ -48,13 +68,75 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		ORDER BY APVDOCNO DESC
 	</select>
 
+	<select id="selectDocTypeList" parameterType="String" resultMap="DocResultSet">
+		SELECT *
+		FROM DOC_TYPE
+		WHERE DOCTYPE LIKE '%'||#{docType}||'%'
+	</select>
 
+	<select id="selectDocTypeListCount" parameterType="String" resultType="_int">
+		SELECT COUNT(*)
+		FROM DOC_TYPE
+		WHERE DOCTYPE LIKE '%'||#{docType}||'%'
+	</select>
+	
+	<select id="selectPrivateListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM DOC_TYPE
+		WHERE DOCTYPE = 'PRIVATE'
+	</select>
+	
+	<select id="selectPrivateList" resultMap="DocResultSet">
+		SELECT *
+		FROM DOC_TYPE
+		WHERE DOCTYPE = 'PRIVATE'
+	</select>
 
+	<select id="selectTemporaryListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM APV_DOC
+		WHERE APVDOCSTATUS='0'
+	</select>
 
+	<select id="selectTemporaryList" resultMap="ApvDocResultSet">
+		SELECT *
+		FROM APV_DOC
+		WHERE APVDOCSTATUS = '0'
+	</select>
 
+	<select id="selectApprovalObtainList" parameterType="String" resultMap="ApvDocResultSet">
+		SELECT *
+		FROM APV_DOC
+		JOIN APPROVAL USING(EMP_ID)
+		WHERE EMP_ID=#{eId}
+		AND APVTYPE = '0' 
+	</select>
+	
+	<select id="selectApprovalList" parameterType="String" resultMap="ApvDocResultSet">
+		SELECT *
+		FROM APV_DOC
+		JOIN APPROVAL USING(EMP_ID)
+		WHERE EMP_ID=#{eId}
+		AND APVTYPE != '0'
+	</select>
 
-
-
-
-
+	<select id="selectApprovalCompleteList" parameterType="String" resultMap="ApvDocResultSet">
+		SELECT *
+		FROM APV_DOC
+		JOIN APPROVAL USING(EMP_ID)
+		WHERE EMP_ID = #{eId}
+		AND APVRESULT != '0'
+	</select>
+	
+	<select id="selectDoc" parameterType="String" resultMap="DocResultSet">
+		SELECT *
+		FROM DOC_TYPE
+		WHERE DOCTITLE = #{docTitle}
+	</select>
+	
+	<select id="selectEmpList" resultMap="EmployeeResultSet">
+		SELECT *
+		FROM EMPLOYEE_OFFICE
+	</select>
+	
 </mapper>

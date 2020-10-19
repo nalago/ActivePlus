@@ -19,8 +19,10 @@
         width: 65%;
         height: 70%;
         margin-left: 50px;
+        margin-top:100px;
         position: absolute;
         border: 1px solid black;
+        
     }
     #docList{
         width: 100%;
@@ -33,11 +35,9 @@
         border: 1px solid black;
     }
     .doctitle{
-        width: 30%;
+        width: 100%;
     }
-    .doccontent{
-        width: 70%;
-    }
+    
     .pagingwrap{
         text-align: center;
        
@@ -75,25 +75,62 @@
             <jsp:include page="submenu/docTypeList.jsp"/>
            <div id="ListWrap">
                <br>
-               <h3>개인 문서</h3>
+               <h3>개인 양식</h3>
                <br>
+               <c:url var="docDetail" value="docDetail.ap"/>
                 <table id="docList">
+                <thead>
                     <tr>
                         <th class="doctitle">양식명</th>
-                        <th class="doccontent">설명</th>
+                        
                     </tr>
-                    <tr>
-                    <c:url var="docDetail" value="docDetail.ap"/>
-                        <td class="doctitle"><a href="${docDetail }">휴가신청서</a></td>
-                        <td class="doccontent">휴가 작성 양식</td>
-                    </tr>
+                 <thead>
+                    <tbody>
+                    <c:if test="${ empty pList }">
+                    	<tr>
+                    		<td>저장 된 양식이 없습니다.</td>
+                    	<tr>
+                    </c:if>
+                    <c:if test="${ !empty pList }">
+                    	<c:forEach var="p" items="${ pList }">
+                    		<td>${ p.apvDocTitle }</td>
+                    	</c:forEach>
+                    </c:if>
+                    	
+                    </tbody>
                 </table>
                 <br><br>
                 <div class="pagingwrap">
-                 <a class="paging" href="#"><</a>
-                 <a class="paging" href="#">1</a>
-                 <a class="paging" href="#">2</a>
-                 <a class="paging" href="#">></a>
+                <!-- 미완성 페이징 -->
+                <c:if test="${pi.currentPage <= 1 }">                
+                	&lt;
+                </c:if>
+                <c:if test="${pi.currentPage < 1 }">
+                	<c:url var="before" value="privateList.ap">
+                		<c:param name="page" value="${ pi.currentPage - 1 }"/>
+                	</c:url>                
+	                 <a class="paging" href="${ before }">&lt;</a>
+                </c:if>
+                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+                	<c:if test="${ p eq pi.currentPage }">
+                	<font color="green" size="4">${ p }</font>
+                	</c:if>
+                	<c:if test="${ p ne pi.currentPage }">
+                		<c:url var="pagination" value="privateList.ap">
+                			<c:param name="page" value="${ p }"/>
+                		</c:url>
+                		<a href="${pagination }">${ p }</a>
+                	</c:if>
+                </c:forEach>
+                 <c:if test="${ pi.endPage <= pi.maxPage }">
+                 	&gt;
+                 </c:if>
+                 <c:if test="${ pi.endPage < pi.maxPage }">
+                 	<c:url var="after" value="privateList.ap">
+                 		<c:param name="page" value="${ pi.currentPage + 1 }"/>
+                 	</c:url>
+	                 <a class="paging" href="${after }">&gt;</a>                 
+                 </c:if>
              </div>
            </div>
            <script>
