@@ -18,5 +18,17 @@ public class Employee {
 	private String userPwd;
 	private String userName;
 	private String userTeam;
+	private String department;
 	private String job;
+	
+	public Employee(String iD, String userPwd, String userName, String userTeam, String job) {
+		super();
+		ID = iD;
+		this.userPwd = userPwd;
+		this.userName = userName;
+		this.userTeam = userTeam;
+		this.job = job;
+	}
+	
+	
 }

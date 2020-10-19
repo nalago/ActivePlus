@@ -12,7 +12,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeButtons="flash, print";
 	config.extraPlugins = 'confighelper';
 	config.toolbarCanCollapse = true;
-	config.toolbar_my=[
+	config.toolbar=[
         { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-',  'Preview' ] },
         { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
         { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-'] },

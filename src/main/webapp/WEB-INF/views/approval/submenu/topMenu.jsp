@@ -14,7 +14,7 @@
                 <li>
                 <c:url var="goDrafting" value="draftingList.ap"/>
                 <c:url var="goPrivate" value="privateList.ap"/>
-                <c:url var="goTemporary" value="temporary.ap"/>
+                <c:url var="goTemporary" value="temporaryList.ap"/>
                     <a class="menu" href="${goDrafting }">기안</a>
                     <ul>
                         <li><a class="menu" href="${goDrafting }">문서 양식</a></li>
