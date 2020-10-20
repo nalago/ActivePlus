@@ -13,7 +13,6 @@
         height: 93.5vh;
         display: inline-block;
         background-color: rgb(236, 228, 228);
-        
     }
     #listButtonclose, #listButtonopen{
         width: 30px;
@@ -74,6 +73,7 @@
     input[type="radio"] {
     	position:hidden;
     }
+    
 </style>
 </head>
 <body>
@@ -91,10 +91,10 @@
                         <c:url var="docTypeList" value="docTypeList.ap">
                         	<c:param name="page" value="${ pi.currentPage }"/>
                         </c:url>
-                            <li><a href="${ docTypeList }&docType=publicdoc">
-                            	 <label for="publicdoc">공통양식</label>
+                            <li><a id="publicdoc" href="${ docTypeList }&docType=publicdoc">
+                            <label for="publicdoc">공통양식</label>
                             </a>
-                            <input type="checkbox" id="publicdoc">
+                            
                                 <ul>
                                     <li>
                                     <a href="${docTypeList}&docType=personal">

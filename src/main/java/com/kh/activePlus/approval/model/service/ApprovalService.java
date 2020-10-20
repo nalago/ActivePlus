@@ -43,19 +43,19 @@ public interface ApprovalService {
 
 	public int selectDocTypeListCount(String docType);
 
-	public int selectPrivateListCount();
+	public int selectPrivateListCount(String eId);
 
-	public ArrayList<Doc> selectPrivateList(PageInfo pi);
+	public ArrayList<Doc> selectPrivateList(String eId, PageInfo pi);
 
-	public int selectTemporaryListCount();
+	public int selectTemporaryListCount(String eId);
 
-	public ArrayList<ApvDoc> selectTemporaryList(PageInfo pi);
+	public ArrayList<ApvDoc> selectTemporaryList(String eId, PageInfo pi);
 
-	public int selectApprovalObtainListCount();
+	public int selectApprovalObtainListCount(String eId);
 
-	public int selectApprovalListCount();
+	public int selectApprovalListCount(String eId);
 
-	public int selectAprrovalCompleteListCount();
+	public int selectAprrovalCompleteListCount(String eId);
 
 	public ArrayList<ApvDoc> selectApprovalObtainList(String eId, PageInfo pi);
 

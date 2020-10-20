@@ -108,41 +108,38 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int selectPrivateListCount() {
-		return aDao.selectPrivateListCount();
+	public int selectPrivateListCount(String eId) {
+		return aDao.selectPrivateListCount(eId);
 	}
 
 	@Override
-	public ArrayList<Doc> selectPrivateList(PageInfo pi) {
-		return aDao.selectPrivateList(pi);
+	public ArrayList<Doc> selectPrivateList(String eId, PageInfo pi) {
+		return aDao.selectPrivateList(eId, pi);
 	}
 
 	@Override
-	public int selectTemporaryListCount() {
-		return aDao.selectTemporaryListCount();
+	public int selectTemporaryListCount(String eId) {
+		return aDao.selectTemporaryListCount(eId);
 	}
 
 	@Override
-	public ArrayList<ApvDoc> selectTemporaryList(PageInfo pi) {
-		return aDao.selectTemporaryList(pi);
+	public ArrayList<ApvDoc> selectTemporaryList(String eId, PageInfo pi) {
+		return aDao.selectTemporaryList(eId, pi);
 	}
 
 	@Override
-	public int selectApprovalObtainListCount() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int selectApprovalObtainListCount(String eId) {
+		return aDao.selectApprovalObtainListCount(eId);
 	}
 
 	@Override
-	public int selectApprovalListCount() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int selectApprovalListCount(String eId) {
+		return aDao.selectApprovalListCount(eId);
 	}
 
 	@Override
-	public int selectAprrovalCompleteListCount() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int selectAprrovalCompleteListCount(String eId) {
+		return aDao.selectApprovalCompleteListCount(eId);
 	}
 
 	@Override
