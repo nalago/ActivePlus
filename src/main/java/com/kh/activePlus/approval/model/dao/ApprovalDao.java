@@ -42,24 +42,24 @@ public class ApprovalDao {
 		return sqlSession.selectOne("approvalMapper.selectDocTypeListCount", docType);
 	}
 
-	public int selectPrivateListCount() {
+	public int selectPrivateListCount(String eId) {
 		return sqlSession.selectOne("approvalMapper.selectPrivateListCount");
 	}
 
-	public ArrayList<Doc> selectPrivateList(PageInfo pi) {
+	public ArrayList<Doc> selectPrivateList(String eId, PageInfo pi) {
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlSession.selectList("approvalMapper.selectPrivateList",null,rowBounds);
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectPrivateList", eId,rowBounds);
 	}
 
-	public int selectTemporaryListCount() {
+	public int selectTemporaryListCount(String eId) {
 		return sqlSession.selectOne("approvalMapper.selectTemporaryListCount");
 	}
 
-	public ArrayList<ApvDoc> selectTemporaryList(PageInfo pi) {
+	public ArrayList<ApvDoc> selectTemporaryList(String eId, PageInfo pi) {
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlSession.selectList("approvalMapper.selectTemporaryList",null,rowBounds);
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectTemporaryList", eId,rowBounds);
 	}
 
 	public ArrayList<ApvDoc> selectApprovalObtainList(String eId, PageInfo pi) {
@@ -86,6 +86,18 @@ public class ApprovalDao {
 
 	public ArrayList<Employee> selectEmpList() {
 		return (ArrayList)sqlSession.selectList("approvalMapper.selectEmpList");
+	}
+
+	public int selectApprovalObtainListCount(String eId) {
+		return sqlSession.selectOne("approvalMapper.selectApprovalObtainListCount", eId);
+	}
+
+	public int selectApprovalListCount(String eId) {
+		return sqlSession.selectOne("approvalMapper.selectApprovalListCount", eId);
+	}
+
+	public int selectApprovalCompleteListCount(String eId) {
+		return sqlSession.selectOne("approvalMapper.selectApprovalCompleteListCount", eId);
 	}
 
 }

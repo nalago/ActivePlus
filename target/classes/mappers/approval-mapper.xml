@@ -80,28 +80,32 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		WHERE DOCTYPE LIKE '%'||#{docType}||'%'
 	</select>
 	
-	<select id="selectPrivateListCount" resultType="_int">
+	<select id="selectPrivateListCount" parameterType="String" resultType="_int">
 		SELECT COUNT(*)
 		FROM DOC_TYPE
 		WHERE DOCTYPE = 'PRIVATE'
+		AND EMP_ID = #{eId}
 	</select>
 	
-	<select id="selectPrivateList" resultMap="DocResultSet">
+	<select id="selectPrivateList" parameterType="String" resultMap="DocResultSet">
 		SELECT *
 		FROM DOC_TYPE
 		WHERE DOCTYPE = 'PRIVATE'
+		AND EMP_ID = #{eId}
 	</select>
 
-	<select id="selectTemporaryListCount" resultType="_int">
+	<select id="selectTemporaryListCount" parameterType="String" resultType="_int">
 		SELECT COUNT(*)
 		FROM APV_DOC
 		WHERE APVDOCSTATUS='0'
+		AND EMP_ID = #{eId}
 	</select>
 
-	<select id="selectTemporaryList" resultMap="ApvDocResultSet">
+	<select id="selectTemporaryList" parameterType="String" resultMap="ApvDocResultSet">
 		SELECT *
 		FROM APV_DOC
 		WHERE APVDOCSTATUS = '0'
+		AND EMP_ID = #{eId}
 	</select>
 
 	<select id="selectApprovalObtainList" parameterType="String" resultMap="ApvDocResultSet">
@@ -138,5 +142,26 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		SELECT *
 		FROM EMPLOYEE_OFFICE
 	</select>
+	
+	<select id="selectApprovalObtainListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM APV_DOC
+		JOIN APPROVAL USING(EMP_ID)
+		WHERE APVTYPE='0'
+	</select>
+	
+	<select id="selectApprovalListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM APV_DOC
+		JOIN APPROVAL USING(EMP_ID)
+		WHERE APVTYPE!='0'
+	</select>
+	
+	<select id="selectApprovalCompleteListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM APV_DOC
+		JOIN EMP_ID
+	</select>
+	
 	
 </mapper>

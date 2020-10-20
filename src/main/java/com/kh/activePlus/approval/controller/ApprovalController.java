@@ -73,15 +73,18 @@ public class ApprovalController {
 		return "approval/drafting";
 	}
 	@RequestMapping("privateList.ap")
-	public ModelAndView goPrivateList(ModelAndView mv,
+	public ModelAndView goPrivateList(ModelAndView mv, HttpServletRequest request,
 			@RequestParam(value="page", required=false) Integer page) {
-		int listCount = aService.selectPrivateListCount();
+		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
+		
+		String eId = loginUser.getID();
+		int listCount = aService.selectPrivateListCount(eId);
 		
 		int currentPage = page != null ? page : 1;
 		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
 		
-		ArrayList<Doc> pList = aService.selectPrivateList(pi);
+		ArrayList<Doc> pList = aService.selectPrivateList(eId, pi);
 		
 		if(pList != null) {
 			mv.addObject("pList",pList);
@@ -94,15 +97,19 @@ public class ApprovalController {
 		return mv;
 	}
 	@RequestMapping("temporaryList.ap")
-	public ModelAndView gotemporaryList(ModelAndView mv,
+	public ModelAndView gotemporaryList(ModelAndView mv,HttpServletRequest request,
 			@RequestParam(value="page", required=false) Integer page){
-		int listCount = aService.selectTemporaryListCount();
+		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
+		
+		String eId = loginUser.getID();
+		
+		int listCount = aService.selectTemporaryListCount(eId);
 		
 		int currentPage = page != null ? page : 1;
 		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
 		
-		ArrayList<ApvDoc> tList = aService.selectTemporaryList(pi);
+		ArrayList<ApvDoc> tList = aService.selectTemporaryList(eId, pi);
 		
 		if(tList != null) {
 			mv.addObject("tList",tList);
@@ -121,13 +128,21 @@ public class ApprovalController {
 		
 		String eId = loginUser.getID();
 		
-		int listCount = aService.selectApprovalObtainListCount();
+		int listCount = aService.selectApprovalObtainListCount(eId);
 		
 		int currentPage = page != null ? page : 1;
 		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
 		
 		ArrayList<ApvDoc> oList = aService.selectApprovalObtainList(eId, pi);
+		
+		if(oList != null) {
+			mv.addObject("oList",oList);
+			mv.addObject("pi",pi);
+			mv.setViewName("approval/approvalObtainList");
+		}else {
+			throw new ApprovalException("결재 받을 문서 조회 실패");
+		}
 		
 		return mv;
 	}
@@ -137,13 +152,21 @@ public class ApprovalController {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
 		String eId = loginUser.getID();
-		int listCount = aService.selectApprovalListCount();
+		int listCount = aService.selectApprovalListCount(eId);
 		
 		int currentPage = page != null ? page : 1;
 		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
 		
 		ArrayList<ApvDoc> aList = aService.selectApprovalList(eId, pi);
+		
+		if(aList != null) {
+			mv.addObject("aList",aList);
+			mv.addObject("pi",pi);
+			mv.setViewName("approval/approvalList");
+		}else {
+			throw new ApprovalException("결재 예정 문서 조회 실패");
+		}
 		
 		return mv;
 	}
@@ -153,13 +176,21 @@ public class ApprovalController {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
 		String eId = loginUser.getID();
-		int listCount = aService.selectAprrovalCompleteListCount();
+		int listCount = aService.selectAprrovalCompleteListCount(eId);
 		
 		int currentPage = page != null ? page : 1;
 		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
 		
-		ArrayList<ApvDoc> aList = aService.selectApprovalCompleteList(eId,pi);
+		ArrayList<ApvDoc> cList = aService.selectApprovalCompleteList(eId,pi);
+		
+		if(cList != null) {
+			mv.addObject("cList",cList);
+			mv.addObject("pi",pi);
+			mv.setViewName("approval/approvalComplList");
+		}else {
+			throw new ApprovalException("임시저장 문서 조회 실패");
+		}
 		
 		return mv;
 	}

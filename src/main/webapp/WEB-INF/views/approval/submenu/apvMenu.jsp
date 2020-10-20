@@ -33,16 +33,10 @@
         height: 35px;
         border-radius: 7px;
     }
-    #drafting, #selectLine, #commentbutton{
+    #drafting, #selectLine{
         background-color: rgb(62, 142, 218);
     }
-    #commentbutton{
-        float: right;
-        border-radius: 7px;
-        border: 0;
-        height:30px;
-        width:50px;
-    }
+   
     #selectLine{
         width: 250px;
         height: 35px;
@@ -57,7 +51,7 @@
     #comment{
         overflow-y: scroll;
         width: 245px;
-        height: 100px;
+        height: 120px;
     }
     #apvfile{
         display: none;
@@ -89,6 +83,15 @@
     #apvfilelist{
         overflow-x: auto;
     }
+    
+    .apvprocedureNames{
+    	border:0;
+    	margin:0;
+    }
+    .apvprocedureNames:focus{
+    	outline:none;
+    }
+    
 </style>
 <title>Insert title here</title>
 </head>
@@ -112,28 +115,29 @@
                             <hr>
                             <h5>&nbsp;결재 순서</h5>
                             <div id="apvprocedure">
-                                
+                                <!-- 모달에서 넘어온 결재 순서 -->
                             </div><hr>
                             <h5>의견</h5>
-                            <textarea id="comment"></textarea>
-                            <button id="commentbutton">등록</button>
-                            <br><br>
+                            <textarea id="comment" name="comment"></textarea>
+                            
+                            
                             <hr>
                             <h5 style="display: inline-block;">첨부파일</h5>
                             <input type="button" id="filedelete">
                             <label for="filedelete" id="filedeletelabel"></label>
-                            <input type="file" id="apvfile" 
+                            <input type="file" id="apvfile" name="apvfiles"
                             onchange="showFileList(this.files, value);"
                             multiple>
                             <label for="apvfile" id="apvfilelabel"></label>
                             <div id="apvfilelist">
-                                
                             </div>
                             <script>
+                            	/* 첨부파일 리스트 출력 */
                                 function showFileList(files, n){
                                     var div = $("#apvfilelist");
                                     name = "";
-                                    if(files.length > 1){
+                                   
+                                    if(files.length >= 1){
                                         for(var i = 0; i < files.length; i++){
                                             var file = files[i];
                                             

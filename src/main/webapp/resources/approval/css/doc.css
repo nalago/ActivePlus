@@ -1,17 +1,18 @@
 @charset "UTF-8";
 /* 문서 */
     #docwrap {
-        width: 885px;
+        width: 880px;
         height: 93.5vh;
         display: inline-block;
-        float: right;
+       	
        
     }
     #doc{
-        width: 700px;
+        width: 800px;
         height: 100%;
         border: 1px solid lightgray;
         overflow-y: scroll;
+        
     }
     .signaturewrap{
         padding: 0;

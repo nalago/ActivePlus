@@ -24,7 +24,7 @@
         height: 100%;
         background: rgba(0,0,0,0.5);
         position: fixed;
-       
+        display:none;
     }
 
     #apvmodal{
@@ -78,9 +78,10 @@
         display: inline-block;
         position: fixed;
         top:25%;
-        left: 46%;
+        left: 45%;
     }
     #approverButton, #consensusButton{
+    	width:120px;
         height: 35%;
         background-color: rgb(62, 142, 218);
         border: 0;
@@ -126,6 +127,16 @@
         bottom : 5%;
         right: 13%;
     }
+    
+    .procedureCancel{
+    	border:0;
+    	margin:0;
+    	color:red;
+    }
+    .procedureCancel:focus{
+    	outline:none;
+    }
+    
     /* confirm */
     #confirmwrap{
         top:0;
@@ -179,7 +190,7 @@
   	}
   	
   	
-    label{
+    #person label{
     	width:94%;
     }
     .procedureNames{
@@ -189,11 +200,16 @@
     input[type="text"]:focus{
     	outline:none;
     }
+    #docform{
+    	display:inline-block;
+    	width:100%;
+    }
     </style>
 </head>
 <body>
 <jsp:include page="../common/menubar.jsp"/>
 <section>
+       <form id="docform"  method="post" enctype="multipart/form-data" onsubmit="draftSubmit">
         <jsp:include page="submenu/topMenu.jsp"/>
             <jsp:include page="submenu/docTypeList.jsp"/>
             <jsp:include page="submenu/apvMenu.jsp"/>
@@ -210,7 +226,7 @@
                 })
                 </script>
                 </div>
-              
+          </form>
         </section>
         <div id="apvmodalwrap">
             <div id="apvmodal">
@@ -265,8 +281,8 @@
                 </div>
                 <div id="confirmcontent">
                     <h4>기안하시겠습니까?</h4>
-                    <button id="confirmOk">OK</button>
-                    <button id="confirmCancel" onclick="closeconfirm();">CANCEL</button>
+                    <input id="confirmOk" type="submit"/>
+                    <button id="confirmCancel" onclick="closeconfirm();">취소</button>
                 </div>
             </div>
         </div>
@@ -275,48 +291,128 @@
             function openmodal(){
                 $("#apvmodalwrap").css("display","block");
             };
+            /* 결재선 등록 버튼 */
+            $("#enroll").on("click", function(){
+            	var procedureList = $("#procedure").children();
+            	var apvprocedure = document.getElementById("apvprocedure");
+            	
+            	for(var i = 0; i < procedureList.length; i++){
+            		console.log(procedureList[i].firstChild);
+            		apvprocedure.insertAdjacentHTML("beforeend", "<input type='text' class='apvprocedureNames' name='apvprocedureNames' value='"+ (i+1) + " " 
+            									+ procedureList[i].firstChild.value+"' readonly />");
+            	}
+            	
+            });
+            
             /*취소버튼*/
             function closemodal(){
                 $("#apvmodalwrap").css("display","none");
+                
             }
             /* X 버튼 */
             $(function(){
                 $("#modalclose").on("click",function(){
                     $("#apvmodalwrap").css("display","none");
+                    
                 });
             });
             /* confirm */
             function confirm(){
-            $("#confirmwrap").css("display","block");
+            	$("#confirmwrap").css("display", "block");
             }
             function closeconfirm(){
-                $("#confirmwrap").css("display","none");
+                $("#confirmwrap").css("display", "none");
             }
+            
+            /* 결재선 직원 클릭 시 선택 효과 */
             $(function(){
             	$(".userName").on("click",function(){
             		$(".userName").css("background","");
             		$(this).css("background","#63ab68");
             	});
             });
+            /* 결재선 지정 펑션 */
             $(function(){
             	$("#approverButton").on("click",function(){
             		var name = $('input[name="userName"]:Checked').val();
             		var procedure = document.getElementById('procedure');
             		var list = $("#procedure").children();
-            		console.log(list);
-            		console.log(name);
+            		
             		for(var i = 0; i < list.length; i++){
-            			console.log(list[i].value);
-            		if(list[i].value == name && name != undefined){
+            			
+            		if(list[i].value == "procedure"+name && name != undefined){
             			return;
-            			procedure.innerHTML += "<input type='text' class='procedureNames' name='userName' value='"+name+"' readonly>";
+            			procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='apv"+name+"' class='procedureNames' name='userName' value='"+name+" (결재)' readonly>"+
+						"<button id='"+name+"' class='procedureCancel'>X</button></div>");
             		}
             		}
             		 if(name != undefined){
-            			procedure.innerHTML += "<input type='text' class='procedureNames' name='userName' value='"+name+"' readonly>";
-            		} 	
+            			
+						procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='apv"+name+"' class='procedureNames' name='userName' value='"+name+" (결재)' readonly>"+
+								"<button id='"+name+"' class='procedureCancel'>X</button></div>");
+            		 }
             	});
             });
+            
+            /* 결재선 X 버튼 */
+            $("#procedure").on('click',function(e){
+            	if(e.target.classList.contains('procedureCancel')){
+            		document.getElementById("procedure"+$(e.target).attr("id")).remove();
+            	}
+            });
+            
+            /* 합의자 지정 펑션 */
+            $(function(){
+            	$("#consensusButton").on("click",function(){
+            		var name = $('input[name="userName"]:Checked').val();
+            		var procedure = document.getElementById('procedure');
+            		var list = $("#procedure").children();
+            		
+            		
+            		for(var i = 0; i < list.length; i++){
+            			
+            		if(list[i].id == "procedure"+name && name != undefined){
+            			
+            			return;
+            			procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='con"+name+"' class='procedureNames' name='userName' value='"+name+" (합의)' readonly>"+
+						"<button id='"+name+"' class='procedureCancel'>X</button></div>");
+            		}
+            		}
+            		 if(name != undefined){
+            			
+						procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='con"+name+"' class='procedureNames' name='userName' value='"+name+" (합의)' readonly>"+
+								"<button id='"+name+"' class='procedureCancel'>X</button></div>");
+            		 }
+            	});
+            });
+            
+            /* 직원리스트에서 검색한 이름만 보여주는 펑션 */
+            $(function(){
+            	$("#searchperson").keyup(function(){
+            		var searchName = $(this).val();
+            		
+            		$("#person > ul > li").hide();
+            		
+            		var temp = $("#person > ul > li > label:contains('"+ searchName +"')");
+            		
+            		console.log($(temp).parent());
+            		
+            		$(temp).parent().show();
+            	})
+            });
+            docform.onsubmit = function(){
+            	if(true){
+            		return false;
+            	}
+            	
+            	
+            	return true;
+            }
+            
+            
+            
+            
+            
         </script>
 </body>
 </html>
