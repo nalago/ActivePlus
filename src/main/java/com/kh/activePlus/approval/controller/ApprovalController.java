@@ -1,13 +1,21 @@
 package com.kh.activePlus.approval.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.activePlus.Employee.model.vo.Employee;
@@ -237,6 +245,77 @@ public class ApprovalController {
 		}
 		
 		return mv;
+	}
+	
+	
+	@RequestMapping(value="drafting.ap", method=RequestMethod.POST)
+	public ModelAndView drafting(ModelAndView mv, MultipartHttpServletRequest request,
+			String[] apvprocedureNames, String comment, String apvDocContent
+			) {
+		/* 문서 내용 가져옴 */
+		System.out.println("controller"+apvDocContent);
+		
+		/* 결재선 */
+		for(int i = 0; i < apvprocedureNames.length; i++) {
+			System.out.println(apvprocedureNames[i].toString());
+			
+		}
+		
+		/* 의견 */
+		System.out.println(comment);
+		
+		
+		/* 첨부파일 (전자문서 먼저 저장 후에 문서번호 가져와서 넣기) */
+		List<MultipartFile> fileList = request.getFiles("apvfiles");
+		System.out.println("첨부파일 갯수 : " + fileList.size());
+		if(!fileList.isEmpty()) {
+			String[] rename = saveFile(fileList, request);
+			for(int i = 0; i < rename.length; i++) {
+				/* 첨부파일 개수만큼 service불러서 저장하기 */
+				
+				
+			}
+		}
+		
+		
+		
+		
+		return mv;
+	}
+	
+	/* 첨부 파일 저장 */
+	public String[] saveFile(List<MultipartFile> fileList, MultipartHttpServletRequest request) {
+		String path = request.getSession().getServletContext().getRealPath("resources");
+		
+		String savePath = path + "\\approval\\duploadFiles";
+		
+		File folder = new File(savePath);
+		
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		String filerename[] = new String[fileList.size()];
+		
+		for(int i = 0; i < fileList.size(); i++) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");		
+			String originFileName = fileList.get(i).getOriginalFilename();
+			String renameFileName = sdf.format(new Date()) + 
+					originFileName.substring(originFileName.lastIndexOf("."));
+			
+			String renamePath = folder + "\\" + renameFileName;
+			filerename[i] = renameFileName;
+			try {
+				fileList.get(i).transferTo(new File(renamePath));
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+		
+		return filerename;
+		
 	}
 	
 	/*@RequestMapping(value="docTypeList.ap", method=RequestMethod.POST)

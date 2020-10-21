@@ -202,30 +202,52 @@
     }
     #docform{
     	display:inline-block;
-    	width:100%;
+    	width:80%;
+    	float:right;
     }
+    #docwrap{
+    	width:800px;
+    }
+    #docDiv{
+    	display:none;
+    }
+    
     </style>
 </head>
 <body>
 <jsp:include page="../common/menubar.jsp"/>
 <section>
-       <form id="docform"  method="post" enctype="multipart/form-data" onsubmit="draftSubmit">
         <jsp:include page="submenu/topMenu.jsp"/>
             <jsp:include page="submenu/docTypeList.jsp"/>
+       <form id="docform" action="drafting.ap"   method="post" enctype="multipart/form-data">
             <jsp:include page="submenu/apvMenu.jsp"/>
             <div id="docwrap">
                 <div id="doc">
                 <!-- 기안 문서 양식 예 -->
                	${ doc.docContent }
+               	<textarea id="editor" name="draftContent">내용 입력</textarea>
                	</div>
+               	<input type="text" id="docDiv" name="apvDocContent" readonly/>
+                </div>
                 <script>
                 $(function(){
                     CKEDITOR.replace("editor",{
-                       
+                    	
                     });
                 })
                 </script>
+                <div id="confirmwrap">
+            <div id="confirm">
+                <div id="confirmtitle">
+                    <h5>&nbsp;알림</h5>
                 </div>
+                <div id="confirmcontent">
+                    <h4>기안하시겠습니까?</h4>
+                    <input id="confirmOk" type="submit"/>
+                    <button id="confirmCancel" type="button" onclick="closeconfirm();">취소</button>
+                </div>
+            </div>
+        </div>
           </form>
         </section>
         <div id="apvmodalwrap">
@@ -248,7 +270,7 @@
                         </svg>
                         <div id="person">
                             <!-- 직원정보 출력하는곳 -->
-                            <ul> 인사
+                            <ul> <h5>인사</h5>
                             <c:forEach var="e" items="${ eList }">
                             	<c:if test="${ e.department eq '인사' }">
                             		<li class="userName"><input type="radio" id="${e.userName}" name="userName" value="${ e.userName }">
@@ -274,18 +296,7 @@
                 </div>
             </div>
         </div>
-        <div id="confirmwrap">
-            <div id="confirm">
-                <div id="confirmtitle">
-                    <h5>&nbsp;알림</h5>
-                </div>
-                <div id="confirmcontent">
-                    <h4>기안하시겠습니까?</h4>
-                    <input id="confirmOk" type="submit"/>
-                    <button id="confirmCancel" onclick="closeconfirm();">취소</button>
-                </div>
-            </div>
-        </div>
+        
         <script>
             /* 모달창 열고 닫기 */
             function openmodal(){
@@ -302,6 +313,7 @@
             									+ procedureList[i].firstChild.value+"' readonly />");
             	}
             	
+            	$("#apvmodalwrap").css("display","none");
             });
             
             /*취소버튼*/
@@ -319,6 +331,7 @@
             /* confirm */
             function confirm(){
             	$("#confirmwrap").css("display", "block");
+            	
             }
             function closeconfirm(){
                 $("#confirmwrap").css("display", "none");
@@ -340,17 +353,18 @@
             		
             		for(var i = 0; i < list.length; i++){
             			
-            		if(list[i].value == "procedure"+name && name != undefined){
+            		
+            		if(list[i].id == "procedure"+name && name != undefined){
             			return;
-            			procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='apv"+name+"' class='procedureNames' name='userName' value='"+name+" (결재)' readonly>"+
+            			procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='apv"+name+"' class='procedureNames' name='procedureName' value='"+name+" (결재)' readonly>"+
 						"<button id='"+name+"' class='procedureCancel'>X</button></div>");
             		}
             		}
             		 if(name != undefined){
             			
-						procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='apv"+name+"' class='procedureNames' name='userName' value='"+name+" (결재)' readonly>"+
+						procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='apv"+name+"' class='procedureNames' name='procedureName' value='"+name+" (결재)' readonly>"+
 								"<button id='"+name+"' class='procedureCancel'>X</button></div>");
-            		 }
+            		 } 
             	});
             });
             
@@ -374,13 +388,13 @@
             		if(list[i].id == "procedure"+name && name != undefined){
             			
             			return;
-            			procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='con"+name+"' class='procedureNames' name='userName' value='"+name+" (합의)' readonly>"+
+            			procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='con"+name+"' class='procedureNames' name='procedureName' value='"+name+" (합의)' readonly>"+
 						"<button id='"+name+"' class='procedureCancel'>X</button></div>");
             		}
             		}
             		 if(name != undefined){
             			
-						procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='con"+name+"' class='procedureNames' name='userName' value='"+name+" (합의)' readonly>"+
+						procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='con"+name+"' class='procedureNames' name='procedureName' value='"+name+" (합의)' readonly>"+
 								"<button id='"+name+"' class='procedureCancel'>X</button></div>");
             		 }
             	});
@@ -400,14 +414,21 @@
             		$(temp).parent().show();
             	})
             });
+            
             docform.onsubmit = function(){
-            	if(true){
-            		return false;
-            	}
+            	/* 문서의 기본 div 내용 */
+            	var docContent = document.getElementById("docContent").innerHTML;
+            	/* 문서 div 내용 담을 input태그 */
+            	var apvdocContent = document.getElementById("docDiv");
+            	
+            	/* 에디터 안의 내용 */
+            	var editorText = CKEDITOR.instances.editor.getData();
+            	apvdocContent.value = docContent+"///"+editorText;
             	
             	
             	return true;
             }
+            
             
             
             

@@ -129,18 +129,18 @@
             $(function(){
                 /* 왼쪽 문서양식 메뉴바 열고 닫기 */
                 $("#listButtonopen").on("click",function(){
-                    var listwidth = $("#doctypeList").innerWidth();
-                    var docwidth = $("#docwrap").innerWidth();
+                    
+                    
                    $("#doctypeList").css("display","inline-block");
                    $(this).css("display","none");
-                    $("#docwrap").css("width",docwidth-listwidth+"px");
+                   
                 });
                 $("#listButtonclose").on("click",function(){
-                    var listwidth = $("#doctypeList").innerWidth();
+                    
                     var docwidth = $("#docwrap").innerWidth();
                     $("#doctypeList").css("display","none");
                     $("#listButtonopen").css("display","inline-block");
-                    $("#docwrap").css("width",docwidth+listwidth+"px");
+                    
                 });
             });
             

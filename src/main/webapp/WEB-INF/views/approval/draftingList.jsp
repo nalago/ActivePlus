@@ -55,7 +55,9 @@
  td{
  	cursor:pointer;
  }
- 
+ tbody tr:hover {
+ 	background-color:#63ab68;
+ }
     
 </style>
 </head>
