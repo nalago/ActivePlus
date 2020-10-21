@@ -104,14 +104,14 @@
                         <svg id="apvmenuclose" viewBox="0 0 15 15" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
                         </svg>
-                        <button id="drafting" onclick="confirm();">기안</button>
-                        <button id="temporary">임시저장</button>
+                        <button id="drafting" type="button" onclick="confirm();">기안</button>
+                        <button id="temporary" type="button" >임시저장</button>
                         <svg id="listButtonopen" viewBox="0 0 15 15" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
                         </svg>
                         <hr>
                         <div id="apvline">
-                            <button id="selectLine" onclick="openmodal();">결재선 지정</button>
+                            <button id="selectLine" type="button" onclick="openmodal();">결재선 지정</button>
                             <hr>
                             <h5>&nbsp;결재 순서</h5>
                             <div id="apvprocedure">
@@ -125,7 +125,7 @@
                             <h5 style="display: inline-block;">첨부파일</h5>
                             <input type="button" id="filedelete">
                             <label for="filedelete" id="filedeletelabel"></label>
-                            <input type="file" id="apvfile" name="apvfiles"
+                            <input multiple="multiple" type="file" id="apvfile" name="apvfiles"
                             onchange="showFileList(this.files, value);"
                             multiple>
                             <label for="apvfile" id="apvfilelabel"></label>

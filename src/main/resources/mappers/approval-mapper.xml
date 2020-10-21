@@ -143,24 +143,28 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		FROM EMPLOYEE_OFFICE
 	</select>
 	
-	<select id="selectApprovalObtainListCount" resultType="_int">
+	<select id="selectApprovalObtainListCount" parameterType="String" resultType="_int">
 		SELECT COUNT(*)
 		FROM APV_DOC
 		JOIN APPROVAL USING(EMP_ID)
 		WHERE APVTYPE='0'
+		AND EMP_ID = #{eId}
 	</select>
 	
-	<select id="selectApprovalListCount" resultType="_int">
+	<select id="selectApprovalListCount" parameterType="String" resultType="_int">
 		SELECT COUNT(*)
 		FROM APV_DOC
 		JOIN APPROVAL USING(EMP_ID)
 		WHERE APVTYPE!='0'
+		AND EMP_ID = #{eId}
 	</select>
 	
-	<select id="selectApprovalCompleteListCount" resultType="_int">
+	<select id="selectApprovalCompleteListCount" parameterType="String" resultType="_int">
 		SELECT COUNT(*)
 		FROM APV_DOC
-		JOIN EMP_ID
+		JOIN APPROVAL USING(EMP_ID)
+		WHERE APVRESULT != '0'
+		AND EMP_ID = #{eId}
 	</select>
 	
 	

@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/sign-table.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/submenu.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/fontello/css/fontello.css">
-<link rel="stylesheet" href="${contextPath }/resources/approval/css/docTypeList.css"/>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <title>Insert title here</title>
 <style>
@@ -184,6 +183,10 @@
         background-color: rgb(62, 142, 218) ;
         margin-right: 20px;
     }
+     tbody tr:hover {
+ 	background-color:#63ab68;
+ 	cursor:pointer;
+ }
 </style>
 </head>
 <body>
@@ -195,6 +198,7 @@
             <div id="docListwrap">
                 <h4>결재 완료 문서</h4>
                 <table id="docList">
+                <thead>
                     <tr>
                         <th id="doctitle">문서명</th>
                         <th id="drfname">기안자</th>
@@ -203,22 +207,48 @@
                         <th id="apvdate">최종결재일</th>
                         <th id="apvstatus">상태</th>
                     </tr>
+                    </thead>
+                    <tbody>
+                    <c:if test="${ empty cList }">
                     <tr>
-                        <td>휴가 신청서</td>
-                        <td>윤영관</td>
-                        <td>2020-10-01</td>
-                        <td>최나라</td>
-                        <td></td>
-                        <td>결재중</td>
+                    	<td colspan="6">결재된 문서가 없습니다.</td>
                     </tr>
+                    </c:if>
+                    
+                    </tbody>
                 </table>
                 <br><br>
                 <div class="pagingwrap">
-                    <a class="paging" href="#"><</a>
-                    <a class="paging" href="#">1</a>
-                    <a class="paging" href="#">2</a>
-                    <a class="paging" href="#">></a>
-                </div>
+                <c:if test="${pi.currentPage <= 1 }">                
+                	&lt;
+                </c:if>
+                <c:if test="${pi.currentPage < 1 }">
+                	<c:url var="before" value="draftingList.ap">
+                		<c:param name="page" value="${ pi.currentPage - 1 }"/>
+                	</c:url>                
+	                 <a class="paging" href="${ before }">&lt;</a>
+                </c:if>
+                <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+                	<c:if test="${ p eq pi.currentPage }">
+                	<font color="green" size="4">${ p }</font>
+                	</c:if>
+                	<c:if test="${ p ne pi.currentPage }">
+                		<c:url var="pagination" value="draftingList.ap">
+                			<c:param name="page" value="${ p }"/>
+                		</c:url>
+                		<a href="${pagination }">${ p }</a>
+                	</c:if>
+                </c:forEach>
+                 <c:if test="${ pi.endPage <= pi.maxPage }">
+                 	&gt;
+                 </c:if>
+                 <c:if test="${ pi.endPage < pi.maxPage }">
+                 	<c:url var="after" value="draftingList.ap">
+                 		<c:param name="page" value="${ pi.currentPage + 1 }"/>
+                 	</c:url>
+	                 <a class="paging" href="${ after }">&gt;</a>                 
+                 </c:if>
+             </div>
             </div>
 
     </section>
