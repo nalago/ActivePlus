@@ -148,8 +148,7 @@
            <script>
            		$(function(){
            			$("td").on("click", function(){
-           				var docTitle = $(this).siblings().text();
-           				console.log(docTitle);
+           				var docTitle = $(this).parent().children().eq(0).text();
            				location.href="selectDoc.ap?docTitle="+docTitle;
            			});
            		});

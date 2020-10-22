@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.activePlus.Employee.model.vo.Employee;
+import com.kh.activePlus.approval.model.vo.Approval;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
+import com.kh.activePlus.approval.model.vo.Attachment;
 import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.approval.model.vo.PageInfo;
 
@@ -98,6 +100,26 @@ public class ApprovalDao {
 
 	public int selectApprovalCompleteListCount(String eId) {
 		return sqlSession.selectOne("approvalMapper.selectApprovalCompleteListCount", eId);
+	}
+
+	public String[] selectEmpId(String string) {
+		return sqlSession.selectOne("approvalMapper.selectEmpId", string);
+	}
+
+	public int insertApproval(Approval apv) {
+		return sqlSession.insert("approvalMapper.insertApproval", apv);
+	}
+
+	public int draftingDoc(ApvDoc doc) {
+		return sqlSession.insert("approvalMapper.draftingDoc", doc);
+	}
+
+	public int insertAttachment(Attachment at) {
+		return sqlSession.insert("approvalMapper.insertAttachment", at);
+	}
+
+	public int insertTempDoc(ApvDoc temporaryDoc) {
+		return sqlSession.insert("approvalMapper.insertTempDoc", temporaryDoc);
 	}
 
 }

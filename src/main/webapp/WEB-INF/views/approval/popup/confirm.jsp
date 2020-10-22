@@ -65,5 +65,24 @@
             </div>
         </div>
 
+
+<script>
+/* confirm */
+window.confirm = function(message){
+    $("#confirmwrap").css("display","block");
+    
+    
+	
+    $("#confirmOk").on("click", function () {
+        return true;
+    });
+
+}
+
+function closeconfirm(){
+    $("#confirmwrap").css("display", "none");
+}
+</script>
+
 </body>
 </html>

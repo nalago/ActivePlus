@@ -19,6 +19,7 @@
 		<typeAlias type="com.kh.activePlus.approval.model.vo.Approval" alias="Approval"/>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.ApprovalSearch" alias="ApprovalSearch"/>
 		<typeAlias type="com.kh.activePlus.Employee.model.vo.Employee" alias="Employee"/>
+		<typeAlias type="com.kh.activePlus.approval.model.vo.Attachment" alias="Attachment"/>
 	</typeAliases>
 
 		<mappers>

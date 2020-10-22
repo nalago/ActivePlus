@@ -208,25 +208,30 @@
     #docwrap{
     	width:800px;
     }
-    #docDiv{
+    #docDiv, #docNo{
     	display:none;
     }
+   
     
     </style>
 </head>
 <body>
 <jsp:include page="../common/menubar.jsp"/>
 <section>
+<jsp:include page="popup/alert.jsp"/>
+<c:set var="d" value="${ doc }"/>
         <jsp:include page="submenu/topMenu.jsp"/>
             <jsp:include page="submenu/docTypeList.jsp"/>
-       <form id="docform" action="drafting.ap"   method="post" enctype="multipart/form-data">
+       <form id="docform" method="post" enctype="multipart/form-data">
             <jsp:include page="submenu/apvMenu.jsp"/>
             <div id="docwrap">
+            
                 <div id="doc">
                 <!-- 기안 문서 양식 예 -->
-               	${ doc.docContent }
+               	${ d.docContent }
                	<textarea id="editor" name="draftContent">내용 입력</textarea>
                	</div>
+               	<input type="text" id="docNo" name="docNo" value="${ d.docNo }" readonly/>
                	<input type="text" id="docDiv" name="apvDocContent" readonly/>
                 </div>
                 <script>
@@ -242,7 +247,7 @@
                     <h5>&nbsp;알림</h5>
                 </div>
                 <div id="confirmcontent">
-                    <h4>기안하시겠습니까?</h4>
+                    <h4></h4>
                     <input id="confirmOk" type="submit"/>
                     <button id="confirmCancel" type="button" onclick="closeconfirm();">취소</button>
                 </div>
@@ -298,6 +303,49 @@
         </div>
         
         <script>
+           /* alert */
+            (function(proxied) {
+            	  window.alert = function(msg) {
+            		 var text =  document.getElementById("alertText");
+            		 $("#alertwrap").css("display","block");
+                  	 text.value = msg;
+            	    return false;
+            	  };
+            })(window.alert);
+            
+           /* confirm */
+            window.confirm = function(message){
+            	var apvprocedureNames = document.getElementsByName('apvprocedureNames');
+                $("#confirmwrap").css("display","block");
+                var confirmContent = $("#confirmcontent");
+                var confirmMsg = confirmContent.children().eq(0);
+                confirmMsg[0].innerHTML = message;
+                if(message.includes("임시저장")){
+                	$("#docform").attr("action","temparayDoc.ap")
+                	$("#confirmOk").on("click", function () {
+                        return true;
+                    });
+                }
+                
+                if(message.includes("기안")){
+                	$("#docform").attr("action","drafting.ap");
+                	if(apvprocedureNames.length == 0){
+                		closeconfirm();
+                		alert("결재선 지정이 필요합니다.");
+                	}else if($("#sign_title").val()==""){
+                		closeconfirm();
+                		alert("기안문서 제목을 입력해주세요.");
+                	}
+                	
+                	
+                	$("#confirmOk").on("click", function () {
+                        return true;
+                    });
+                }
+                
+
+            }
+            
             /* 모달창 열고 닫기 */
             function openmodal(){
                 $("#apvmodalwrap").css("display","block");
@@ -328,11 +376,7 @@
                     
                 });
             });
-            /* confirm */
-            function confirm(){
-            	$("#confirmwrap").css("display", "block");
-            	
-            }
+           
             function closeconfirm(){
                 $("#confirmwrap").css("display", "none");
             }
@@ -425,10 +469,12 @@
             	var editorText = CKEDITOR.instances.editor.getData();
             	apvdocContent.value = docContent+"///"+editorText;
             	
+            	var docNo = document.getElementsByName('docNo');
+            	docNo = ${d.docNo};
             	
+            
             	return true;
             }
-            
             
             
             
