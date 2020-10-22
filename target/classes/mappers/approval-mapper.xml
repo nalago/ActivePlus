@@ -48,6 +48,16 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="job" column="JOB_GRADE"/>
 	</resultMap>
 	
+	<resultMap id="AttachmentResultSet" type="Attachment">
+		<id property="fId" column="FID"/>
+		<result property="original" column="ORIGINAL"/>
+		<result property="rename" column="RENAME"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="status" column="STATUS"/>
+		<result property="refTable" column="REF_TABLE"/>
+		<result property="refId" column="REF_ID"/>
+	</resultMap>
+	
 	<select id="selectAllDocTypeListCount" resultType="_int">
 		SELECT COUNT(*)
 		FROM DOC_TYPE
@@ -166,6 +176,34 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		WHERE APVRESULT != '0'
 		AND EMP_ID = #{eId}
 	</select>
+	
+	<select id="selectEmpId" parameterType="String" resultType="String">
+		SELECT EMP_ID
+		FROM EMPLOYEE
+		WHERE NAME = #{string}
+	</select>
+	<!-- 기안 -->
+	<!-- <insert id="draftingDoc" parameterType="ApvDoc">
+		INSERT INTO APV_DOC
+		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '0', SYSDATE, SYSDATE, #{apdStep}, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
+	</insert> -->
+	<!-- 결재선 추가-->
+	<!--
+	<insert id="insertApproval" parameterType="Approval">
+		INSERT INTO APPROVAL
+		VALUES(SEQ_APV.NEXTVAL, SEQ_APVDOC.CURRVAL, #{},#{}, 0, NULL, NULL, NULL, #{empId})
+	</insert> -->
+	
+	<!-- 첨부파일 추가  -->
+	<!-- <insert id="insertAttachment" parameterType="Attachment">
+		INSERT INTO ATTACHMENT
+		VALUES(SEQ_ATT.NEXTVAL, #{original},#{rename},#{filePath}, APV_DOC, #{docNo}, DEFAULT)
+	</insert> -->
+	<!-- 임시문서 저장 -->
+	<!-- <insert id="insertTempDoc" parameterType="ApvDoc">
+		INSERT INTO APV_DOC
+		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '0', SYSDATE, SYSDATE, #{apdStep}, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
+	</insert> -->
 	
 	
 </mapper>

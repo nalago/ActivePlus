@@ -8,6 +8,7 @@ import com.kh.activePlus.Employee.model.vo.Employee;
 import com.kh.activePlus.approval.model.vo.Approval;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
+import com.kh.activePlus.approval.model.vo.Attachment;
 import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.approval.model.vo.PageInfo;
 
@@ -15,7 +16,7 @@ import com.kh.activePlus.approval.model.vo.PageInfo;
 public interface ApprovalService {
 	public ArrayList<Employee> selectEmpList();
 	
-	public int draftingDoc(Doc doc);
+	public int draftingDoc(ApvDoc doc);
 	
 	public int TemporaryDocSave(Doc tempDoc);
 	
@@ -64,6 +65,14 @@ public interface ApprovalService {
 	public ArrayList<ApvDoc> selectApprovalCompleteList(String eId, PageInfo pi);
 
 	public Doc selectDoc(String docTitle);
+
+	public String[] selectEmpId(String string);
+
+	public int insertApproval(Approval apv);
+
+	public int insertAttachment(Attachment at);
+
+	public int insertTempDoc(ApvDoc temporaryDoc);
 
 
 	

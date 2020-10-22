@@ -10,6 +10,7 @@ import com.kh.activePlus.approval.model.dao.ApprovalDao;
 import com.kh.activePlus.approval.model.vo.Approval;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
+import com.kh.activePlus.approval.model.vo.Attachment;
 import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.approval.model.vo.PageInfo;
 
@@ -24,9 +25,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int draftingDoc(Doc doc) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int draftingDoc(ApvDoc doc) {
+		return aDao.draftingDoc(doc);
 	}
 
 	@Override
@@ -155,6 +155,26 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public Doc selectDoc(String docTitle) {
 		return aDao.selectDocTypeList(docTitle);
+	}
+
+	@Override
+	public String[] selectEmpId(String string) {
+		return aDao.selectEmpId(string);
+	}
+
+	@Override
+	public int insertApproval(Approval apv) {
+		return aDao.insertApproval(apv);
+	}
+
+	@Override
+	public int insertAttachment(Attachment at) {
+		return aDao.insertAttachment(at);
+	}
+
+	@Override
+	public int insertTempDoc(ApvDoc temporaryDoc) {
+		return aDao.insertTempDoc(temporaryDoc);
 	}
 
 	

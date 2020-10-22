@@ -19,5 +19,16 @@ public class Attachment {
 	private String rename;
 	private String filePath;
 	private String status;
-	private String refId;
+	private String refTable;
+	private int refId;
+	
+	public Attachment(String original, String rename, String filePath, int refId) {
+		super();
+		this.original = original;
+		this.rename = rename;
+		this.filePath = filePath;
+		this.refId = refId;
+	}
+	
+	
 }

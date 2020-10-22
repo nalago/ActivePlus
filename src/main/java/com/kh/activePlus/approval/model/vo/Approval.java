@@ -12,4 +12,14 @@ public class Approval {
 	private Date apvCompDate;
 	private Date reciveDate;
 	private String empId;
+	
+	public Approval(int apvStep, int apvType, String empId) {
+		super();
+		this.apvStep = apvStep;
+		this.apvType = apvType;
+		this.empId = empId;
+	}
+	
+	
+	
 }

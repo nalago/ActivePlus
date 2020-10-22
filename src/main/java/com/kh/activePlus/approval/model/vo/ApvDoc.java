@@ -26,6 +26,17 @@ public class ApvDoc {
 	private String empId;
 	private int apvDocFileCount;
 	
+	public ApvDoc(String apvDocTitle, String apvDocContent, String apdPath, int docNo, String empId,
+			int apvDocFileCount) {
+		super();
+		this.apvDocTitle = apvDocTitle;
+		this.apvDocContent = apvDocContent;
+		this.apdPath = apdPath;
+		this.docNo = docNo;
+		this.empId = empId;
+		this.apvDocFileCount = apvDocFileCount;
+	}
+	
 	
 	
 	

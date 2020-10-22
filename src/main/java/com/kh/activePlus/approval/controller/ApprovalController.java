@@ -21,8 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.activePlus.Employee.model.vo.Employee;
 import com.kh.activePlus.approval.model.exception.ApprovalException;
 import com.kh.activePlus.approval.model.service.ApprovalService;
+import com.kh.activePlus.approval.model.vo.Approval;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
+import com.kh.activePlus.approval.model.vo.Attachment;
 import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.approval.model.vo.PageInfo;
 import com.kh.activePlus.approval.model.vo.Pagination;
@@ -235,10 +237,10 @@ public class ApprovalController {
 	public ModelAndView selectDoc(ModelAndView mv,String docTitle) {
 		Doc doc = aService.selectDoc(docTitle);
 		ArrayList<Employee> eList = aService.selectEmpList();
-		System.out.println(eList);
+		
 		if(doc != null) {
 			mv.addObject("eList", eList);
-			mv.addObject("doc",doc);
+			mv.addObject("doc", doc);
 			mv.setViewName("approval/drafting");
 		}else {
 			throw new ApprovalException("양식 조회 실패");
@@ -250,41 +252,86 @@ public class ApprovalController {
 	
 	@RequestMapping(value="drafting.ap", method=RequestMethod.POST)
 	public ModelAndView drafting(ModelAndView mv, MultipartHttpServletRequest request,
-			String[] apvprocedureNames, String comment, String apvDocContent
+			String[] apvprocedureNames, String comment, String apvDocContent,
+			String apvDocTitle, int docNo
 			) {
-		/* 문서 내용 가져옴 */
-		System.out.println("controller"+apvDocContent);
+		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
+		String eId = loginUser.getID();
+		String apdPath = "0 "+ eId + " (기안)";
+		String[] procedureNames = new String[apvprocedureNames.length];
+		String[] apvTypes = new String[apvprocedureNames.length];
+		int[] apvtype = new int[apvprocedureNames.length];
 		/* 결재선 */
 		for(int i = 0; i < apvprocedureNames.length; i++) {
 			System.out.println(apvprocedureNames[i].toString());
+			apdPath +=", "+ apvprocedureNames[i].toString();
+			int begin = apvprocedureNames[i].indexOf(" ");
+			int end = apvprocedureNames[i].indexOf(" (");
+			procedureNames[i] = apvprocedureNames[i].substring(begin, end);
+			System.out.println("첫 인덱스 : "+ begin+", 마지막 인덱스 : "+end);
+			System.out.println("결재선 이름만 "+procedureNames[i]);
+			
+			apvTypes[i] = apvprocedureNames[i].substring(end+1);
+			System.out.println("결재 종류 :"+apvTypes[i]);
+			if(apvTypes[i].contains("기안")) {
+				apvtype[i] = 0;
+			}else if(apvTypes[i].contains("결재")) {
+				apvtype[i] = 1;
+			}else if(apvTypes[i].contains("합의")) {
+				apvtype[i] = 2;
+			}
+			
 			
 		}
-		
+		System.out.println(apdPath);
 		/* 의견 */
 		System.out.println(comment);
-		
 		
 		/* 첨부파일 (전자문서 먼저 저장 후에 문서번호 가져와서 넣기) */
 		List<MultipartFile> fileList = request.getFiles("apvfiles");
 		System.out.println("첨부파일 갯수 : " + fileList.size());
-		if(!fileList.isEmpty()) {
-			String[] rename = saveFile(fileList, request);
-			for(int i = 0; i < rename.length; i++) {
-				/* 첨부파일 개수만큼 service불러서 저장하기 */
-				
-				
+		
+		
+		/* 기안문 넘길 곳 */
+		ApvDoc draftingDoc = new ApvDoc(apvDocTitle, apvDocContent, apdPath, docNo, eId, fileList.size() );
+		
+		int result = aService.draftingDoc(draftingDoc);
+		String[] empIds = {eId};
+		int result2 = 0;
+		int result3 = 0;
+		if(result > 0) {
+			for(int i = 0; i < procedureNames.length; i++) {
+				empIds = aService.selectEmpId(procedureNames[i]);
+				Approval apv = new Approval(i,apvtype[i], empIds[i]);
+				result2 += aService.insertApproval(apv);
 			}
+			
+			for(MultipartFile file : fileList) {
+				if(!file.isEmpty()) {
+					result3 = saveFile(fileList, request, docNo);
+				}
+			}
+			if(result2 == procedureNames.length && result3 == fileList.size()) {
+				mv.addObject("msg","정상적으로 기안되었습니다.");
+				mv.setViewName("redirect:approval/draftingList");
+				return mv;
+			}else {
+				throw new ApprovalException("결재선 등록 실패");
+			}
+			
+		}else {
+			throw new ApprovalException("기안 실패");
 		}
 		
 		
 		
 		
-		return mv;
 	}
 	
 	/* 첨부 파일 저장 */
-	public String[] saveFile(List<MultipartFile> fileList, MultipartHttpServletRequest request) {
+	public int saveFile(List<MultipartFile> fileList, MultipartHttpServletRequest request,
+			int docNo) {
 		String path = request.getSession().getServletContext().getRealPath("resources");
 		
 		String savePath = path + "\\approval\\duploadFiles";
@@ -295,7 +342,7 @@ public class ApprovalController {
 			folder.mkdirs();
 		}
 		String filerename[] = new String[fileList.size()];
-		
+		int result = 0;
 		for(int i = 0; i < fileList.size(); i++) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");		
 			String originFileName = fileList.get(i).getOriginalFilename();
@@ -304,19 +351,85 @@ public class ApprovalController {
 			
 			String renamePath = folder + "\\" + renameFileName;
 			filerename[i] = renameFileName;
+			Attachment at = new Attachment(originFileName, renameFileName, savePath, docNo);
+			result += aService.insertAttachment(at);
+			
 			try {
 				fileList.get(i).transferTo(new File(renamePath));
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 			}
 			
-			
+		}
+		
+		return result;
+		
+	}
+	
+	/* 첨부파일 삭제 */
+	public void deleteFile(String filePath, HttpServletRequest request) {
+		String path = request.getSession().getServletContext().getRealPath("resources");
+		
+		File deleteFile = new File(path+"\\approval\\duploadFiles"+filePath);
+		
+		if(deleteFile.exists()) {
+			deleteFile.delete();
+		}
+		
+	}
+	
+	@RequestMapping("temporaryDoc.ap")
+	public ModelAndView temporaryDoc(ModelAndView mv,
+			 MultipartHttpServletRequest request,
+				String[] apvprocedureNames, String comment, String apvDocContent,
+				String apvDocTitle, int docNo) {
+		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
+		
+		String eId = loginUser.getID();
+		String apdPath = "0 "+ eId + " (기안)";
+		for(int i = 0; i < apvprocedureNames.length; i++) {
+			System.out.println(apvprocedureNames[i].toString());
+			apdPath +=", "+ apvprocedureNames[i].toString();
+		}
+		/* 첨부파일 */
+		List<MultipartFile> fileList = request.getFiles("apvfiles");
+		System.out.println("첨부파일 갯수 : " + fileList.size());
+		
+		ApvDoc temporaryDoc = new ApvDoc(apvDocTitle, apvDocContent, apdPath, docNo, eId, fileList.size() );
+		
+		int result = aService.insertTempDoc(temporaryDoc);
+		int result2 = 0;
+		if(result > 0) {
+			for(MultipartFile file : fileList) {
+				if(!file.isEmpty()) {
+					result2 = saveFile(fileList, request, docNo);
+				}
+			}
+			if(result2 == fileList.size()) {
+				mv.addObject("msg","임시저장이 완료되었습니다.");
+				mv.setViewName("redirect:approval/temporaryList.ap");
+				return mv;
+			}else {
+				throw new ApprovalException("첨부파일 등록 실패");
+			}
+		}else {
+			throw new ApprovalException("임시저장 실패");
 		}
 		
 		
-		return filerename;
-		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/*@RequestMapping(value="docTypeList.ap", method=RequestMethod.POST)
 	public void docTypeList(String docType, HttpServletResponse response) throws IOException {
