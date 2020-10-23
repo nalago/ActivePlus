@@ -51,7 +51,16 @@
     color:black;
     text-decoration: none;
 }
-    
+    #insertPrivate{
+    	float:right;
+    	width:70px;
+    	height:30px;
+    	background-color: rgb(62, 142, 218);
+    	margin-right:50px;
+    }
+    tbody tr:hover {
+ 	background-color:#63ab68;
+ }
 </style>
 </head>
 <body>
@@ -93,7 +102,9 @@
                     </c:if>
                     <c:if test="${ !empty pList }">
                     	<c:forEach var="p" items="${ pList }">
-                    		<td>${ p.apvDocTitle }</td>
+                    	<tr>
+                    		<td>${ p.docTitle }</td>
+                    	</tr>
                     	</c:forEach>
                     </c:if>
                     	
@@ -131,9 +142,24 @@
                  	</c:url>
 	                 <a class="paging" href="${after }">&gt;</a>                 
                  </c:if>
+                 <button id="insertPrivate">등록</button>
              </div>
            </div>
            <script>
+           		$("#insertPrivate").on("click",function(){
+           			location.href="privateDoc.ap";
+           		});
+           		
+           		$(function(){
+           			$("td").on("click", function(){
+           				var docTitle = $(this).parent().children().eq(0).text();
+           				if(docTitle.includes('없습니다.')){
+          					return false;
+          				}
+           				
+           				location.href="selectPriDoc.ap?docTitle="+docTitle;
+           			});
+           		});
            		
            </script>
     </section>

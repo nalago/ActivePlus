@@ -114,7 +114,7 @@
                                 </ul>
                             </li>
                             <li>
-                            	<a href="${docTypeList }&docType=privatedoc">
+                            	<a href="${docTypeList }&docType=PRIVATE">
                             		개인양식
                             	</a>
                             </li>

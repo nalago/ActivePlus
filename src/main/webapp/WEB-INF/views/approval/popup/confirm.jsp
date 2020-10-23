@@ -58,7 +58,7 @@
                     <h5>&nbsp;알림</h5>
                 </div>
                 <div id="confirmcontent">
-                    <h4>기안하시겠습니까?</h4>
+                    <h4></h4>
                     <button id="confirmOk">OK</button>
                     <button id="confirmCancel" onclick="closeconfirm();">CANCEL</button>
                 </div>
@@ -70,7 +70,9 @@
 /* confirm */
 window.confirm = function(message){
     $("#confirmwrap").css("display","block");
-    
+    var confirmContent = $("#confirmcontent");
+    var confirmMsg = confirmContent.children().eq(0);
+    confirmMsg[0].innerHTML = message;
     
 	
     $("#confirmOk").on("click", function () {

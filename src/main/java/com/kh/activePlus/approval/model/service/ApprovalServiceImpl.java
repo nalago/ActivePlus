@@ -177,6 +177,31 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return aDao.insertTempDoc(temporaryDoc);
 	}
 
+	@Override
+	public int priDocSave(Doc priDoc) {
+		return aDao.priDocSave(priDoc);
+	}
+
+	@Override
+	public Doc selectPriDoc(Doc searchd) {
+		return aDao.selectPriDoc(searchd);
+	}
+
+	@Override
+	public int deletePriDoc(Doc searchd) {
+		return aDao.deletePriDoc(searchd);
+	}
+
+	@Override
+	public Doc selectTempDoc(Doc searchTemp) {
+		return aDao.selectTempDoc(searchTemp);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectTempAt(int docNo) {
+		return aDao.selectTempAt(docNo);
+	}
+
 	
 
 }

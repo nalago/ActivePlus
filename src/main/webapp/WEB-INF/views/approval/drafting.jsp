@@ -211,7 +211,12 @@
     #docDiv, #docNo{
     	display:none;
     }
-   
+   	
+   	#apvDocTitle{
+   		width:300px;
+   		hegiht:30px;
+   		font-size:25px;
+   	}
     
     </style>
 </head>
@@ -228,8 +233,20 @@
             
                 <div id="doc">
                 <!-- 기안 문서 양식 예 -->
-               	${ d.docContent }
+                <c:if test="${ d.docType != 'PRIVATE' }">
+               	${ d.docContent }                
+                </c:if>
+               	<c:if test="${d.docType != 'PRIVATE' }">
                	<textarea id="editor" name="draftContent">내용 입력</textarea>
+               	</c:if>
+               	<c:if test="${ d.docType eq 'PRIVATE' }"> 
+               		
+               		<input id="apvDocTitle" type="text" name="apvDocTitle" placeholder="문서 제목 입력"/>
+               	</c:if>
+               	
+               	<c:if test="${ d.docType eq 'PRIVATE' }">
+               	<textarea id="editor" name="draftContent">${ d.docContent }</textarea>
+               	</c:if>
                	</div>
                	<input type="text" id="docNo" name="docNo" value="${ d.docNo }" readonly/>
                	<input type="text" id="docDiv" name="apvDocContent" readonly/>
@@ -309,7 +326,7 @@
             		 var text =  document.getElementById("alertText");
             		 $("#alertwrap").css("display","block");
                   	 text.value = msg;
-            	    return false;
+            	    	return false;
             	  };
             })(window.alert);
             
@@ -321,7 +338,7 @@
                 var confirmMsg = confirmContent.children().eq(0);
                 confirmMsg[0].innerHTML = message;
                 if(message.includes("임시저장")){
-                	$("#docform").attr("action","temparayDoc.ap")
+                	$("#docform").attr("action","temporaryDoc.ap")
                 	$("#confirmOk").on("click", function () {
                         return true;
                     });
@@ -336,14 +353,10 @@
                 		closeconfirm();
                 		alert("기안문서 제목을 입력해주세요.");
                 	}
-                	
-                	
                 	$("#confirmOk").on("click", function () {
                         return true;
                     });
                 }
-                
-
             }
             
             /* 모달창 열고 닫기 */
@@ -354,9 +367,8 @@
             $("#enroll").on("click", function(){
             	var procedureList = $("#procedure").children();
             	var apvprocedure = document.getElementById("apvprocedure");
-            	
+            	console.log(apvprocedure.children[0]);
             	for(var i = 0; i < procedureList.length; i++){
-            		console.log(procedureList[i].firstChild);
             		apvprocedure.insertAdjacentHTML("beforeend", "<input type='text' class='apvprocedureNames' name='apvprocedureNames' value='"+ (i+1) + " " 
             									+ procedureList[i].firstChild.value+"' readonly />");
             	}
