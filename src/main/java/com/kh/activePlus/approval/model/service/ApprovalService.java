@@ -74,6 +74,16 @@ public interface ApprovalService {
 
 	public int insertTempDoc(ApvDoc temporaryDoc);
 
+	public int priDocSave(Doc priDoc);
+
+	public Doc selectPriDoc(Doc searchd);
+
+	public int deletePriDoc(Doc searchd);
+
+	public Doc selectTempDoc(Doc searchTemp);
+
+	public ArrayList<Attachment> selectTempAt(int docNo);
+
 
 	
 	

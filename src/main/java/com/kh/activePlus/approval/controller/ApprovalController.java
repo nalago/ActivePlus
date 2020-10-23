@@ -100,12 +100,85 @@ public class ApprovalController {
 			mv.addObject("pList",pList);
 			mv.addObject("pi",pi);
 			mv.setViewName("approval/privateDocList");
+			return mv;
 		}else {
 			throw new ApprovalException("개인양식 조회 실패");
 		}
 		
-		return mv;
 	}
+	
+	@RequestMapping("privateDoc.ap")
+	public String goPrivateDoc() {
+		return "approval/privateDoc";
+	}
+	
+	@RequestMapping("selectPriDoc.ap")
+	public ModelAndView selectPriDoc(ModelAndView mv, HttpServletRequest request,
+			String docTitle) {
+		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
+		
+		String eId = loginUser.getID();
+		
+		Doc searchd = new Doc(docTitle, eId);
+		
+		Doc PriDoc = aService.selectPriDoc(searchd);
+		
+		System.out.println("select pridoc"+PriDoc);
+		
+		if(PriDoc != null) {
+			mv.addObject("priDoc", PriDoc);
+			mv.setViewName("approval/privateDoc");
+			return mv;
+		}else {
+			throw new ApprovalException("개인양식을 불러오는데 실패했습니다.");
+		}
+		
+	}
+	
+	@RequestMapping("priDocSave.ap")
+	public ModelAndView priDocSave(ModelAndView mv, HttpServletRequest request,
+			String priDocTitle, String priDocContent, String docexplanation) {
+		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
+		
+		String eId = loginUser.getID();
+		
+		Doc priDoc = new Doc(priDocTitle, priDocContent, docexplanation, eId);
+		
+		int result = aService.priDocSave(priDoc);
+		
+		if(result > 0) {
+			mv.addObject("msg","개인양식이 등록되었습니다.");
+			mv.setViewName("approval/privateDocList");
+			return mv;
+		}else {
+			throw new ApprovalException("개인양식 등록에 실패하였습니다.");
+		}
+		
+	}
+	
+	
+	@RequestMapping("deletePriDoc.ap")
+	public ModelAndView deletePriDoc(ModelAndView mv,HttpServletRequest request,
+			String docTitle) {
+		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
+		
+		String eId = loginUser.getID();
+		
+		Doc searchd = new Doc(docTitle, eId);
+		
+		int result = aService.deletePriDoc(searchd);
+		
+		if(result > 0) {
+			mv.addObject("msg","개인양식 삭제에 성공하였습니다.");
+			mv.setViewName("redirect:approval/temporaryList");
+			return mv;
+		}else {
+			throw new ApprovalException("개인양식 삭제에 실패하였습니다.");
+		}
+		
+		
+	}
+	
 	@RequestMapping("temporaryList.ap")
 	public ModelAndView gotemporaryList(ModelAndView mv,HttpServletRequest request,
 			@RequestParam(value="page", required=false) Integer page){
@@ -125,12 +198,43 @@ public class ApprovalController {
 			mv.addObject("tList",tList);
 			mv.addObject("pi",pi);
 			mv.setViewName("approval/temporaryList");
+			return mv;
 		}else {
 			throw new ApprovalException("임시저장 문서 조회 실패");
 		}
 		
-		return mv;
 	}
+	
+	@RequestMapping("selectTempDoc.ap")
+	public ModelAndView SelectTempDoc(ModelAndView mv, HttpServletRequest request,
+			String docTitle) {
+		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
+		
+		String eId = loginUser.getID();
+		
+		Doc searchTemp = new Doc(docTitle, eId);
+		
+		ArrayList<Employee> eList = aService.selectEmpList();
+		
+		Doc tempDoc = aService.selectTempDoc(searchTemp);
+		
+		ArrayList<Attachment> tempAt = aService.selectTempAt(tempDoc.getDocNo());
+
+		
+		if(tempDoc != null) {
+			mv.addObject("eList", eList);
+			mv.addObject("tempAt", tempAt);
+			mv.addObject("tDoc",tempDoc);
+			mv.setViewName("approval/tmpDoc");
+			return mv;
+		}else {
+			throw new ApprovalException("임시저장 문서를 불러오는데 실패하였습니다.");
+		}
+		
+	}
+	
+	
+	
 	@RequestMapping("approvalObtainList.ap")
 	public ModelAndView goObtainList(ModelAndView mv, HttpServletRequest request,
 			@RequestParam(value="page", required=false) Integer page) {
@@ -150,11 +254,11 @@ public class ApprovalController {
 			mv.addObject("oList",oList);
 			mv.addObject("pi",pi);
 			mv.setViewName("approval/approvalObtainList");
+			return mv;
 		}else {
 			throw new ApprovalException("결재 받을 문서 조회 실패");
 		}
 		
-		return mv;
 	}
 	@RequestMapping("approvalList.ap")
 	public ModelAndView goApprovalList(ModelAndView mv,HttpServletRequest request,
@@ -174,11 +278,11 @@ public class ApprovalController {
 			mv.addObject("aList",aList);
 			mv.addObject("pi",pi);
 			mv.setViewName("approval/approvalList");
+			return mv;
 		}else {
 			throw new ApprovalException("결재 예정 문서 조회 실패");
 		}
 		
-		return mv;
 	}
 	@RequestMapping("approvalCompleteList.ap")
 	public ModelAndView goApprovalCompleteList(ModelAndView mv, HttpServletRequest request,
@@ -198,11 +302,11 @@ public class ApprovalController {
 			mv.addObject("cList",cList);
 			mv.addObject("pi",pi);
 			mv.setViewName("approval/approvalComplList");
+			return mv;
 		}else {
 			throw new ApprovalException("임시저장 문서 조회 실패");
 		}
 		
-		return mv;
 	}
 	@RequestMapping("tempDocDetail.ap")
 	public String goTempDocDetail() {
@@ -223,30 +327,33 @@ public class ApprovalController {
 		
 		System.out.println(dList);
 		if(dList != null) {
+			mv.addObject("docType",docType);
 			mv.addObject("dList",dList);
 			mv.addObject("pi",pi);
 			mv.setViewName("approval/draftingList");
+			return mv;
 		}else {
 			throw new ApprovalException("문서양식 리스트 조회 실패");
 		}
 		
-		return mv;
 	}
 	
 	@RequestMapping("selectDoc.ap")
 	public ModelAndView selectDoc(ModelAndView mv,String docTitle) {
 		Doc doc = aService.selectDoc(docTitle);
 		ArrayList<Employee> eList = aService.selectEmpList();
+		System.out.println(docTitle);
+		System.out.println("selectDoc"+doc);
 		
 		if(doc != null) {
 			mv.addObject("eList", eList);
 			mv.addObject("doc", doc);
 			mv.setViewName("approval/drafting");
+			return mv;
 		}else {
 			throw new ApprovalException("양식 조회 실패");
 		}
 		
-		return mv;
 	}
 	
 	
@@ -387,9 +494,12 @@ public class ApprovalController {
 		
 		String eId = loginUser.getID();
 		String apdPath = "0 "+ eId + " (기안)";
-		for(int i = 0; i < apvprocedureNames.length; i++) {
-			System.out.println(apvprocedureNames[i].toString());
-			apdPath +=", "+ apvprocedureNames[i].toString();
+		if(apvprocedureNames != null) {
+			for(int i = 0; i < apvprocedureNames.length; i++) {
+				System.out.println(apvprocedureNames[i].toString());
+				apdPath +=", "+ apvprocedureNames[i].toString();
+			}
+			
 		}
 		/* 첨부파일 */
 		List<MultipartFile> fileList = request.getFiles("apvfiles");
@@ -400,6 +510,7 @@ public class ApprovalController {
 		int result = aService.insertTempDoc(temporaryDoc);
 		int result2 = 0;
 		if(result > 0) {
+			
 			for(MultipartFile file : fileList) {
 				if(!file.isEmpty()) {
 					result2 = saveFile(fileList, request, docNo);

@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="docStatus" column="DOCSTATUS"/>
 		<result property="docType" column="DOCTYPE"/>
 		<result property="docExplantion" column="DOCEXPLANTION"/>
+		<result property="empId" column="EMP_ID"/>
 	</resultMap>
 
 	<resultMap id="ApvDocResultSet" type="ApvDoc">
@@ -82,12 +83,14 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		SELECT *
 		FROM DOC_TYPE
 		WHERE DOCTYPE LIKE '%'||#{docType}||'%'
+		AND DOCSTATUS = 'Y'
 	</select>
 
 	<select id="selectDocTypeListCount" parameterType="String" resultType="_int">
 		SELECT COUNT(*)
 		FROM DOC_TYPE
 		WHERE DOCTYPE LIKE '%'||#{docType}||'%'
+		AND DOCSTATUS = 'Y'
 	</select>
 	
 	<select id="selectPrivateListCount" parameterType="String" resultType="_int">
@@ -95,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		FROM DOC_TYPE
 		WHERE DOCTYPE = 'PRIVATE'
 		AND EMP_ID = #{eId}
+		AND DOCSTATUS = 'Y'
 	</select>
 	
 	<select id="selectPrivateList" parameterType="String" resultMap="DocResultSet">
@@ -102,6 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		FROM DOC_TYPE
 		WHERE DOCTYPE = 'PRIVATE'
 		AND EMP_ID = #{eId}
+		AND DOCSTATUS = 'Y'
 	</select>
 
 	<select id="selectTemporaryListCount" parameterType="String" resultType="_int">
@@ -145,7 +150,8 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	<select id="selectDoc" parameterType="String" resultMap="DocResultSet">
 		SELECT *
 		FROM DOC_TYPE
-		WHERE DOCTITLE = #{docTitle}
+		WHERE DOCTITLE LIKE '%'||#{docTitle}||'%'
+		AND DOCSTATUS = 'Y'
 	</select>
 	
 	<select id="selectEmpList" resultMap="EmployeeResultSet">
@@ -183,10 +189,10 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		WHERE NAME = #{string}
 	</select>
 	<!-- 기안 -->
-	<!-- <insert id="draftingDoc" parameterType="ApvDoc">
+	<insert id="draftingDoc" parameterType="ApvDoc">
 		INSERT INTO APV_DOC
 		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '0', SYSDATE, SYSDATE, #{apdStep}, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
-	</insert> -->
+	</insert> 
 	<!-- 결재선 추가-->
 	<!--
 	<insert id="insertApproval" parameterType="Approval">
@@ -200,10 +206,47 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		VALUES(SEQ_ATT.NEXTVAL, #{original},#{rename},#{filePath}, APV_DOC, #{docNo}, DEFAULT)
 	</insert> -->
 	<!-- 임시문서 저장 -->
-	<!-- <insert id="insertTempDoc" parameterType="ApvDoc">
+	<insert id="insertTempDoc" parameterType="ApvDoc">
 		INSERT INTO APV_DOC
 		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '0', SYSDATE, SYSDATE, #{apdStep}, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
-	</insert> -->
+	</insert>
+	<!-- 개인 양식 등록 -->
+	<insert id="priDocSave" parameterType="Doc">
+		INSERT INTO DOC_TYPE
+		VALUES(SEQ_DOCTYPE.NEXTVAL,#{docTitle},#{docContent},DEFAULT ,'PRIVATE' , #{docExplantion}, #{empId})
+	</insert>
+	
+	<select id="selectPriDoc" parameterType="Doc" resultMap="DocResultSet">
+		SELECT *
+		FROM DOC_TYPE
+		WHERE DOCTITLE = #{docTitle}
+		AND EMP_ID = #{empId}
+		AND DOCSTATUS = 'Y'
+	</select>
+	
+	<update id="deletePriDoc" parameterType="Doc">
+		UPDATE DOC_TYPE
+		SET DOCSTATUS = 'N'
+		WHERE DOCTITLE = #{docTitle}
+		AND EMP_ID = #{empId} 
+	</update>
+	
+	<select id="selectTempDoc" parameterType="Doc" resultMap="DocResultSet">
+		SELECT *
+		FROM APV_DOC
+		WHERE APVDOCTITLE = #{docTitle}
+		AND EMP_ID = #{empId}
+		AND APVSTATUS = '0'
+	</select>
+	
+	<select id="selectTempAt" resultMap="AttachmentResultSet">
+		SELECT *
+		FROM ATTACHMENT
+		WHERE REF_ID = #{docNo}
+		AND STATUS = 'Y'
+	</select>
+	
+	
 	
 	
 </mapper>

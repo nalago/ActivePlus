@@ -52,7 +52,9 @@
     color:black;
     text-decoration: none;
 }
-    
+    tbody tr:hover {
+ 	background-color:#63ab68;
+ }
 </style>
 </head>
 <body>
@@ -135,7 +137,15 @@
              </div>
            </div>
            <script>
-           		
+           $(function(){
+      			$("td").on("click", function(){
+      				var docTitle = $(this).parent().children().eq(0).text();
+      				if(docTitle.includes('없습니다.')){
+      					return false;
+      				}
+      				location.href="selectTempDoc.ap?docTitle="+docTitle;
+      			});
+      		});
            </script>
     </section>
 

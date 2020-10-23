@@ -122,4 +122,24 @@ public class ApprovalDao {
 		return sqlSession.insert("approvalMapper.insertTempDoc", temporaryDoc);
 	}
 
+	public int priDocSave(Doc priDoc) {
+		return sqlSession.insert("approvalMapper.priDocSave", priDoc);
+	}
+
+	public Doc selectPriDoc(Doc searchd) {
+		return sqlSession.selectOne("approvalMapper.selectPriDoc", searchd);
+	}
+
+	public int deletePriDoc(Doc searchd) {
+		return sqlSession.update("approvalMapper.deletePriDoc", searchd);
+	}
+
+	public Doc selectTempDoc(Doc searchTemp) {
+		return sqlSession.selectOne("approvalMapper.selectTempDoc", searchTemp);
+	}
+
+	public ArrayList<Attachment> selectTempAt(int docNo) {
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectTempAt", docNo);
+	}
+
 }

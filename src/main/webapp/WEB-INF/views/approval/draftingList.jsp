@@ -68,10 +68,9 @@
             <script>
                 $(function(){
                     $("#listButtonopen").on("click",function(){
-                        console.log($("#doctypeList"));
                        $("#doctypeList").css("display","inline-block");
                        $(this).css("display","none");
-    
+    					
                     });
                     $("#listButtonclose").on("click",function(){
                         $("#doctypeList").css("display","none");
@@ -83,7 +82,16 @@
             
            <div id="ListWrap">
                <br>
-               <h3>공통 양식</h3>
+               <c:choose>
+               	<c:when test="${ docType eq 'PRIVATE' }"><h3>개인 양식</h3></c:when>
+               	<c:when test="${ docType eq 'personal' }"><h3>인사 양식</h3></c:when>
+               	<c:when test="${ docType eq 'task' }"><h3>업무 양식</h3></c:when>
+               	<c:when test="${ docType eq 'report' }"><h3>보고 양식</h3></c:when>
+               	<c:when test="${ docType eq 'publicdoc' }"><h3>공통양식</h3></c:when>
+               	<c:otherwise><h3>전체 양식</h3></c:otherwise>
+               </c:choose>
+               
+               
                <br>
                <c:url var="docDetail" value="docDetail.ap">
                	<c:param name="docNo" value="${doc.docNo }"/>

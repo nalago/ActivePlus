@@ -47,6 +47,7 @@
         width: 240px;
         height: 170px;
         border: 1px solid black;
+        overflow-y:scroll;
     }
     #comment{
         overflow-y: scroll;
