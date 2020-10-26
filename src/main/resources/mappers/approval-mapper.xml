@@ -108,6 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		WHERE DOCTYPE = 'PRIVATE'
 		AND EMP_ID = #{eId}
 		AND DOCSTATUS = 'Y'
+		ORDER BY DOCNO DESC
 	</select>
 
 	<select id="selectTemporaryListCount" parameterType="String" resultType="_int">
@@ -123,6 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		FROM APV_DOC
 		WHERE APVDOCSTATUS = '0'
 		AND EMP_ID = #{eId}
+		ORDER BY APVDOCNO DESC
 	</select>
 
 	<select id="selectApprovalObtainList" parameterType="String" resultMap="ApvDocResultSet">
@@ -131,6 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		JOIN APPROVAL USING(EMP_ID)
 		WHERE EMP_ID=#{eId}
 		AND APVTYPE = '0' 
+		ORDER BY APVDOCNO DESC
 	</select>
 	
 	<select id="selectApprovalList" parameterType="String" resultMap="ApvDocResultSet">
@@ -139,6 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		JOIN APPROVAL USING(EMP_ID)
 		WHERE EMP_ID=#{eId}
 		AND APVTYPE != '0'
+		ORDER BY APVDOCNO DESC
 	</select>
 
 	<select id="selectApprovalCompleteList" parameterType="String" resultMap="ApvDocResultSet">
@@ -147,6 +151,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		JOIN APPROVAL USING(EMP_ID)
 		WHERE EMP_ID = #{eId}
 		AND APVRESULT != '0'
+		ORDER BY APVDOCNO DESC
 	</select>
 	
 	<select id="selectDoc" parameterType="_int" resultMap="DocResultSet">
@@ -248,7 +253,16 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		AND STATUS = 'Y'
 	</select>
 	
+	<delete id="deleteTempDoc" parameterType="_int">
+		DELETE 
+		FROM APV_DOC
+		WHERE APVDOCNO = #{apvDocNo}
+	</delete>
 	
-	
+	<delete id="deleteAttachment" parameterType="_int">
+		DELETE
+		FROM ATTACHMENT
+		WHERE REF_ID = #{docNo}
+	</delete>
 	
 </mapper>

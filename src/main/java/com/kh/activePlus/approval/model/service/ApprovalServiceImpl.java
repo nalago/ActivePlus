@@ -36,9 +36,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int deleteTempDoc(int dId) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteTempDoc(int apvDocNo) {
+		return aDao.deleteTempDoc(apvDocNo);
 	}
 
 	@Override
@@ -201,6 +200,13 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ArrayList<Attachment> selectTempAt(int docNo) {
 		return aDao.selectTempAt(docNo);
 	}
+
+	@Override
+	public int deleteAttachment(int docNo) {
+		return aDao.deleteAttachment(docNo);
+	}
+
+	
 
 	
 
