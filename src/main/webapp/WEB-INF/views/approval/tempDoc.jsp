@@ -125,6 +125,15 @@
         bottom : 5%;
         right: 13%;
     }
+    .procedureCancel{
+    	border:0;
+    	margin:0;
+    	color:red;
+    }
+    .procedureCancel:focus{
+    	outline:none;
+    }
+    
     /* confirm */
     #confirmwrap{
         top:0;
@@ -168,27 +177,93 @@
         background-color: rgb(62, 142, 218) ;
         margin-right: 20px;
     }
+    
+    #docform{
+    	width:80%;
+    	display:inline-block;
+    	float:right;
+    }
+    
+    ul, li{
+    	list-style:none;
+    }
+   
+  	input[type='radio']{
+  		visibility:hidden;
+  	}
+  	
+  	
+    #person label{
+    	width:94%;
+    }
+    .procedureNames{
+    	 background-color: rgba(10, 20, 15, 0);
+    	 border:none;
+    }
+    input[type="text"]:focus{
+    	outline:none;
+    }
+    
+     #docDiv, #docNo{
+    	display:none;
+    }
+    	#apvDocTitle{
+   		width:300px;
+   		hegiht:30px;
+   		font-size:25px;
+   	}
     </style>
 </head>
 <body>
 <jsp:include page="../common/menubar.jsp"/>
 <section>
+        <jsp:include page="popup/alert.jsp"/>
+<c:set var="d" value="${ tDoc }"/>
         <jsp:include page="submenu/topMenu.jsp"/>
             <jsp:include page="submenu/docTypeList.jsp"/>
-            <form id="tDocForm" method="post" encType="multipart/form-data">
+            <form id="docform" method="post" encType="multipart/form-data">
             <jsp:include page="submenu/apvTempMenu.jsp"/>
             <div id="docwrap">
                 <div id="doc">
                 <!-- 기안 문서 양식 예 -->
-                	${ d.docContent }
-                    <textarea id="editor"></textarea>
-                </div>
+                <c:if test="${ doc.docType != 'PRIVATE' }">
+	               	${ d.apvDocContent }                
+               	<textarea id="editor" name="draftContent">내용 입력</textarea>
+                </c:if>
+               	<c:if test="${ doc.docType eq 'PRIVATE' }"> 
+               	<div id="docContent">
+               		<input id="apvDocTitle" type="text" name="apvDocTitle" value="${ d.apvDocTitle }"/>
+               	</div>
+	               	<textarea id="editor" name="draftContent">${ d.apvDocContent }</textarea>
+               	</c:if>
+               	
+               	<c:if test="${ doc.docType eq 'PRIVATE' }">
+               	</c:if>
+               	</div>
+               	<input type="text" id="docNo" name="docNo" value="${ d.docNo }" readonly/>
+               	<input type="text" id="docDiv" name="apvDocContent" readonly/>
                 </div>
                 <script>
+                $(function(){
                     CKEDITOR.replace("editor",{
-                        extraPlugins:"confighelper"
+                    	
                     });
+                })
                 </script>
+        <div id="confirmwrap">
+            <div id="confirm">
+                <div id="confirmtitle">
+                    <h5>&nbsp;알림</h5>
+                </div>
+                <div id="confirmcontent">
+                    <h4></h4>
+                    <input id="confirmOk" type="submit"/>
+                    <button id="confirmCancel" type="button" onclick="closeconfirm();">CANCEL</button>
+                </div>
+            </div>
+        </div>
+        </form>
+        </section>
         <div id="apvmodalwrap">
             <div id="apvmodal">
                 <div id="modaltitle">
@@ -209,13 +284,16 @@
                         </svg>
                         <div id="person">
                             <!-- 직원정보 출력하는곳 -->
+                            <ul>
+                            <h5>인사</h5>
                             <c:forEach var="e" items="${ eList }">
                             	<c:if test="${ e.department eq '인사' }">
-                            		<li class="userName"><input type="radio" id="${e.userName}" name="userName" value="${ e.userName }">
+                            		<li class="userName"><input type="radio" id="${e.userName}" name="userName" value="${ e.userName }[${e.ID}]">
                             		<label for="${ e.userName }" style=margin:0;>${ e.userName }</label>
                             		</li>
                             	</c:if>
                             </c:forEach>
+                            </ul>
                         </div>
                     </div>
                     <div id="modalbuttonwrap">
@@ -233,26 +311,46 @@
                 </div>
             </div>
         </div>
-        <div id="confirmwrap">
-            <div id="confirm">
-                <div id="confirmtitle">
-                    <h5>&nbsp;알림</h5>
-                </div>
-                <div id="confirmcontent">
-                    <h4>기안하시겠습니까?</h4>
-                    <button id="confirmOk">OK</button>
-                    <button id="confirmCancel" onclick="closeconfirm();">CANCEL</button>
-                </div>
-            </div>
-        </div>
-        <jsp:include page="popup/alert.jsp"/>
-        </form>
-        </section>
         <script>
-            /* 모달창 열고 닫기 */
-            function openmodal(){
-                $("#apvmodalwrap").css("display","block");
-            };
+        (function(proxied) {
+      	  window.alert = function(msg) {
+      		 var text =  document.getElementById("alertText");
+      		 $("#alertwrap").css("display","block");
+            	 text.value = msg;
+      	    	return false;
+      	  };
+     	 })(window.alert);
+        /* confirm */
+        window.confirm = function(message){
+        	var apvprocedureNames = document.getElementsByName('apvprocedureNames');
+        	$("#confirmwrap").css("display","block");
+            var confirmContent = $("#confirmcontent");
+            var confirmMsg = confirmContent.children().eq(0);
+            confirmMsg[0].innerHTML = message;
+            
+            if(message.includes("기안")){
+            	$("#docform").attr("action","drafting.ap");
+            	if(apvprocedureNames.length == 0){
+            		closeconfirm();
+            		alert("결재선 지정이 필요합니다.");
+            	}else if($("#sign_title").val()=="" || $("#apvDocTitle").val() == ""){
+            		closeconfirm();
+            		alert("기안문서 제목을 입력해주세요.");
+            	}
+            	$("#confirmOk").on("click", function () {
+                    return true;
+                });
+            }
+        	
+            if(message.includes('삭제')){
+            	$("#docform").attr("action","deleteTempDoc.ap");
+            	$("#confirmOk").on("click", function () {
+                    return true;
+                });
+            }
+        	
+        }
+            
             /*취소버튼*/
             function closemodal(){
                 $("#apvmodalwrap").css("display","none");
@@ -261,15 +359,14 @@
             $(function(){
                 $("#modalclose").on("click",function(){
                     $("#apvmodalwrap").css("display","none");
+                    
                 });
             });
             /* 결재선 등록 버튼 */
             $("#enroll").on("click", function(){
             	var procedureList = $("#procedure").children();
             	var apvprocedure = document.getElementById("apvprocedure");
-            	
             	for(var i = 0; i < procedureList.length; i++){
-            		console.log(procedureList[i].firstChild);
             		apvprocedure.insertAdjacentHTML("beforeend", "<input type='text' class='apvprocedureNames' name='apvprocedureNames' value='"+ (i+1) + " " 
             									+ procedureList[i].firstChild.value+"' readonly />");
             	}
@@ -349,39 +446,27 @@
             	})
             });
             
-            /* confirm */
-            window.confirm = function(message){
-            	$("#confirmwrap").css("display","block");
-                var confirmContent = $("#confirmcontent");
-                var confirmMsg = confirmContent.children().eq(0);
-                confirmMsg[0].innerHTML = message;
-                
-                if(message.includes("기안")){
-                	$("#tDocForm").attr("action","drafting.ap");
-                	if(apvprocedureNames.length == 0){
-                		closeconfirm();
-                		alert("결재선 지정이 필요합니다.");
-                	}else if($("#sign_title").val()==""){
-                		closeconfirm();
-                		alert("기안문서 제목을 입력해주세요.");
-                	}
-                	$("#confirmOk").on("click", function () {
-                        return true;
-                    });
-                }
-            	
-                if(message.includes('삭제')){
-                	$("#tDocForm").attr("action","deleteTempDoc.ap");
-                	$("#confirmOk").on("click", function () {
-                        return true;
-                    });
-                }
-            	
-            }
+            
             function closeconfirm(){
                 $("#confirmwrap").css("display","none");
             }
             
+            docform.onsubmit = function(){
+            	/* 문서의 기본 div 내용 */
+            	var docContent = document.getElementById("docContent").innerHTML;
+            	/* 문서 div 내용 담을 input태그 */
+            	var apvdocContent = document.getElementById("docDiv");
+            	
+            	/* 에디터 안의 내용 */
+            	var editorText = CKEDITOR.instances.editor.getData();
+            	apvdocContent.value = docContent+"@"+editorText;
+            	
+            	console.log(apvdocContent.value);
+            	var docNo = document.getElementsByName('docNo');
+            	docNo = ${d.docNo};
+            	
+            	return false;
+            }
             
             
             

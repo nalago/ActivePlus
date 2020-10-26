@@ -64,7 +64,7 @@ public interface ApprovalService {
 
 	public ArrayList<ApvDoc> selectApprovalCompleteList(String eId, PageInfo pi);
 
-	public Doc selectDoc(String docTitle);
+	public Doc selectDoc(int docNo);
 
 	public String[] selectEmpId(String string);
 
@@ -80,7 +80,7 @@ public interface ApprovalService {
 
 	public int deletePriDoc(Doc searchd);
 
-	public Doc selectTempDoc(Doc searchTemp);
+	public ApvDoc selectTempDoc(ApvDoc searchTemp);
 
 	public ArrayList<Attachment> selectTempAt(int docNo);
 

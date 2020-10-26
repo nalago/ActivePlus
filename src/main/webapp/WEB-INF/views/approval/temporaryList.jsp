@@ -33,12 +33,13 @@
         margin: 0;
         border: 1px solid black;
     }
+    .docNo{
+    	width:10%;
+    }
     .doctitle{
-        width: 30%;
+        width: 90%;
     }
-    .doccontent{
-        width: 70%;
-    }
+    
     .pagingwrap{
         text-align: center;
        
@@ -54,12 +55,15 @@
 }
     tbody tr:hover {
  	background-color:#63ab68;
+ 	cursor:pointer;
  }
 </style>
 </head>
 <body>
+<jsp:include page="popup/alert.jsp"/>
 <jsp:include page="../common/menubar.jsp"/>
 <section>
+
         <jsp:include page="submenu/topMenu.jsp"/>
             <script>
                 $(function(){
@@ -72,6 +76,7 @@
                     $("#listButtonclose").on("click",function(){
                         $("#doctypeList").css("display","none");
                         $("#listButtonopen").css("display","inline-block");
+                        
                     });
                 });
             </script>
@@ -84,8 +89,8 @@
                 <table id="docList">
                 <thead>
                     <tr>
+                    	<th class="docNo">문서번호</th>
                         <th class="doctitle">양식명</th>
-                        <th class="doccontent">설명</th>
                     </tr>
                  <thead>
                     <tbody>
@@ -96,20 +101,21 @@
                     </c:if>
                     <c:if test="${ !empty tList }">
                     	<c:forEach var="t" items="${ tList }">
-                    		<td>${t.docTitle }</td>
-                    		<td>${t.docExplantion }</td>
+                    	<tr>
+                    		<td>${t.apvDocNo }</td>
+                    		<td>${t.apvDocTitle }</td>
+                    	<tr>
                     	</c:forEach>
                     </c:if>
                     </tbody>
                 </table>
                 <br><br>
                 <div class="pagingwrap">
-                <!-- 미완성 페이징 -->
                 <c:if test="${pi.currentPage <= 1 }">                
                 	&lt;
                 </c:if>
                 <c:if test="${pi.currentPage < 1 }">
-                	<c:url var="before" value="draftingList.ap">
+                	<c:url var="before" value="temporaryList.ap">
                 		<c:param name="page" value="${ pi.currentPage - 1 }"/>
                 	</c:url>                
 	                 <a class="paging" href="${ before }">&lt;</a>
@@ -119,7 +125,7 @@
                 	<font color="green" size="4">${ p }</font>
                 	</c:if>
                 	<c:if test="${ p ne pi.currentPage }">
-                		<c:url var="pagination" value="drafting.ap">
+                		<c:url var="pagination" value="temporaryList.ap">
                 			<c:param name="page" value="${ p }"/>
                 		</c:url>
                 		<a href="${pagination }">${ p }</a>
@@ -129,7 +135,7 @@
                  	&gt;
                  </c:if>
                  <c:if test="${ pi.endPage < pi.maxPage }">
-                 	<c:url var="after" value="drafting.ap">
+                 	<c:url var="after" value="temporaryList.ap">
                  		<c:param name="page" value="${ pi.currentPage + 1 }"/>
                  	</c:url>
 	                 <a class="paging" href="${after }">&gt;</a>                 
@@ -139,11 +145,11 @@
            <script>
            $(function(){
       			$("td").on("click", function(){
-      				var docTitle = $(this).parent().children().eq(0).text();
-      				if(docTitle.includes('없습니다.')){
+      				var docNo = $(this).parent().children().eq(0).text();
+      				if(docNo.includes('문서번호')){
       					return false;
       				}
-      				location.href="selectTempDoc.ap?docTitle="+docTitle;
+      				location.href="selectTempDoc.ap?apvDocNo="+docNo;
       			});
       		});
            </script>
