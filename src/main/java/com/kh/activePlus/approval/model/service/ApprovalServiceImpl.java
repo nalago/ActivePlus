@@ -153,8 +153,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public Doc selectDoc(String docTitle) {
-		return aDao.selectDocTypeList(docTitle);
+	public Doc selectDoc(int docNo) {
+		return aDao.selectDocTypeList(docNo);
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public Doc selectTempDoc(Doc searchTemp) {
+	public ApvDoc selectTempDoc(ApvDoc searchTemp) {
 		return aDao.selectTempDoc(searchTemp);
 	}
 

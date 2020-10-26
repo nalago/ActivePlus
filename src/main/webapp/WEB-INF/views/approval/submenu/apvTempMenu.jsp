@@ -88,6 +88,14 @@
     #apvfilelist{
         overflow-x: auto;
     }
+    .apvprocedureNames{
+    	border:0;
+    	margin:0;
+    }
+    .apvprocedureNames:focus{
+    	outline:none;
+    }
+    
 </style>
 <title>Insert title here</title>
 </head>
@@ -100,22 +108,21 @@
                         <svg id="apvmenuclose" viewBox="0 0 15 15" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
                         </svg>
-                        <button id="drafting" onclick="confirm('기안하시겠습니까?');">기안</button>
-                        <button id="tempDocDelete" onclick="confirm('삭제하시겠습니까?');">삭제</button>
+                        <button id="drafting" type="button" onclick="confirm('기안하시겠습니까?');">기안</button>
+                        <button id="tempDocDelete" type="button" onclick="confirm('삭제하시겠습니까?');">삭제</button>
                         <svg id="listButtonopen" viewBox="0 0 15 15" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
                         </svg>
                         <hr>
                         <div id="apvline">
-                            <button id="selectLine" onclick="openmodal();">결재선 지정</button>
+                            <button id="selectLine" type="button" onclick="openmodal();">결재선 지정</button>
                             <hr>
                             <h5>&nbsp;결재 순서</h5>
                             <div id="apvprocedure">
                                 
                             </div><hr>
                             <h5>의견</h5>
-                            <textarea id="comment"></textarea>
-                            <button id="commentbutton">등록</button>
+                            <textarea id="comment" name="comment"></textarea>
                             <br><br>
                             <hr>
                             <h5 style="display: inline-block;">첨부파일</h5>
@@ -158,6 +165,10 @@
                 </div>
             </div>
             <script>
+            /* 모달창 열고 닫기 */
+            function openmodal(){
+                $("#apvmodalwrap").css("display","block");
+            };
             /* 오른쪽 기안 관련 메뉴바 열고 닫기 */
             $(function(){
                 $("#apvmenuopen").on("click",function(){

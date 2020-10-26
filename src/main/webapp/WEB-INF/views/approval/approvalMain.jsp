@@ -40,16 +40,16 @@
         <div class="temporaryList Wrap">
             <h4 class="title">임시 저장 문서</h4>
             <div id="temporaryList">
-				<c:if test="${ empty tempDocList }">
+				<c:if test="${ empty tempList }">
 					<h3>저장 된 임시 문서가 없습니다.</h3>
 				</c:if>
-				<c:if test="${ !empty tempDocList }">
-					<c:forEach var="d" items="${ tempDocList }" begin="0" end="5">
+				<c:if test="${ !empty tempList }">
+					<c:forEach var="d" items="${ tempList }" begin="0" end="5">
 						<table>
 							<tr>
 								<td width="50">${ d.apvDocNo }</td>
 								<td width="200">${ d.apvDocTitle }</td>
-								<td width="200">${ d.apvCreateDate }</td>
+								<td width="200">${ d.apdCreateDate }</td>
 							</tr>
 						</table>
 					</c:forEach>

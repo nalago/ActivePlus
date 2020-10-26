@@ -32,9 +32,9 @@ public class Doc {
 
 
 
-	public Doc(String docTitle, String empId) {
+	public Doc(int DocNo, String empId) {
 		super();
-		this.docTitle = docTitle;
+		this.docNo = DocNo;
 		this.empId = empId;
 	}
 	
