@@ -375,6 +375,7 @@
             $("#enroll").on("click", function(){
             	var procedureList = $("#procedure").children();
             	var apvprocedure = document.getElementById("apvprocedure");
+            	apvprocedure.innerHTML = "";
             	for(var i = 0; i < procedureList.length; i++){
             		apvprocedure.insertAdjacentHTML("beforeend", "<input type='text' class='apvprocedureNames' name='apvprocedureNames' value='"+ (i+1) + " " 
             									+ procedureList[i].firstChild.value+"' readonly />");

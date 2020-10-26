@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -100,6 +101,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<c:set var="d" value="${ tDoc }"/>
 <svg id="apvmenuopen" viewBox="0 0 15 15" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
                     </svg>
@@ -119,7 +121,10 @@
                             <hr>
                             <h5>&nbsp;결재 순서</h5>
                             <div id="apvprocedure">
-                                
+                            <c:set var="apdpath" value="${ fn:split(d.apdPath, ',') }"/>
+                            <c:forEach var="path" items="${ apdpath }" >
+                            	<input type='text' class='apvprocedureNames' name='apvprocedureNames' value='${ path }' readonly />
+                            </c:forEach>
                             </div><hr>
                             <h5>의견</h5>
                             <textarea id="comment" name="comment"></textarea>

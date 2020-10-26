@@ -74,7 +74,7 @@
 		<script>
 			alert('${msg}');
 		</script>
-		<c:remove var="msg"/>
+		<c:remove var="msg" scope="session"/>
 		</c:if>
             <script>
                 $(function(){
@@ -172,6 +172,9 @@
            		$(function(){
            			$("td").on("click", function(){
            				var docNo = $(this).parent().children().eq(0).text();
+          				if(docNo.includes('없습니다.')){
+          					return false;
+          				}
            				location.href="selectDoc.ap?docNo="+docNo;
            			});
            		});

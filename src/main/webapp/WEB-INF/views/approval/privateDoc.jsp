@@ -115,9 +115,10 @@
     	height:50px;
     	font-size:25px;
     }
-    #priDocContent{
+    #priDocContent, #priDocNo{
     	display:none;
     }
+    
     
 </style>
 </head>
@@ -144,6 +145,7 @@
             <div id="pridocwrap">
                 <div id="pridoc">
                     <h4>&nbsp;개인 문서 양식 편집</h4>
+                    <input type="text" id="priDocNo" name="docNo" value="${ priDoc.docNo }"/>
                     <input type="text" id="priDocTitle" name="priDocTitle" placeholder="문서 제목 입력" value="${ priDoc.docTitle }"/>
                     <input type="text" id="priDocContent" name="priDocContent"/>
                     <textarea id="prieditor">${ priDoc.docContent }</textarea>

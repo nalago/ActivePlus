@@ -227,7 +227,9 @@
                 <div id="doc">
                 <!-- 기안 문서 양식 예 -->
                 <c:if test="${ doc.docType != 'PRIVATE' }">
+                <div id="docContent">
 	               	${ d.apvDocContent }                
+                </div>
                	<textarea id="editor" name="draftContent">내용 입력</textarea>
                 </c:if>
                	<c:if test="${ doc.docType eq 'PRIVATE' }"> 
@@ -240,7 +242,7 @@
                	<c:if test="${ doc.docType eq 'PRIVATE' }">
                	</c:if>
                	</div>
-               	<input type="text" id="docNo" name="docNo" value="${ d.docNo }" readonly/>
+               	<input type="text" id="docNo" name="docNo" value="${ d.apvDocNo }" readonly/>
                	<input type="text" id="docDiv" name="apvDocContent" readonly/>
                 </div>
                 <script>
@@ -337,6 +339,8 @@
             		closeconfirm();
             		alert("기안문서 제목을 입력해주세요.");
             	}
+            	
+            	
             	$("#confirmOk").on("click", function () {
                     return true;
                 });
@@ -349,7 +353,23 @@
                 });
             }
         	
-        }
+        };
+        docform.onsubmit = function(){
+        	/* 문서의 기본 div 내용 */
+        	var docContent = document.getElementById("docContent").innerHTML;
+        	/* 문서 div 내용 담을 input태그 */
+        	var apvdocContent = document.getElementById("docDiv");
+        	
+        	/* 에디터 안의 내용 */
+        	var editorText = CKEDITOR.instances.editor.getData();
+        	apvdocContent.value = docContent+"@"+editorText;
+        	
+        	console.log(apvdocContent.value);
+        	var docNo = document.getElementsByName('docNo');
+        	docNo = ${d.docNo};
+        	
+        	return true;
+        };
             
             /*취소버튼*/
             function closemodal(){
@@ -366,6 +386,8 @@
             $("#enroll").on("click", function(){
             	var procedureList = $("#procedure").children();
             	var apvprocedure = document.getElementById("apvprocedure");
+            	
+            	apvprocedure.innerHTML = "";
             	for(var i = 0; i < procedureList.length; i++){
             		apvprocedure.insertAdjacentHTML("beforeend", "<input type='text' class='apvprocedureNames' name='apvprocedureNames' value='"+ (i+1) + " " 
             									+ procedureList[i].firstChild.value+"' readonly />");
@@ -451,22 +473,7 @@
                 $("#confirmwrap").css("display","none");
             }
             
-            docform.onsubmit = function(){
-            	/* 문서의 기본 div 내용 */
-            	var docContent = document.getElementById("docContent").innerHTML;
-            	/* 문서 div 내용 담을 input태그 */
-            	var apvdocContent = document.getElementById("docDiv");
-            	
-            	/* 에디터 안의 내용 */
-            	var editorText = CKEDITOR.instances.editor.getData();
-            	apvdocContent.value = docContent+"@"+editorText;
-            	
-            	console.log(apvdocContent.value);
-            	var docNo = document.getElementsByName('docNo');
-            	docNo = ${d.docNo};
-            	
-            	return false;
-            }
+            
             
             
             

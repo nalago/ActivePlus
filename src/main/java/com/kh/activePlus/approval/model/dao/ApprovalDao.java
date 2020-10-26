@@ -142,4 +142,12 @@ public class ApprovalDao {
 		return (ArrayList)sqlSession.selectList("approvalMapper.selectTempAt", docNo);
 	}
 
+	public int deleteTempDoc(int apvDocNo) {
+		return sqlSession.delete("approvalMapper.deleteTempDoc", apvDocNo);
+	}
+
+	public int deleteAttachment(int docNo) {
+		return sqlSession.delete("approvalMapper.deleteAttachment", docNo);
+	}
+
 }

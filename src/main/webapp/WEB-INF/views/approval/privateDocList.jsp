@@ -34,8 +34,11 @@
         margin: 0;
         border: 1px solid black;
     }
+    .docNo{
+    	width:10%;
+    }
     .doctitle{
-        width: 100%;
+        width: 90%;
     }
     
     .pagingwrap{
@@ -66,6 +69,7 @@
 <body>
 <jsp:include page="../common/menubar.jsp"/>
 <section>
+<jsp:include page="popup/alert.jsp"/>
         <jsp:include page="submenu/topMenu.jsp"/>
             <script>
                 $(function(){
@@ -90,8 +94,8 @@
                 <table id="docList">
                 <thead>
                     <tr>
+                    	<th class="docNo">문서번호</th>
                         <th class="doctitle">양식명</th>
-                        
                     </tr>
                  <thead>
                     <tbody>
@@ -103,6 +107,7 @@
                     <c:if test="${ !empty pList }">
                     	<c:forEach var="p" items="${ pList }">
                     	<tr>
+                    		<td>${ p.docNo }</td>
                     		<td>${ p.docTitle }</td>
                     	</tr>
                     	</c:forEach>
@@ -152,12 +157,12 @@
            		
            		$(function(){
            			$("td").on("click", function(){
-           				var docTitle = $(this).parent().children().eq(0).text();
-           				if(docTitle.includes('없습니다.')){
+           				var docNo = $(this).parent().children().eq(0).text();
+          				if(docNo.includes('없습니다.')){
           					return false;
           				}
            				
-           				location.href="selectPriDoc.ap?docTitle="+docTitle;
+           				location.href="selectPriDoc.ap?docNo="+docNo;
            			});
            		});
            		

@@ -146,7 +146,7 @@
            $(function(){
       			$("td").on("click", function(){
       				var docNo = $(this).parent().children().eq(0).text();
-      				if(docNo.includes('문서번호')){
+      				if(docNo.includes('없습니다.')){
       					return false;
       				}
       				location.href="selectTempDoc.ap?apvDocNo="+docNo;
