@@ -51,8 +51,8 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	
 	<resultMap id="AttachmentResultSet" type="Attachment">
 		<id property="fId" column="FID"/>
-		<result property="original" column="ORIGINAL"/>
-		<result property="rename" column="RENAME"/>
+		<result property="original" column="A_ORIGINNAME"/>
+		<result property="rename" column="A_RENAME"/>
 		<result property="filePath" column="FILE_PATH"/>
 		<result property="status" column="STATUS"/>
 		<result property="refTable" column="REF_TABLE"/>
@@ -128,27 +128,30 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	</select>
 
 	<select id="selectApprovalObtainList" parameterType="String" resultMap="ApvDocResultSet">
-		SELECT *
-		FROM APV_DOC
-		JOIN APPROVAL USING(EMP_ID)
-		WHERE EMP_ID=#{eId}
-		AND APVTYPE = '0' 
+		SELECT APVDOCNO, AD.APVDOCTITLE, AD.APVDOCCONTENT, AD.APVDOCSTATUS, AD.APD_CREATE_DATE, AD.APD_MODIFY_DATE,
+		AD.APDSTEP, AD.APDPATH, AD.DOCNO, AD.EMP_ID, AD.APVDOCFILECOUNT
+		FROM APPROVAL AP
+        LEFT JOIN APV_DOC AD USING(APVDOCNO)
+		WHERE AD.EMP_ID = #{eId}
+		AND AP.APVTYPE = '0'
+        AND AD.APVDOCSTATUS != '0'
 		ORDER BY APVDOCNO DESC
 	</select>
 	
 	<select id="selectApprovalList" parameterType="String" resultMap="ApvDocResultSet">
-		SELECT *
-		FROM APV_DOC
-		JOIN APPROVAL USING(EMP_ID)
-		WHERE EMP_ID=#{eId}
+		SELECT AD.APVDOCNO, AD.APVDOCTITLE, AD.APVDOCCONTENT, AD.APVDOCSTATUS, AD.APD_CREATE_DATE, AD.APD_MODIFY_DATE,
+		AD.APDSTEP, AD.APDPATH, AD.DOCNO, EMP_ID, AD.APVDOCFILECOUNT
+		FROM APV_DOC AD
+		JOIN APPROVAL AP USING(EMP_ID)
 		AND APVTYPE != '0'
 		ORDER BY APVDOCNO DESC
 	</select>
 
 	<select id="selectApprovalCompleteList" parameterType="String" resultMap="ApvDocResultSet">
-		SELECT *
-		FROM APV_DOC
-		JOIN APPROVAL USING(EMP_ID)
+		SELECT AD.APVDOCNO, AD.APVDOCTITLE, AD.APVDOCCONTENT, AD.APVDOCSTATUS, AD.APD_CREATE_DATE, AD.APD_MODIFY_DATE,
+		AD.APDSTEP, AD.APDPATH, AD.DOCNO, EMP_ID, AD.APVDOCFILECOUNT
+		FROM APV_DOC AD
+		JOIN APPROVAL AP USING(EMP_ID)
 		WHERE EMP_ID = #{eId}
 		AND APVRESULT != '0'
 		ORDER BY APVDOCNO DESC
@@ -168,10 +171,11 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	
 	<select id="selectApprovalObtainListCount" parameterType="String" resultType="_int">
 		SELECT COUNT(*)
-		FROM APV_DOC
-		JOIN APPROVAL USING(EMP_ID)
-		WHERE APVTYPE='0'
-		AND EMP_ID = #{eId}
+		FROM APPROVAL AP
+        LEFT JOIN APV_DOC AD USING(APVDOCNO)
+		WHERE AD.EMP_ID = #{eId}
+		AND AP.APVTYPE = '0'
+        AND AD.APVDOCSTATUS != '0'
 	</select>
 	
 	<select id="selectApprovalListCount" parameterType="String" resultType="_int">
@@ -198,7 +202,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	<!-- 기안 -->
 	<insert id="draftingDoc" parameterType="ApvDoc">
 		INSERT INTO APV_DOC
-		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '1', SYSDATE, SYSDATE, #{apdStep}, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
+		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '1', SYSDATE, NULL, #{apdStep}, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
 	</insert> 
 	<!-- 결재선 추가-->
 	
@@ -210,12 +214,12 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	<!-- 첨부파일 추가  -->
 	 <insert id="insertAttachment" parameterType="Attachment">
 		INSERT INTO ATTACHMENT
-		VALUES(SEQ_ATT.NEXTVAL, #{original},#{rename},#{filePath}, 'APV_DOC', #{refId}, DEFAULT)
+		VALUES(SEQ_ATT.NEXTVAL, #{original},#{rename},#{filePath}, 'APV_DOC', SEQ_APVDOC.CURRVAL, DEFAULT)
 	</insert>
 	<!-- 임시문서 저장 -->
 	<insert id="insertTempDoc" parameterType="ApvDoc">
 		INSERT INTO APV_DOC
-		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '0', SYSDATE, SYSDATE, #{apdStep}, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
+		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '0', SYSDATE, NULL, #{apdStep}, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
 	</insert>
 	<!-- 개인 양식 등록 -->
 	<insert id="priDocSave" parameterType="Doc">

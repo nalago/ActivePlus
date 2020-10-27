@@ -179,6 +179,12 @@
                     $("#docwrap").css("width",$("#docwrap").innerWidth()+width+"px");
                 });
             });
+            $(function (){
+            	$("#filedelete").on("click", function(){
+            		$("#apvfilelist").html("");
+            		$("#apvfile").val("");
+            	})
+            })
             </script>
 </body>
 </html>
