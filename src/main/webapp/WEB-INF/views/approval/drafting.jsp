@@ -340,10 +340,14 @@
                 var confirmMsg = confirmContent.children().eq(0);
                 confirmMsg[0].innerHTML = message;
                 if(message.includes("임시저장")){
+                	console.log(apvprocedureNames.value);
                 	$("#docform").attr("action","temporaryDoc.ap")
-                	if($("#sign_title").val()=="" || $("#apvDocTitle").val() == ""){
-                		closeconfirm();
-                		alert("기안문서 제목을 입력해주세요.");
+                	if($("#sign_title").val()==""){
+                		$("#sign_title").val(" "); 
+                	}else if($("#apvDocTitle").val() == ""){
+                		$("#apvDocTitle").val(" ");
+                	}else if(apvprocedureNames.value == undefined){
+                		apvprocedureNames.value = " ";
                 	}
                 	$("#confirmOk").on("click", function () {
                         return true;

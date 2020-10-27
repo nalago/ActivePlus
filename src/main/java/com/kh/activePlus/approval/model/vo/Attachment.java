@@ -22,12 +22,11 @@ public class Attachment {
 	private String refTable;
 	private int refId;
 	
-	public Attachment(String original, String rename, String filePath, int refId) {
+	public Attachment(String original, String rename, String filePath) {
 		super();
 		this.original = original;
 		this.rename = rename;
 		this.filePath = filePath;
-		this.refId = refId;
 	}
 	
 	

@@ -101,7 +101,7 @@
                     <tbody>
                     <c:if test="${ empty pList }">
                     	<tr>
-                    		<td>저장 된 양식이 없습니다.</td>
+                    		<td colspan="2">저장 된 양식이 없습니다.</td>
                     	<tr>
                     </c:if>
                     <c:if test="${ !empty pList }">

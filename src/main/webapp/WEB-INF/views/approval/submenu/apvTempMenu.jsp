@@ -133,24 +133,25 @@
                             <h5 style="display: inline-block;">첨부파일</h5>
                             <input type="button" id="filedelete">
                             <label for="filedelete" id="filedeletelabel"></label>
-                            <input type="file" id="apvfile" 
+                            <input type="file" id="apvfile" name="apvfiles" files="${ tempAt }"
                             onchange="showFileList(this.files, value);"
                             multiple>
                             <label for="apvfile" id="apvfilelabel"></label>
                             <div id="apvfilelist">
                                 <c:forEach var="at" items="${tempAt}">
-                                 ${ at }
-                                </c:forEach>
-                            </div>
+									<a href="${ contextPath }/resources/approval/duploadFiles/${ at.rename }" download="${ at.original }">${ at.original }</a><br>
+                                </c:forEach> 
+                                </div>
                             <script>
                                 function showFileList(files, n){
                                     var div = $("#apvfilelist");
                                     name = "";
-                                    if(files.length > 1){
+                                    if(files.length >= 1){
                                         for(var i = 0; i < files.length; i++){
                                             var file = files[i];
-                                            
+                                            console.log(file);
                                             var filenames = file.name;
+                                            console.log(filenames);
                                             
                                             filename = filenames.split("\\");
                                             name += filename[filename.length-1];
@@ -163,9 +164,14 @@
                                         var filename = name.split("\\");
                                         div.html(filename[filename.length-1]);
                                     }
-                                    
+                                    console.log($("#apvfile"));
                                 }
-                                
+                                $(function (){
+                                	$("#filedelete").on("click", function(){
+                                		$("#apvfilelist").html("");
+                                		$("#apvfile").attr("files","");
+                                	})
+                                })
                                 </script>
                 </div>
             </div>

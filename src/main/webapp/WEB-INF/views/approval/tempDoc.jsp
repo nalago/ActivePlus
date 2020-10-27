@@ -204,7 +204,7 @@
     	outline:none;
     }
     
-     #docDiv, #docNo{
+     #docDiv, #docNo, #apvdocNo{
     	display:none;
     }
     	#apvDocTitle{
@@ -242,7 +242,8 @@
                	<c:if test="${ doc.docType eq 'PRIVATE' }">
                	</c:if>
                	</div>
-               	<input type="text" id="docNo" name="docNo" value="${ d.apvDocNo }" readonly/>
+               	<input type="text" id="apvdocNo" name="apvDocNo" value="${ d.apvDocNo }" readonly/>
+               	<input type="text" id="docNo" name="docNo" value="${ doc.docNo }" readonly/>
                	<input type="text" id="docDiv" name="apvDocContent" readonly/>
                 </div>
                 <script>
