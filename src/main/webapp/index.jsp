@@ -12,7 +12,7 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 	<script>
 		$(document).ready(function(){
 			<c:set var="contextPath" value="${ pageContext.servletContext.contextPath }" scope="application"/>
-		
+			document.location.href="loginform.ap";
 		});
 	</script>
 </head>
