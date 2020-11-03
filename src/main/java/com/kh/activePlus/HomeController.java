@@ -23,8 +23,9 @@ public class HomeController {
 	
 	@RequestMapping(value = "/main.ap", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		/*
-		Employee user = new Employee("125","125","윤영관","사무","대리");
+
+		
+		Employee user = new Employee("100215","11234","최나라","의료","대리");
 		
 		model.addAttribute("loginUser", user);*/
 		
