@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,6 +50,12 @@ public class ApprovalController {
 		// 결재 완료 문서
 		ArrayList<ApvDoc> apvCompList = aService.selectApvDocList(compDocSearch);
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		
+		
+		
+		System.out.println(tempList);
+		
 		mv.addObject("tempList", tempList);
 		mv.addObject("apvList", apvList);
 		mv.addObject("apvCompList", apvCompList);
@@ -63,8 +70,9 @@ public class ApprovalController {
 		
 		int currentPage = page != null ? page : 1;
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5, 10);
 		
+		System.out.println(pi);
 		ArrayList<Doc> dList = aService.selectAllDocTypeList(pi);
 		
 		if(dList != null) {
@@ -92,7 +100,7 @@ public class ApprovalController {
 		
 		int currentPage = page != null ? page : 1;
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5, 10);
 		
 		ArrayList<Doc> pList = aService.selectPrivateList(eId, pi);
 		
@@ -106,20 +114,19 @@ public class ApprovalController {
 		}
 		
 	}
-	
 	@RequestMapping("privateDoc.ap")
-	public String goPrivateDoc() {
+	public String goPrivate() {
 		return "approval/privateDoc";
 	}
 	
 	@RequestMapping("selectPriDoc.ap")
 	public ModelAndView selectPriDoc(ModelAndView mv, HttpServletRequest request,
-			String docTitle) {
+			int docNo) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
 		String eId = loginUser.getID();
 		
-		Doc searchd = new Doc(docTitle, eId);
+		Doc searchd = new Doc(docNo, eId);
 		
 		Doc PriDoc = aService.selectPriDoc(searchd);
 		
@@ -147,7 +154,7 @@ public class ApprovalController {
 		int result = aService.priDocSave(priDoc);
 		
 		if(result > 0) {
-			mv.addObject("msg","개인양식이 등록되었습니다.");
+			request.getSession().setAttribute("msg", "정상적으로 기안되었습니다.");
 			mv.setViewName("approval/privateDocList");
 			return mv;
 		}else {
@@ -159,18 +166,18 @@ public class ApprovalController {
 	
 	@RequestMapping("deletePriDoc.ap")
 	public ModelAndView deletePriDoc(ModelAndView mv,HttpServletRequest request,
-			String docTitle) {
+			int docNo) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
 		String eId = loginUser.getID();
 		
-		Doc searchd = new Doc(docTitle, eId);
+		Doc searchd = new Doc(docNo, eId);
 		
 		int result = aService.deletePriDoc(searchd);
 		
 		if(result > 0) {
-			mv.addObject("msg","개인양식 삭제에 성공하였습니다.");
-			mv.setViewName("redirect:approval/temporaryList");
+			request.getSession().setAttribute("msg", "정상적으로 삭제되었습니다.");
+			mv.setViewName("redirect:privateList.ap");
 			return mv;
 		}else {
 			throw new ApprovalException("개인양식 삭제에 실패하였습니다.");
@@ -185,18 +192,19 @@ public class ApprovalController {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
 		String eId = loginUser.getID();
-		
+		System.out.println(eId);
 		int listCount = aService.selectTemporaryListCount(eId);
+		System.out.println(listCount);
 		
 		int currentPage = page != null ? page : 1;
-		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5, 10);
+		System.out.println(pi);
 		
 		ArrayList<ApvDoc> tList = aService.selectTemporaryList(eId, pi);
 		
 		if(tList != null) {
 			mv.addObject("tList",tList);
-			mv.addObject("pi",pi);
+			mv.addObject("pi", pi);
 			mv.setViewName("approval/temporaryList");
 			return mv;
 		}else {
@@ -207,25 +215,32 @@ public class ApprovalController {
 	
 	@RequestMapping("selectTempDoc.ap")
 	public ModelAndView SelectTempDoc(ModelAndView mv, HttpServletRequest request,
-			String docTitle) {
+			int apvDocNo) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
 		String eId = loginUser.getID();
 		
-		Doc searchTemp = new Doc(docTitle, eId);
+		ApvDoc searchTemp = new ApvDoc(apvDocNo, eId);
 		
 		ArrayList<Employee> eList = aService.selectEmpList();
 		
-		Doc tempDoc = aService.selectTempDoc(searchTemp);
-		
-		ArrayList<Attachment> tempAt = aService.selectTempAt(tempDoc.getDocNo());
+		ApvDoc tempDoc = aService.selectTempDoc(searchTemp);
+		Doc doc = aService.selectDoc(tempDoc.getDocNo());
+		if(doc.getDocType().equals("PRIVATE")) {
+		tempDoc.setApvDocContent(tempDoc.getApvDocContent().substring(tempDoc.getApvDocContent().indexOf("@")+1));
+		}else {
+			tempDoc.setApvDocContent(tempDoc.getApvDocContent().substring(0, tempDoc.getApvDocContent().indexOf("@")));
+		}
+		System.out.println(tempDoc.getApvDocContent());
+		ArrayList<Attachment> tempAt = aService.selectTempAt(apvDocNo);
 
 		
 		if(tempDoc != null) {
+			mv.addObject("doc",doc);
 			mv.addObject("eList", eList);
 			mv.addObject("tempAt", tempAt);
 			mv.addObject("tDoc",tempDoc);
-			mv.setViewName("approval/tmpDoc");
+			mv.setViewName("approval/tempDoc");
 			return mv;
 		}else {
 			throw new ApprovalException("임시저장 문서를 불러오는데 실패하였습니다.");
@@ -246,7 +261,7 @@ public class ApprovalController {
 		
 		int currentPage = page != null ? page : 1;
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5, 10);
 		
 		ArrayList<ApvDoc> oList = aService.selectApprovalObtainList(eId, pi);
 		
@@ -270,7 +285,7 @@ public class ApprovalController {
 		
 		int currentPage = page != null ? page : 1;
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5, 10);
 		
 		ArrayList<ApvDoc> aList = aService.selectApprovalList(eId, pi);
 		
@@ -294,7 +309,7 @@ public class ApprovalController {
 		
 		int currentPage = page != null ? page : 1;
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5, 10);
 		
 		ArrayList<ApvDoc> cList = aService.selectApprovalCompleteList(eId,pi);
 		
@@ -308,10 +323,7 @@ public class ApprovalController {
 		}
 		
 	}
-	@RequestMapping("tempDocDetail.ap")
-	public String goTempDocDetail() {
-		return "approval/tempDoc";
-	}
+	
 	
 	@RequestMapping("docTypeList.ap")
 	public ModelAndView docTypeList(ModelAndView mv,
@@ -321,7 +333,7 @@ public class ApprovalController {
 		
 		int currentPage = page != null ? page : 1;
 		
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5, 10);
 		
 		ArrayList<Doc> dList = aService.selectDocTypeList(docType, pi); 
 		
@@ -339,10 +351,10 @@ public class ApprovalController {
 	}
 	
 	@RequestMapping("selectDoc.ap")
-	public ModelAndView selectDoc(ModelAndView mv,String docTitle) {
-		Doc doc = aService.selectDoc(docTitle);
+	public ModelAndView selectDoc(ModelAndView mv,int docNo) {
+		Doc doc = aService.selectDoc(docNo);
 		ArrayList<Employee> eList = aService.selectEmpList();
-		System.out.println(docTitle);
+		System.out.println(docNo);
 		System.out.println("selectDoc"+doc);
 		
 		if(doc != null) {
@@ -360,68 +372,89 @@ public class ApprovalController {
 	@RequestMapping(value="drafting.ap", method=RequestMethod.POST)
 	public ModelAndView drafting(ModelAndView mv, MultipartHttpServletRequest request,
 			String[] apvprocedureNames, String comment, String apvDocContent,
-			String apvDocTitle, int docNo
+			String apvDocTitle, int docNo, @RequestParam(value="apvDocNo", required=false, defaultValue="0") int apvDocNo
 			) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
 		String eId = loginUser.getID();
-		String apdPath = "0 "+ eId + " (기안)";
-		String[] procedureNames = new String[apvprocedureNames.length];
-		String[] apvTypes = new String[apvprocedureNames.length];
-		int[] apvtype = new int[apvprocedureNames.length];
+		String[] procedureNames = new String[apvprocedureNames.length+1];
+		String[] apvTypes = new String[apvprocedureNames.length+1];
+		int[] apvtype = new int[apvprocedureNames.length+1];
+		String[] empIds = new String[apvprocedureNames.length+1];
+		String apdPath = "";
+		
+		
 		/* 결재선 */
+		apdPath = "0 "+loginUser.getUserName()+"["+ eId + "] (기안)";
+		empIds[0] = eId;
+		apvTypes[0] = "(기안)";
 		for(int i = 0; i < apvprocedureNames.length; i++) {
+			
 			System.out.println(apvprocedureNames[i].toString());
 			apdPath +=", "+ apvprocedureNames[i].toString();
 			int begin = apvprocedureNames[i].indexOf(" ");
 			int end = apvprocedureNames[i].indexOf(" (");
+			
+			int ebegin = apvprocedureNames[i].indexOf("[");
+			int eend = apvprocedureNames[i].indexOf("]");
+			empIds[i+1] = apvprocedureNames[i].substring(ebegin+1, eend);
 			procedureNames[i] = apvprocedureNames[i].substring(begin, end);
-			System.out.println("첫 인덱스 : "+ begin+", 마지막 인덱스 : "+end);
-			System.out.println("결재선 이름만 "+procedureNames[i]);
+			apvTypes[i+1] = apvprocedureNames[i].substring(end+1);
 			
-			apvTypes[i] = apvprocedureNames[i].substring(end+1);
-			System.out.println("결재 종류 :"+apvTypes[i]);
-			if(apvTypes[i].contains("기안")) {
-				apvtype[i] = 0;
-			}else if(apvTypes[i].contains("결재")) {
-				apvtype[i] = 1;
-			}else if(apvTypes[i].contains("합의")) {
-				apvtype[i] = 2;
+			if(apvTypes[i+1].contains("결재")) {
+				apvtype[i+1] = 1;
+			}else if(apvTypes[i+1].contains("합의")) {
+				apvtype[i+1] = 2;
 			}
-			
-			
 		}
-		System.out.println(apdPath);
-		/* 의견 */
-		System.out.println(comment);
 		
 		/* 첨부파일 (전자문서 먼저 저장 후에 문서번호 가져와서 넣기) */
 		List<MultipartFile> fileList = request.getFiles("apvfiles");
-		System.out.println("첨부파일 갯수 : " + fileList.size());
-		
+		int result3 = 0;
+		int filesize = 0;
+		for(MultipartFile file : fileList) {
+			if(!file.isEmpty()) {
+				filesize = fileList.size();
+			}else if(file.isEmpty() && apvDocNo != 0) {
+				ArrayList<Attachment> atList = aService.selectTempAt(apvDocNo);
+				if (atList != null) {
+					for (Attachment at : atList) {
+						deleteFile(at.getRename(), request);
+					}
+				}else {
+					break;
+				}
+			}
+		}
 		
 		/* 기안문 넘길 곳 */
-		ApvDoc draftingDoc = new ApvDoc(apvDocTitle, apvDocContent, apdPath, docNo, eId, fileList.size() );
+		ApvDoc draftingDoc = new ApvDoc(apvDocTitle, apvDocContent, apdPath, docNo, eId, filesize );
 		
 		int result = aService.draftingDoc(draftingDoc);
-		String[] empIds = {eId};
+		
+
+		for(MultipartFile file : fileList) {
+			if(!file.isEmpty()) {
+				result3 = saveFile(fileList, request);
+				break;
+			}else {
+				break;
+			}
+		}
+		
 		int result2 = 0;
-		int result3 = 0;
 		if(result > 0) {
-			for(int i = 0; i < procedureNames.length; i++) {
-				empIds = aService.selectEmpId(procedureNames[i]);
+			System.out.println(empIds.length);
+			for(int i = 0; i < empIds.length; i++) {
+				System.out.println(apvtype[i] +" "+ empIds[i]);
 				Approval apv = new Approval(i,apvtype[i], empIds[i]);
 				result2 += aService.insertApproval(apv);
 			}
 			
-			for(MultipartFile file : fileList) {
-				if(!file.isEmpty()) {
-					result3 = saveFile(fileList, request, docNo);
-				}
-			}
-			if(result2 == procedureNames.length && result3 == fileList.size()) {
-				mv.addObject("msg","정상적으로 기안되었습니다.");
-				mv.setViewName("redirect:approval/draftingList");
+			if(result2 == empIds.length) {
+				
+				request.getSession().setAttribute("msg", "정상적으로 기안되었습니다.");
+				mv.setViewName("redirect:draftingList.ap");
 				return mv;
 			}else {
 				throw new ApprovalException("결재선 등록 실패");
@@ -437,8 +470,8 @@ public class ApprovalController {
 	}
 	
 	/* 첨부 파일 저장 */
-	public int saveFile(List<MultipartFile> fileList, MultipartHttpServletRequest request,
-			int docNo) {
+	public int saveFile(List<MultipartFile> fileList, MultipartHttpServletRequest request
+			) {
 		String path = request.getSession().getServletContext().getRealPath("resources");
 		
 		String savePath = path + "\\approval\\duploadFiles";
@@ -453,12 +486,13 @@ public class ApprovalController {
 		for(int i = 0; i < fileList.size(); i++) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");		
 			String originFileName = fileList.get(i).getOriginalFilename();
+			System.out.println(originFileName);
 			String renameFileName = sdf.format(new Date()) + 
-					originFileName.substring(originFileName.lastIndexOf("."));
+			originFileName.substring(originFileName.lastIndexOf("."));
 			
 			String renamePath = folder + "\\" + renameFileName;
 			filerename[i] = renameFileName;
-			Attachment at = new Attachment(originFileName, renameFileName, savePath, docNo);
+			Attachment at = new Attachment(originFileName, renameFileName, savePath);
 			result += aService.insertAttachment(at);
 			
 			try {
@@ -487,38 +521,53 @@ public class ApprovalController {
 	
 	@RequestMapping("temporaryDoc.ap")
 	public ModelAndView temporaryDoc(ModelAndView mv,
-			 MultipartHttpServletRequest request,
+			 MultipartHttpServletRequest request, 
 				String[] apvprocedureNames, String comment, String apvDocContent,
 				String apvDocTitle, int docNo) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
-		
 		String eId = loginUser.getID();
-		String apdPath = "0 "+ eId + " (기안)";
+		String apdPath = "";
 		if(apvprocedureNames != null) {
 			for(int i = 0; i < apvprocedureNames.length; i++) {
-				System.out.println(apvprocedureNames[i].toString());
-				apdPath +=", "+ apvprocedureNames[i].toString();
+				apdPath += apvprocedureNames[i].toString()+",";
 			}
 			
+		}else {
+			apdPath = " ";
 		}
+		if(apvDocTitle.equals(" ")) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");	
+			apvDocTitle = sdf.format(new Date())+loginUser.getUserName();
+		}
+		
 		/* 첨부파일 */
 		List<MultipartFile> fileList = request.getFiles("apvfiles");
-		System.out.println("첨부파일 갯수 : " + fileList.size());
+		int result2 = 0;
+		int filesize = 0;
+		for(MultipartFile file : fileList) {
+			if(!file.isEmpty()) {
+				filesize = fileList.size();
+			}
+		}
 		
-		ApvDoc temporaryDoc = new ApvDoc(apvDocTitle, apvDocContent, apdPath, docNo, eId, fileList.size() );
+		
+		ApvDoc temporaryDoc = new ApvDoc(apvDocTitle, apvDocContent, apdPath, docNo, eId, filesize );
 		
 		int result = aService.insertTempDoc(temporaryDoc);
-		int result2 = 0;
-		if(result > 0) {
-			
-			for(MultipartFile file : fileList) {
-				if(!file.isEmpty()) {
-					result2 = saveFile(fileList, request, docNo);
-				}
+		for(MultipartFile file : fileList) {
+			if(!file.isEmpty()) {
+				result2 += saveFile(fileList, request);
+			}else {
+				break;
 			}
-			if(result2 == fileList.size()) {
-				mv.addObject("msg","임시저장이 완료되었습니다.");
-				mv.setViewName("redirect:approval/temporaryList.ap");
+		}
+		
+		
+		
+		if(result > 0) {
+			if(result2 == fileList.size() || result2 == 0) {
+				request.getSession().setAttribute("msg", "정상적으로 저장되었습니다.");
+				mv.setViewName("redirect:temporaryList.ap");
 				return mv;
 			}else {
 				throw new ApprovalException("첨부파일 등록 실패");
@@ -526,13 +575,38 @@ public class ApprovalController {
 		}else {
 			throw new ApprovalException("임시저장 실패");
 		}
-		
-		
 	}
 	
 	
-	
-	
+	@RequestMapping("deleteTempDoc.ap")
+	public ModelAndView delelteTempDoc(ModelAndView mv, int apvDocNo,
+			HttpServletRequest request) {
+		
+		
+		ArrayList<Attachment> atList = aService.selectTempAt(apvDocNo);
+		int result2 = 0;
+		if (!atList.isEmpty()) {
+			for (Attachment at : atList) {
+				deleteFile(at.getRename(), request);
+				result2 += aService.deleteAttachment(apvDocNo);
+			}
+		}
+		
+		int result = aService.deleteTempDoc(apvDocNo);
+		
+		System.out.println(result2);
+		System.out.println(atList.size());
+		
+		if(result > 0 && result2 == atList.size()) {
+			request.getSession().setAttribute("msg", "임시문서가 삭제되었습니다.");
+			mv.setViewName("redirect:temporaryList.ap");
+		}else {
+			throw new ApprovalException("임시문서 삭제에 실패하였습니다.");
+		}
+		
+		
+		return mv;
+	}
 	
 	
 	

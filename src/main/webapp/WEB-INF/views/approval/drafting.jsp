@@ -234,18 +234,18 @@
                 <div id="doc">
                 <!-- 기안 문서 양식 예 -->
                 <c:if test="${ d.docType != 'PRIVATE' }">
-               	${ d.docContent }                
-                </c:if>
-               	<c:if test="${d.docType != 'PRIVATE' }">
+	               	${ d.docContent }                
                	<textarea id="editor" name="draftContent">내용 입력</textarea>
-               	</c:if>
+                </c:if>
+               	
                	<c:if test="${ d.docType eq 'PRIVATE' }"> 
-               		
+               	<div id="docContent">
                		<input id="apvDocTitle" type="text" name="apvDocTitle" placeholder="문서 제목 입력"/>
+               	</div>
+	               	<textarea id="editor" name="draftContent">${ d.docContent }</textarea>
                	</c:if>
                	
                	<c:if test="${ d.docType eq 'PRIVATE' }">
-               	<textarea id="editor" name="draftContent">${ d.docContent }</textarea>
                	</c:if>
                	</div>
                	<input type="text" id="docNo" name="docNo" value="${ d.docNo }" readonly/>
@@ -292,10 +292,12 @@
                         </svg>
                         <div id="person">
                             <!-- 직원정보 출력하는곳 -->
-                            <ul> <h5>인사</h5>
+                            
+                            <ul> 
+                            <h5>인사</h5>
                             <c:forEach var="e" items="${ eList }">
                             	<c:if test="${ e.department eq '인사' }">
-                            		<li class="userName"><input type="radio" id="${e.userName}" name="userName" value="${ e.userName }">
+                            		<li class="userName"><input type="radio" id="${e.userName}" name="userName" value="${ e.userName}[${e.ID}]">
                             		<label for="${ e.userName }" style=margin:0;>${ e.userName }</label>
                             		</li>
                             	</c:if>
@@ -338,7 +340,15 @@
                 var confirmMsg = confirmContent.children().eq(0);
                 confirmMsg[0].innerHTML = message;
                 if(message.includes("임시저장")){
+                	console.log(apvprocedureNames.value);
                 	$("#docform").attr("action","temporaryDoc.ap")
+                	if($("#sign_title").val()==""){
+                		$("#sign_title").val(" "); 
+                	}else if($("#apvDocTitle").val() == ""){
+                		$("#apvDocTitle").val(" ");
+                	}else if(apvprocedureNames.value == undefined){
+                		apvprocedureNames.value = " ";
+                	}
                 	$("#confirmOk").on("click", function () {
                         return true;
                     });
@@ -349,10 +359,12 @@
                 	if(apvprocedureNames.length == 0){
                 		closeconfirm();
                 		alert("결재선 지정이 필요합니다.");
-                	}else if($("#sign_title").val()==""){
+                	}else if($("#sign_title").val()=="" || $("#apvDocTitle").val() == ""){
                 		closeconfirm();
                 		alert("기안문서 제목을 입력해주세요.");
                 	}
+                	
+                	
                 	$("#confirmOk").on("click", function () {
                         return true;
                     });
@@ -367,7 +379,7 @@
             $("#enroll").on("click", function(){
             	var procedureList = $("#procedure").children();
             	var apvprocedure = document.getElementById("apvprocedure");
-            	console.log(apvprocedure.children[0]);
+            	apvprocedure.innerHTML = "";
             	for(var i = 0; i < procedureList.length; i++){
             		apvprocedure.insertAdjacentHTML("beforeend", "<input type='text' class='apvprocedureNames' name='apvprocedureNames' value='"+ (i+1) + " " 
             									+ procedureList[i].firstChild.value+"' readonly />");
@@ -479,8 +491,9 @@
             	
             	/* 에디터 안의 내용 */
             	var editorText = CKEDITOR.instances.editor.getData();
-            	apvdocContent.value = docContent+"///"+editorText;
+            	apvdocContent.value = docContent+"@"+editorText;
             	
+            	console.log(apvdocContent.value);
             	var docNo = document.getElementsByName('docNo');
             	docNo = ${d.docNo};
             	

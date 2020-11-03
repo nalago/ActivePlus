@@ -34,19 +34,16 @@
         border: 1px solid black;
     }
 
+    #docNo{
+		width:10%;
+	}
     #drftitle{
         width: 15%;
     }
     #drfname{
-        width: 15%;
+        width: 10%;
     }
     #drfdate{
-        width: 20%;
-    }
-    #apvname{
-        width: 15%;
-    }
-    #apvdate{
         width: 20%;
     }
     #apvstatus{
@@ -200,21 +197,22 @@
                 <table id="docList">
                 <thead>
                     <tr>
+                     	<th id="docNo">문서번호</th>
                         <th id="doctitle">문서명</th>
                         <th id="drfname">기안자</th>
                         <th id="drfdate">기안일</th>
-                        <th id="apvname">최종결재자</th>
-                        <th id="apvdate">최종결재일</th>
                         <th id="apvstatus">상태</th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:if test="${ empty cList }">
                     <tr>
-                    	<td colspan="6">결재된 문서가 없습니다.</td>
+                    	<td colspan="5">결재된 문서가 없습니다.</td>
                     </tr>
                     </c:if>
+                    <c:if test="${ !empty cList }">
                     
+                    </c:if>
                     </tbody>
                 </table>
                 <br><br>

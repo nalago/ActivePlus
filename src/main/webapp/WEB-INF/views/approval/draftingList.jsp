@@ -33,11 +33,14 @@
         margin: 0;
         border: 1px solid black;
     }
+    .docNo{
+     width:10%;
+    }
     .doctitle{
         width: 30%;
     }
     .doccontent{
-        width: 70%;
+        width: 60%;
     }
     .pagingwrap{
         text-align: center;
@@ -64,7 +67,15 @@
 <body>
 <jsp:include page="../common/menubar.jsp"/>
 <section>
+		<jsp:include page="popup/alert.jsp"/>
         <jsp:include page="submenu/topMenu.jsp"/>
+        
+        <c:if test="${ !empty msg }">
+		<script>
+			alert('${msg}');
+		</script>
+		<c:remove var="msg" scope="session"/>
+		</c:if>
             <script>
                 $(function(){
                     $("#listButtonopen").on("click",function(){
@@ -77,6 +88,8 @@
                         $("#listButtonopen").css("display","inline-block");
                     });
                 });
+                
+                
             </script>
             <jsp:include page="submenu/docTypeList.jsp"/>
             
@@ -100,6 +113,7 @@
                 <table id="docList">
                 <thead>
                     <tr>
+                    	<th class="docNo">문서번호</th>
                         <th class="doctitle">양식명</th>
                         <th class="doccontent">설명</th>
                     </tr>
@@ -107,12 +121,13 @@
                     <tbody>
                     <c:if test="${ empty dList }">
                     <tr>
-                    	<td colspan="2">양식이 없습니다.</td>
+                    	<td colspan="3">양식이 없습니다.</td>
                     <tr>
                     </c:if>
                     <c:if test="${ !empty dList }">
                     	<c:forEach var="d" items="${ dList }">
                     	<tr>
+                    		<td>${d.docNo }</td>
                     		<td>${d.docTitle }</td>
                     		<td>${d.docExplantion }</td>
                     	<tr>
@@ -156,8 +171,11 @@
            <script>
            		$(function(){
            			$("td").on("click", function(){
-           				var docTitle = $(this).parent().children().eq(0).text();
-           				location.href="selectDoc.ap?docTitle="+docTitle;
+           				var docNo = $(this).parent().children().eq(0).text();
+          				if(docNo.includes('없습니다.')){
+          					return false;
+          				}
+           				location.href="selectDoc.ap?docNo="+docNo;
            			});
            		});
            </script>

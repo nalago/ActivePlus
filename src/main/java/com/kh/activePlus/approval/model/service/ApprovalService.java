@@ -20,7 +20,7 @@ public interface ApprovalService {
 	
 	public int TemporaryDocSave(Doc tempDoc);
 	
-	public int deleteTempDoc(int dId);
+	public int deleteTempDoc(int apvDocNo);
 	
 	public int insertPriDoc(Doc doc);
 	
@@ -64,7 +64,7 @@ public interface ApprovalService {
 
 	public ArrayList<ApvDoc> selectApprovalCompleteList(String eId, PageInfo pi);
 
-	public Doc selectDoc(String docTitle);
+	public Doc selectDoc(int docNo);
 
 	public String[] selectEmpId(String string);
 
@@ -80,9 +80,11 @@ public interface ApprovalService {
 
 	public int deletePriDoc(Doc searchd);
 
-	public Doc selectTempDoc(Doc searchTemp);
+	public ApvDoc selectTempDoc(ApvDoc searchTemp);
 
 	public ArrayList<Attachment> selectTempAt(int docNo);
+
+	public int deleteAttachment(int docNo);
 
 
 	

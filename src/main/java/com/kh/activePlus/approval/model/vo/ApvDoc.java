@@ -1,6 +1,6 @@
 package com.kh.activePlus.approval.model.vo;
 
-import java.util.Date;
+import java.sql.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +26,8 @@ public class ApvDoc {
 	private String empId;
 	private int apvDocFileCount;
 	
+	
+	
 	public ApvDoc(String apvDocTitle, String apvDocContent, String apdPath, int docNo, String empId,
 			int apvDocFileCount) {
 		super();
@@ -35,6 +37,14 @@ public class ApvDoc {
 		this.docNo = docNo;
 		this.empId = empId;
 		this.apvDocFileCount = apvDocFileCount;
+	}
+
+
+
+	public ApvDoc(int apvDocNo, String empId) {
+		super();
+		this.apvDocNo = apvDocNo;
+		this.empId = empId;
 	}
 	
 	

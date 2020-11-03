@@ -45,7 +45,7 @@ public class ApprovalDao {
 	}
 
 	public int selectPrivateListCount(String eId) {
-		return sqlSession.selectOne("approvalMapper.selectPrivateListCount");
+		return sqlSession.selectOne("approvalMapper.selectPrivateListCount", eId);
 	}
 
 	public ArrayList<Doc> selectPrivateList(String eId, PageInfo pi) {
@@ -55,7 +55,7 @@ public class ApprovalDao {
 	}
 
 	public int selectTemporaryListCount(String eId) {
-		return sqlSession.selectOne("approvalMapper.selectTemporaryListCount");
+		return sqlSession.selectOne("approvalMapper.selectTemporaryListCount", eId);
 	}
 
 	public ArrayList<ApvDoc> selectTemporaryList(String eId, PageInfo pi) {
@@ -82,8 +82,8 @@ public class ApprovalDao {
 		return (ArrayList)sqlSession.selectList("approvalMapper.selectApprovalCompleteList",eId,rowBounds);
 	}
 
-	public Doc selectDocTypeList(String docTitle) {
-		return sqlSession.selectOne("approvalMapper.selectDoc",docTitle);
+	public Doc selectDocTypeList(int docNo) {
+		return sqlSession.selectOne("approvalMapper.selectDoc",docNo);
 	}
 
 	public ArrayList<Employee> selectEmpList() {
@@ -134,12 +134,20 @@ public class ApprovalDao {
 		return sqlSession.update("approvalMapper.deletePriDoc", searchd);
 	}
 
-	public Doc selectTempDoc(Doc searchTemp) {
+	public ApvDoc selectTempDoc(ApvDoc searchTemp) {
 		return sqlSession.selectOne("approvalMapper.selectTempDoc", searchTemp);
 	}
 
 	public ArrayList<Attachment> selectTempAt(int docNo) {
 		return (ArrayList)sqlSession.selectList("approvalMapper.selectTempAt", docNo);
+	}
+
+	public int deleteTempDoc(int apvDocNo) {
+		return sqlSession.delete("approvalMapper.deleteTempDoc", apvDocNo);
+	}
+
+	public int deleteAttachment(int docNo) {
+		return sqlSession.delete("approvalMapper.deleteAttachment", docNo);
 	}
 
 }
