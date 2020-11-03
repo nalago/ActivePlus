@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,16 +18,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kh.activePlus.Employee.model.vo.Employee;
 import com.kh.activePlus.approval.model.exception.ApprovalException;
 import com.kh.activePlus.approval.model.service.ApprovalService;
 import com.kh.activePlus.approval.model.vo.Approval;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
-import com.kh.activePlus.approval.model.vo.Attachment;
 import com.kh.activePlus.approval.model.vo.Doc;
-import com.kh.activePlus.approval.model.vo.PageInfo;
-import com.kh.activePlus.approval.model.vo.Pagination;
+import com.kh.activePlus.common.attachment.Attachment;
+import com.kh.activePlus.common.paging.PageInfo;
+import com.kh.activePlus.common.paging.Pagination;
+import com.kh.activePlus.employee.model.vo.Employee;
 
 @Controller
 public class ApprovalController {
@@ -38,7 +37,7 @@ public class ApprovalController {
 	public ModelAndView goApproval(ModelAndView mv, HttpServletRequest request) throws Exception {
 		// 전자결재 메인창에 띄울 세 리스트 불러오기
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
-		String empId= loginUser.getID();
+		String empId= loginUser.getId();
 		// 임시문서
 		ApprovalSearch tempDocSearch = new ApprovalSearch(empId, "0");
 		ApprovalSearch apvDocSearch = new ApprovalSearch(empId, "1");
@@ -95,7 +94,7 @@ public class ApprovalController {
 			@RequestParam(value="page", required=false) Integer page) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		int listCount = aService.selectPrivateListCount(eId);
 		
 		int currentPage = page != null ? page : 1;
@@ -124,7 +123,7 @@ public class ApprovalController {
 			int docNo) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		
 		Doc searchd = new Doc(docNo, eId);
 		
@@ -147,7 +146,7 @@ public class ApprovalController {
 			String priDocTitle, String priDocContent, String docexplanation) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		
 		Doc priDoc = new Doc(priDocTitle, priDocContent, docexplanation, eId);
 		
@@ -169,7 +168,7 @@ public class ApprovalController {
 			int docNo) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		
 		Doc searchd = new Doc(docNo, eId);
 		
@@ -191,7 +190,7 @@ public class ApprovalController {
 			@RequestParam(value="page", required=false) Integer page){
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		System.out.println(eId);
 		int listCount = aService.selectTemporaryListCount(eId);
 		System.out.println(listCount);
@@ -218,7 +217,7 @@ public class ApprovalController {
 			int apvDocNo) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		
 		ApvDoc searchTemp = new ApvDoc(apvDocNo, eId);
 		
@@ -255,7 +254,7 @@ public class ApprovalController {
 			@RequestParam(value="page", required=false) Integer page) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		
 		int listCount = aService.selectApprovalObtainListCount(eId);
 		
@@ -280,7 +279,7 @@ public class ApprovalController {
 			@RequestParam(value="page", required=false) Integer page) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		int listCount = aService.selectApprovalListCount(eId);
 		
 		int currentPage = page != null ? page : 1;
@@ -304,7 +303,7 @@ public class ApprovalController {
 			@RequestParam(value="page", required=false) Integer page) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		int listCount = aService.selectAprrovalCompleteListCount(eId);
 		
 		int currentPage = page != null ? page : 1;
@@ -376,7 +375,7 @@ public class ApprovalController {
 			) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
 		
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		String[] procedureNames = new String[apvprocedureNames.length+1];
 		String[] apvTypes = new String[apvprocedureNames.length+1];
 		int[] apvtype = new int[apvprocedureNames.length+1];
@@ -385,7 +384,7 @@ public class ApprovalController {
 		
 		
 		/* 결재선 */
-		apdPath = "0 "+loginUser.getUserName()+"["+ eId + "] (기안)";
+		apdPath = "0 "+loginUser.getName()+"["+ eId + "] (기안)";
 		empIds[0] = eId;
 		apvTypes[0] = "(기안)";
 		for(int i = 0; i < apvprocedureNames.length; i++) {
@@ -419,7 +418,7 @@ public class ApprovalController {
 				ArrayList<Attachment> atList = aService.selectTempAt(apvDocNo);
 				if (atList != null) {
 					for (Attachment at : atList) {
-						deleteFile(at.getRename(), request);
+						deleteFile(at.getRenameFile(), request);
 					}
 				}else {
 					break;
@@ -525,7 +524,7 @@ public class ApprovalController {
 				String[] apvprocedureNames, String comment, String apvDocContent,
 				String apvDocTitle, int docNo) {
 		Employee loginUser = (Employee)request.getSession().getAttribute("loginUser");
-		String eId = loginUser.getID();
+		String eId = loginUser.getId();
 		String apdPath = "";
 		if(apvprocedureNames != null) {
 			for(int i = 0; i < apvprocedureNames.length; i++) {
@@ -537,7 +536,7 @@ public class ApprovalController {
 		}
 		if(apvDocTitle.equals(" ")) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");	
-			apvDocTitle = sdf.format(new Date())+loginUser.getUserName();
+			apvDocTitle = sdf.format(new Date())+loginUser.getName();
 		}
 		
 		/* 첨부파일 */
@@ -587,7 +586,7 @@ public class ApprovalController {
 		int result2 = 0;
 		if (!atList.isEmpty()) {
 			for (Attachment at : atList) {
-				deleteFile(at.getRename(), request);
+				deleteFile(at.getRenameFile(), request);
 				result2 += aService.deleteAttachment(apvDocNo);
 			}
 		}

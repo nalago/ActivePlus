@@ -11,7 +11,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.kh.activePlus.Employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.Employee;
  
 /**
  * 

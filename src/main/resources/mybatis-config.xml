@@ -18,24 +18,24 @@
 		<typeAlias type="com.kh.activePlus.approval.model.vo.ApvDoc" alias="ApvDoc"/>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.Approval" alias="Approval"/>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.ApprovalSearch" alias="ApprovalSearch"/>
-		<typeAlias type="com.kh.activePlus.Employee.model.vo.Employee" alias="Employee"/>
-		<typeAlias type="com.kh.activePlus.approval.model.vo.Attachment" alias="Attachment"/>
+		<typeAlias type="com.kh.activePlus.employee.model.vo.Employee" alias="Employee"/>
 
 		<typeAlias type="com.kh.activePlus.schedule.model.vo.Schedule" alias="Schedule"/>
-		<typeAlias type="com.kh.activePlus.member.model.vo.Member" alias="Member"/>
-		<typeAlias type="com.kh.activePlus.member.model.vo.Search" alias="Search"/>
+		<typeAlias type="com.kh.activePlus.common.search.Search" alias="Search"/>
 
+		<typeAlias type="com.kh.activePlus.board.model.vo.Notice" alias="Notice"/>
+		<typeAlias type="com.kh.activePlus.board.model.vo.HosBoard" alias="HosBoard"/>
+		<typeAlias type="com.kh.activePlus.common.attachment.Attachment" alias="Attachment"/>
+		<typeAlias type="com.kh.activePlus.common.search.Search" alias="Search"/>
+		<typeAlias type="com.kh.activePlus.mail.model.vo.EmailReceive" alias="EmailReceive"/>
+		<typeAlias type="com.kh.activePlus.mail.model.vo.Email" alias="Email"/>
 	</typeAliases>
 
 		<mappers>
 			<mapper resource="mappers/approval-mapper.xml"/>
 			<mapper resource="mappers/schedule-mapper.xml"/>
-			<mapper resource="mappers/member-mapper.xml"/>
+			<mapper resource="mappers/employee-mapper.xml"/>
 		</mappers>
-	<!-- <mappers>
-		<mapper resource="mappers/board-mapper.xml"/>
-		<mapper resource="mappers/notice-mapper.xml"/>
-	</mappers> -->
 
 
 </configuration>

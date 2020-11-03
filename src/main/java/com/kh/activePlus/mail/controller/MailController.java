@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.kh.activePlus.Employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.Employee;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.paging.Pagination;
 import com.kh.activePlus.mail.model.service.MailService;
@@ -26,12 +26,12 @@ public class MailController {
 	public String goMail(HttpServletRequest req, @RequestParam(name="page", required=false)Integer page,
 			String kind) {
 		Employee user = (Employee)req.getSession().getAttribute("loginUser");
-		String receiver = user.getEmpId();
+		String receiver = user.getId();
 		
 		int currentPage = page != null ? page : 1;
 		int listCount = mService.getListCount(receiver, kind);
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5, 10);
-		ArrayList<Email> in = mService.selectInList(receiver);
+		//ArrayList<Email> in = mService.selectInList(receiver);
 		
 		
 		return "mail/mailInbox";

@@ -51,8 +51,8 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	
 	<resultMap id="AttachmentResultSet" type="Attachment">
 		<id property="fId" column="FID"/>
-		<result property="original" column="A_ORIGINNAME"/>
-		<result property="rename" column="A_RENAME"/>
+		<result property="originalFile" column="A_ORIGINNAME"/>
+		<result property="renameFile" column="A_RENAME"/>
 		<result property="filePath" column="FILE_PATH"/>
 		<result property="status" column="STATUS"/>
 		<result property="refTable" column="REF_TABLE"/>
