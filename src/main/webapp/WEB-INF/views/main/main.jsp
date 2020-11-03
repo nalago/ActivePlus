@@ -89,6 +89,7 @@ thead {
 		<div id="userInfo">
 			<div id="basic">
 				<div id="picture"></div>
+
 				<div class="user">${ loginUser.empId } ${ loginUser.category }, ${ loginUser.name }</div>
 			</div>
 			<div id="TNA">
@@ -98,6 +99,7 @@ thead {
 				<!-- 출근 버튼 클릭 후 아래 버튼을 보이게한다. -->
 				<button type="button" class="TNABtn half" style="margin-left:20px;">퇴근</button>
 				<button type="button" class="TNABtn half">반차</button>
+
 			</div>
 			
 		</div>
