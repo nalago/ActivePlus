@@ -20,10 +20,15 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 			</a>
 		</div>
 		<div class="sidenav">
-			<c:url var="goCal" value="calendar.ap"/>
+			<c:url var="goSchd" value="calendar.ap">
+				<c:param name="scd_sq" value="1"/>
+			</c:url>
+			<c:url var="goItem" value="itemList.ap"/>
+			<c:url var="goMail" value="mail.ap"/>
+			<c:url var="goTask" value="diagnosisList.ap"/>
 			<c:url var="goMail" value="mail.ap"/>
 			<c:url var="goApproval" value="approvalMain.ap"/>
-			<a href="${ goCal }">일정관리</a>
+			<a href="${ goSchd }">일정관리</a>
 			<a href="${ goApproval }">전자결재</a>
 			<a href="#">게시판</a>
 			<a href="#">메신저</a> 

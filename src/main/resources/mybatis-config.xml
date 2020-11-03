@@ -20,10 +20,12 @@
 		<typeAlias type="com.kh.activePlus.approval.model.vo.ApprovalSearch" alias="ApprovalSearch"/>
 		<typeAlias type="com.kh.activePlus.Employee.model.vo.Employee" alias="Employee"/>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.Attachment" alias="Attachment"/>
+		<typeAlias type="com.kh.activePlus.schedule.model.vo.Schedule" alias="Schedule"/>
 	</typeAliases>
 
 		<mappers>
 			<mapper resource="mappers/approval-mapper.xml"/>
+			<mapper resource="mappers/schedule-mapper.xml"/>
 		</mappers>
 	<!-- <mappers>
 		<mapper resource="mappers/member-mapper.xml"/>
