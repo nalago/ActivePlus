@@ -51,7 +51,7 @@
     <div class="topnav">
         <div class="topmenu">
             <div class="profile">
-                <span id="user" class="profile">@${ emp.team } @${ emp.name }님</span>
+                <span id="user" class="profile">@${ loginUser.category } @${ loginUser.name }님</span>
                 <span><a id="info" class="profile" href="#">개인정보</a></span>
                 <img id="logo" src="img/active.png">
                 <div class="buttonwrap">

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+	<resultMap id="memberResultSet" type="Member">
+		<id property="id" column="EMP_ID"/>
+		<result property="pwd" column="PWD"/>
+		<result property="email" column="EMAIL"/>
+		<result property="name" column="NAME"/>
+		<result property="phone" column="PHONE"/>		
+		<result property="birth" column="BIRTH"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="salary" column="SALARY"/>
+		<result property="acc_no" column="ACC_NO"/>
+		<result property="address" column="ADDRESS"/>
+		<result property="hire_date" column="HIRE_DATE"/>		
+		<result property="status" column="STATUS"/>
+		<result property="license" column="LICENSE"/>
+		<result property="license_no" column="LICENSE_NO"/>
+		<result property="license_date" column="LICENSE_DATE"/>
+	</resultMap>
+	
+	
+
+	<select id="selectOne" parameterType="Member" resultMap="memberResultSet">
+		SELECT *
+		FROM EMPLOYEE
+		WHERE EMP_ID=#{id}
+	</select>
+	
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM EMPLOYEE
+	</select>
+	
+	<select id="selectList" resultMap="memberResultSet">
+		SELECT *
+		FROM EMPLOYEE
+		ORDER BY EMP_ID DESC
+	</select>
+	
+	<insert id="insertMember" parameterType="Member">
+		INSERT INTO EMPLOYEE VALUES(
+		#{id}, #{pwd}, #{email}, #{phone},
+		#{name}, #{birth}, #{category}, #{salary}, #{acc_no},
+		#{address}, #{hire_date}, #{status}, #{license}, #{license_no}, #{license_date},
+		#{originalFileName}, #{renameFileName})
+	</insert>
+	
+	<select id="selectOne1" resultMap="memberResultSet">
+		SELECT *
+		FROM EMPLOYEE
+		WHERE EMP_ID=#{id}
+	</select>
+	
+<select id="searchList" parameterType="Search" resultMap="memberResultSet">
+		<bind name="sv" value="'%' + _parameter.getSearchValue() + '%'"/>
+		SELECT *
+		FROM EMPLOYEE
+		<where>
+			<choose>
+				<when test="searchCondition == 'name'">
+					AND NAME LIKE #{sv}
+				</when>
+				<when test="searchCondition == 'category'">
+					AND CATEGORY LIKE #{sv}
+				</when>
+				<when test="searchCondition == 'status'">
+					AND STATUS LIKE #{sv}
+				</when>
+				<otherwise>
+					AND (NAME LIKE #{sv}
+						OR CATEGORY LIKE #{sv}
+						OR STATUS LIKE #{sv})
+				</otherwise>
+			</choose>
+		</where>
+		ORDER BY EMP_ID DESC
+	</select>
+
+
+
+
+
+
+
+
+</mapper>

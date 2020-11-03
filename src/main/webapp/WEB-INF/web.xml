@@ -6,10 +6,15 @@
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
+	
+	
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring/root-context.xml</param-value>
+		<param-value>
+		classpath:spring/root-context.xml
+		classpath:spring/spring-security.xml
+		</param-value>
 	</context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
@@ -32,6 +37,13 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>*.ap</url-pattern>
 	</servlet-mapping>
+	
+	<!-- 에러 페이지 등록 -->
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/WEB-INF/view/common/errorPage.jsp</location>
+	</error-page>
+	
 	<!-- 한글 인코딩 -->
 	<!-- 우리가 직접 필터를 만들어서 등록할수도 있지만 스프링에서 인코딩용 필터를 제공하므로
 		  만들지 않고도 web.xml에 등록만 하여 사용 가능함 -->
@@ -51,5 +63,6 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
 
 </web-app>
