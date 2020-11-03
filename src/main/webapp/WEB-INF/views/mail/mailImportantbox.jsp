@@ -140,7 +140,7 @@
 						
 					</tbody>
 				</table>
-				<button class="mailSend">메일쓰기</button>
+				<button class="mailSend" id="writeBtn">메일쓰기</button>
 			
 			</div>
 		</div>
