@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mailMapper">
+	<resultMap type="Email" id="emailResultSet">
+		<id property="mailId" column="MID"/>
+		<result property="category" column="M_CATEGORY"/>
+		<result property="title" column="MTITLE"/>
+		<result property="content" column="MCONTENT"/>
+		<result property="writer" column="MWRITER"/>
+		<result property="mwName" column="MW"/><!-- 작성자 이름 -->
+		<result property="status" column="M_STATUS"/>
+		<result property="iptMark" column="IMPORTANT_MARK"/>
+		<result property="sendDate" column="SEND_DATE"/>
+		<result property="attStock" column="ATT_STOCK"/>
+		<result property="deleteDate" column="DELETE_DATE"/>
+		<result property="mrCategory" column="MR_CATEGORY"/>
+		<result property="readValue" column="READ"/>
+		<result property="readDate" column="READ_DATE"/>
+		<result property="receiver" column="RECEIVER"/>
+		<result property="rvName" column="MR"/><!-- 수신자 이름 -->
+		<result property="mrStatus" column="MR_STATUS"/>
+		<result property="rIptMark" column="MRIMPOTANT_MARK"/>
+	</resultMap>
+	
+	<select id="selectListCount" parameterType="map" resultType="Integer">
+		SELECT *
+		FROM M_VIEW
+		<where>
+			<choose>
+			
+				<when test="kind == in">
+				</when>
+		
+			</choose>
+		
+		</where>
+	</select>
+
+</mapper>

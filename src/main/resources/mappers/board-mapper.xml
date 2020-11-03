@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="boardMapper">
+	<resultMap type="Notice" id="noticeResultSet">
+		<id property="noticeId" column="NID"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="title" column="TITLE"/>
+		<result property="content" column="CONTENT"/>
+		<result property="count" column="COUNT"/>
+		<result property="status" column="STATUS"/>
+		<result property="createDate" column="CREATE_DATE"/>
+		<result property="modifyDate" column="MODIFY_DATE"/>
+		<result property="deleteDate" column="DELETE_DATE"/>
+		<result property="writer" column="WRITER"/>
+		<result property="attachment" column="ATTACHMENT"/>
+		<result property="writerName" column="NAME"/>
+	</resultMap>
+	<resultMap type="HosBoard" id="hosBoardResultSet">
+		<id property="hbId" column="BID"/>
+		<result property="title" column="BTITLE"/>
+		<result property="content" column="BCONTENT"/>
+		<result property="count" column="COUNT"/>
+		<result property="status" column="B_STATUS"/>
+		<result property="createDate" column="CREATE_DATE"/>
+		<result property="modifyDate" column="MODIFY_DATE"/>
+		<result property="deleteDate" column="DELETE_DATE"/>
+		<result property="writer" column="WRITER"/>
+		<result property="writerName" column="NAME"/>
+	</resultMap>
+	<resultMap type="Attachment" id="attachmentResultSet">
+		<id property="atId" column="FID"/>
+		<result property="originalFile" column="A_ORIGINNAME"/>
+		<result property="renameFile" column="A_RENAME"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="refTable" column="REF_TABLE"/>
+		<result property="refId" column="REF_ID"/>
+		<result property="status" column="STATUS"/>
+	</resultMap>
+	
+	<!-- 공지사항 -->
+	<select id="selectList" resultMap="noticeResultSet">
+		SELECT *
+		FROM N_EMP
+		WHERE STATUS='Y'
+		ORDER BY NID DESC
+	</select>
+	
+	<select id="getListCount" resultType="_int">
+		SELECT COUNT(*) FROM NOTICE
+		WHERE STATUS='Y'
+	</select>
+	
+	<select id="selectNotice" parameterType="_int" resultMap="noticeResultSet">
+		SELECT * FROM N_EMP
+		WHERE STATUS='Y' AND NID=#{nId}
+	</select>
+	
+	<insert id="insertNotice" parameterType="Notice">
+		INSERT INTO NOTICE
+		VALUES(SEQ_NID.nextval, #{category}, #{title},
+		#{content}, 0, 'Y', SYSDATE, NULL, NULL, #{writer},#{attachment})
+		
+		<selectKey keyProperty="noticeId" resultType="Integer" order="AFTER">
+			SELECT SEQ_NID.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	<!-- DELETE -->
+	<update id="deleteNotice" parameterType="_int" >
+		UPDATE NOTICE 
+		SET STATUS='N', DELETE_DATE=SYSDATE 
+		WHERE NID=#{nId}
+	</update>
+	
+	<!-- UPDATE -->
+	<update id="updateNotice" parameterType="Notice">
+		UPDATE NOTICE
+		SET CATEGORY=#{category},TITLE=#{title},CONTENT=#{content},MODIFY_DATE=SYSDATE,ATTACHMENT=#{attachment}
+		WHERE NID=#{noticeId}
+	</update>
+	<!-- search -->	
+	<select id="searchList" parameterType="Search" resultMap="noticeResultSet">
+		<bind name="sv" value="'%' + _parameter.getSearchValue() + '%'"/>
+		SELECT *
+		FROM NOTICE
+		<where>
+		STATUS='Y'
+			<if test="empId != null">
+				AND WRITER = #{empId}
+			</if>
+			<choose>
+				<when test="searchCondition == 'title'">
+					AND TITLE LIKE #{sv}
+				</when>
+				<when test="searchCondition == 'content'">
+					AND CONTENT LIKE #{sv}
+				</when>
+				<otherwise>
+					AND (TITLE LIKE #{sv}
+						OR CONTENT LIKE #{sv})
+				</otherwise>
+			</choose>	
+		</where>
+		ORDER BY NID DESC
+	</select>
+	<!-- search -->	
+	<select id="getSearchCount" parameterType="Search" resultType="_int">
+		<bind name="value" value="'%' + _parameter.getSearchValue() + '%'"/>
+		SELECT COUNT(*)
+		FROM NOTICE
+		<where>
+		STATUS='Y'
+			<if test="empId != null">
+				AND WRITER = #{empId}
+			</if>
+			<choose>
+				<when test="searchCondition == 'title'">
+					AND TITLE LIKE #{value}
+				</when>
+				<when test="searchCondition == 'content'">
+					AND CONTENT LIKE #{value}
+				</when>
+				<otherwise>
+					AND (TITLE LIKE #{value}
+						OR CONTENT LIKE #{value})
+				</otherwise>
+			</choose>	
+		</where>
+	</select>
+	
+	<!-- 원내게시판 -->
+	<select id="selectTopList" resultMap="hosBoardResultSet">
+	<![CDATA[
+		SELECT * 
+		FROM(
+			SELECT ROW_NUMBER() OVER(ORDER BY COUNT DESC, BID DESC) RNUM , BID, NAME, BTITLE, COUNT, CREATE_DATE
+			FROM H_EMP
+			WHERE B_STATUS = 'Y')
+		WHERE RNUM <= 3
+	]]>	
+	</select>
+	
+	<select id="selectHBList" resultMap="hosBoardResultSet">
+	<![CDATA[
+		SELECT * 
+		FROM(
+			SELECT ROW_NUMBER() OVER(ORDER BY COUNT DESC, BID DESC) RNUM , BID, NAME, BTITLE, COUNT, CREATE_DATE
+			FROM H_EMP
+			WHERE B_STATUS = 'Y')
+		WHERE RNUM > 3
+		ORDER BY BID DESC
+	]]>
+	</select>
+	
+	<select id="getHBListCount" resultType="Integer">
+	<![CDATA[
+		SELECT COUNT(*) 
+		FROM(SELECT ROW_NUMBER() OVER(ORDER BY COUNT DESC, BID DESC) RNUM
+			FROM H_EMP
+			WHERE B_STATUS = 'Y')
+		WHERE RNUM > 3
+	]]>	
+	</select>
+	
+	<select id="HBtSearchCount" parameterType="Search" resultType="_int">
+		<bind name="value" value="'%' + _parameter.getSearchValue() + '%'"/>
+		SELECT COUNT(*)
+		FROM HOS_BOARD
+		<where>
+			B_STATUS='Y'
+			<if test="empId != null">
+				AND WRITER = #{empId}
+			</if>
+			<choose>
+				<when test="searchCondition == 'title'">
+					AND TITLE LIKE #{value}
+				</when>
+				<when test="searchCondition == 'content'">
+					AND CONTENT LIKE #{value}
+				</when>
+				<otherwise>
+					AND (TITLE LIKE #{value}
+						OR CONTENT LIKE #{value})
+				</otherwise>
+			</choose>	
+		</where>
+	</select>
+	<select id="HBSearchList" parameterType="Search" resultMap="noticeResultSet">
+		<bind name="sv" value="'%' + _parameter.getSearchValue() + '%'"/>
+		SELECT *
+		FROM HOS_BOARD
+		<where>
+		B_STATUS='Y'
+			<if test="empId != null">
+				AND WRITER = #{empId}
+			</if>
+			<choose>
+				<when test="searchCondition == 'title'">
+					AND TITLE LIKE #{sv}
+				</when>
+				<when test="searchCondition == 'content'">
+					AND CONTENT LIKE #{sv}
+				</when>
+				<otherwise>
+					AND (TITLE LIKE #{sv}
+						OR CONTENT LIKE #{sv})
+				</otherwise>
+			</choose>	
+		</where>
+		ORDER BY NID DESC
+	</select>
+	
+	<insert id="insertHB" parameterType="HosBoard">
+		INSERT INTO HOS_BOARD
+		VALUES(SEQ_BID.NEXTVAL,#{title},#{content},0,'Y',SYSDATE,NULL,NULL,#{writer})
+	</insert>
+	
+	<select id="selectHB" parameterType="_int" resultMap="hosBoardResultSet">
+		SELECT BID, BTITLE, BCONTENT, CREATE_DATE, WRITER, NAME
+		FROM H_EMP
+		WHERE B_STATUS='Y'
+		AND BID=#{hbId}
+	</select>
+	
+	<update id="addCount" parameterType="_int">
+		UPDATE HOS_BOARD
+		SET COUNT = COUNT + 1
+		WHERE BID=#{hbId}
+	</update>
+	
+	<update id="updateHB" parameterType="HosBoard">
+		UPDATE HOS_BOARD
+		SET BTITLE=#{title}, BCONTENT=#{content},MODIFY_DATE=SYSDATE
+		WHERE BID=#{hbId}
+	</update>
+	
+	<update id="deleteHB" parameterType="_int">
+		UPDATE HOS_BOARD
+		SET B_STATUS='N', DELETE_DATE=SYSDATE
+		WHERE BID=#{hbId}
+	</update>
+	
+	<!-- Attachment -->
+	<insert id="insertAttachment" parameterType="Attachment">
+		INSERT INTO ATTACHMENT
+		VALUES (SEQ_FID.nextval, #{originalFile}, #{renameFile}, #{filePath}, #{refTable}, #{refId}, DEFAULT)
+	</insert>
+	<select id="selectAttachment" parameterType="Attachment" resultMap="attachmentResultSet">
+		SELECT * 
+		FROM ATTACHMENT
+		WHERE REF_TABLE=#{refTable}
+		AND REF_ID=#{refId}
+		AND STATUS='Y'
+	</select>
+	
+	<update id="deleteAttachment" parameterType="Attachment">
+		UPDATE ATTACHMENT
+		SET STATUS='N'
+		WHERE REF_TABLE=#{refTable} AND REF_ID=#{refId}
+	</update>
+	<update id="updateAttachment" parameterType="Attachment">
+		UPDATE ATTACHMENT 
+		SET A_ORIGINNAME=#{originalFile}, A_RENAME=#{renameFile} 
+		WHERE REF_TABLE=#{ref_table} AND REF_ID=#{refId}
+	</update>
+	
+</mapper>

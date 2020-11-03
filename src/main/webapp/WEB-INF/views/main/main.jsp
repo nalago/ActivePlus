@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Active Plus</title>
 <style>
 #userInfo {
-	margin-left:300px;
+	margin-left:200px;
 	width: 300px;
 	height: 600px;
 	border: 1px solid black;
@@ -16,7 +17,7 @@
 
 #mainT {
 	margin: 30px;
-	margin-left:700px;
+	margin-left:600px;
 }
 h3{
 	margin-top:70px;
@@ -30,6 +31,54 @@ tbody{
 }
 thead {
 }
+/*유저 정보 */
+#basic {
+	border:1px solid yellowGreen;
+	width : 200px;
+	height: 300px;
+	margin:auto;
+	margin-top:30px;
+}
+#picture{
+	width:170px;
+	height:200px;
+	border: 1px solid lightblue;
+	margin:auto;
+	margin-top:20px;
+}
+.user{
+	border:1px solid yellow;
+	width:200px;
+	text-align:center;
+	margin-top:20px;
+	
+}
+#TNA{
+	border:1px solid lightgray;
+	width:300px;
+	height:50px;
+}
+#work{
+	width:250px;
+	height:40px;
+	margin-left:25px;
+	margin-top:5px;
+}
+.TNABtn{
+	background:none;
+	color:#2f2f2f;
+	border:none;
+	border-radius:10px;
+	font-size:15px;
+}
+.TNABtn:hover{
+	cursor:pointer;
+}
+.half{
+	width:125px;
+	height:50px;
+}
+
 </style>
 </head>
 <body>
@@ -40,8 +89,17 @@ thead {
 		<div id="userInfo">
 			<div id="basic">
 				<div id="picture"></div>
-				<div id="user">${ emp.team } ${ emp.dept }, ${ emp.name }님</div>
+				<div class="user">${ loginUser.empId } ${ loginUser.category }, ${ loginUser.name }</div>
 			</div>
+			<div id="TNA">
+				<!-- <button type="button" class="TNABtn" id="work">출근</button> -->
+				<c:if test="${ !empty TNA.inTime }">
+				</c:if>
+				<!-- 출근 버튼 클릭 후 아래 버튼을 보이게한다. -->
+				<button type="button" class="TNABtn half" style="margin-left:20px;">퇴근</button>
+				<button type="button" class="TNABtn half">반차</button>
+			</div>
+			
 		</div>
 		<div id="mainT">
 			<h3>메일</h3>
