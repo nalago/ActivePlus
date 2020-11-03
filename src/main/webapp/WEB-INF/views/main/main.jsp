@@ -40,7 +40,7 @@ thead {
 		<div id="userInfo">
 			<div id="basic">
 				<div id="picture"></div>
-				<div id="user">${ emp.team } ${ emp.dept }, ${ emp.name }님</div>
+				<div id="user">${ loginUser.category } ${ loginUser.name }님</div>
 			</div>
 		</div>
 		<div id="mainT">
