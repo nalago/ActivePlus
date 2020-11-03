@@ -7,13 +7,13 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.activePlus.Employee.model.vo.Employee;
 import com.kh.activePlus.approval.model.vo.Approval;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
-import com.kh.activePlus.approval.model.vo.Attachment;
 import com.kh.activePlus.approval.model.vo.Doc;
-import com.kh.activePlus.approval.model.vo.PageInfo;
+import com.kh.activePlus.common.attachment.Attachment;
+import com.kh.activePlus.common.paging.PageInfo;
+import com.kh.activePlus.employee.model.vo.Employee;
 
 @Repository("aDao")
 public class ApprovalDao {

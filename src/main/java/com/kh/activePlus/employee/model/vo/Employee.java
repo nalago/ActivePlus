@@ -1,8 +1,7 @@
-package com.kh.activePlus.member.model.vo;
+package com.kh.activePlus.employee.model.vo;
 
 import java.sql.Date;
 
-import com.kh.activePlus.Employee.model.vo.Employee;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -17,7 +16,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class Member {
+public class Employee {
    private String id;
    private String pwd;
    private String email;
@@ -36,6 +35,13 @@ public class Member {
    private String originalFileName;
    private String renameFileName;
    /*private int m_no;*/
+   
+   public Employee(String id, String pwd, String name, String category) {
+	   this.id = id;
+	   this.pwd = pwd;
+	   this.name = name;
+	   this.category = category;
+   }
    
    
    

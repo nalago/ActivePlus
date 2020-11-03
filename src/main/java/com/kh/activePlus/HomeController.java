@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.kh.activePlus.Employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.Employee;
 
 /**
  * Handles requests for the application home page.
@@ -25,9 +25,9 @@ public class HomeController {
 	public String home(Locale locale, Model model) {
 
 		
-		Employee user = new Employee("100215","11234","최나라","의료","대리");
+		Employee user = new Employee("100215","11234","최나라","의료");
 		
-		model.addAttribute("loginUser", user);*/
+		model.addAttribute("loginUser", user);
 		
 		return "main/main";
 	}

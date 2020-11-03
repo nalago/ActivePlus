@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.kh.activePlus.Employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.Employee;
 import com.kh.activePlus.board.model.service.HosBoardService;
 import com.kh.activePlus.board.model.service.NoticeService;
 import com.kh.activePlus.board.model.vo.HosBoard;

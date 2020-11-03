@@ -1,4 +1,4 @@
-package com.kh.activePlus.member.controller;
+package com.kh.activePlus.employee.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,71 +20,72 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kh.activePlus.member.exception.MemberException;
-import com.kh.activePlus.member.model.service.MemberService;
-import com.kh.activePlus.member.model.vo.Member;
-import com.kh.activePlus.member.model.vo.PageInfo;
-import com.kh.activePlus.member.model.vo.Pagination;
-import com.kh.activePlus.member.model.vo.Search;
+import com.kh.activePlus.common.paging.PageInfo;
+import com.kh.activePlus.common.paging.Pagination;
+import com.kh.activePlus.common.search.Search;
+import com.kh.activePlus.employee.exception.EmployeeException;
+import com.kh.activePlus.employee.model.service.EmployeeService;
+import com.kh.activePlus.employee.model.vo.Employee;
+
 
 
 @Controller
 @SessionAttributes({"loginUser", "msg"})
-public class MemberController {
+public class EmployeeController {
 	
 	@Autowired
-	private MemberService mService;
+	private EmployeeService eService;
 	
 	@RequestMapping(value="loginform.ap")
-	public String memberloginform() {
+	public String Employeeloginform() {
 		
-	return "member/loginform";	
+	return "employee/loginform";	
 	
 	}
 	
 	@RequestMapping(value="login.ap", method=RequestMethod.POST)
-	public String memberLogin(Member m, Model model) {
-		Member loginUser = mService.loginMember(m);
+	public String EmployeeLogin(Employee m, Model model) {
+		Employee loginUser = eService.loginEmployee(m);
 		
 		
 		if(loginUser != null) {
 			
 			model.addAttribute("loginUser", loginUser);
 		}else {
-			throw new MemberException("로그인에 실패하였습니다.");
+			throw new EmployeeException("로그인에 실패하였습니다.");
 		}
 		
 		return "redirect:main.ap";
 	}
 	
-	@RequestMapping("goMemberSystem")
-	public ModelAndView memberSystem(ModelAndView mv,
+	@RequestMapping("goEmployeeSystem")
+	public ModelAndView EmployeeSystem(ModelAndView mv,
 			@RequestParam(value="page", required=false) Integer page
 			) {
 		
-		int listCount = mService.selectListCount();
+		int listCount = eService.selectListCount();
 		
 		int currentPage = page != null ? page : 1;
 		
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10, 5);
 		
-		ArrayList<Member> list = mService.selectList(pi);
+		ArrayList<Employee> list = eService.selectList(pi);
 		
 		/*System.out.println(list);*/
 		
 		if(list != null) {
 			mv.addObject("list", list);
 			mv.addObject("pi", pi);
-			mv.setViewName("member/goMemberSystem");
+			mv.setViewName("employee/goEmployeeSystem");
 		}else {
-			throw new MemberException("회원목록 출력에 실패하였습니다.");
+			throw new EmployeeException("회원목록 출력에 실패하였습니다.");
 		}
 		
 		return mv;
 	}
 	
 	@RequestMapping("minsert.ap")
-	public String memberInsert(Member m, HttpServletRequest request,
+	public String EmployeeInsert(Employee m, HttpServletRequest request,
 			@RequestParam(value="uploadFile", required=false) MultipartFile file) {
 		if(!file.getOriginalFilename().equals("")) {
 			String renameFileName = saveFile(file, request);
@@ -95,12 +96,12 @@ public class MemberController {
 			}
 		}
 		
-		int result = mService.insertMember(m);
+		int result = eService.insertEmployee(m);
 		System.out.println(m);
 		if(result > 0) {
-			return "redirect:goMemberSystem.ap";
+			return "redirect:goEmployeeSystem.ap";
 		}else {
-			throw new MemberException("회원등록에 실패하였습니다.");
+			throw new EmployeeException("회원등록에 실패하였습니다.");
 		}
 	}
 	// 파일 저장을 위한 별도의 메소드
@@ -133,48 +134,48 @@ public class MemberController {
 			return renameFileName;
 		}
 		
-		@RequestMapping("memberInsertView.ap")
-		public String memberinsertView() {
-			return "member/memberInsertForm";
+		@RequestMapping("employeeInsertView.ap")
+		public String EmployeeinsertView() {
+			return "employee/employeeInsertForm";
 		}
 		
 		@RequestMapping("mdetail.ap")
-		public ModelAndView memberDetail(ModelAndView mv,
+		public ModelAndView EmployeeDetail(ModelAndView mv,
 					String id, @RequestParam("page") Integer page,
 					HttpServletRequest request,
 					HttpServletResponse response) {
 			
 			int currentPage = page !=  null ? page : 1;
 			
-			Member member = mService.selectMember(id);
+			Employee Employee = eService.selectEmployee(id);
 			
-			if(member != null) {
-				mv.addObject("member", member)
+			if(Employee != null) {
+				mv.addObject("employee", Employee)
 				.addObject("currentPage", currentPage)
-				.setViewName("member/memberDetailView");
+				.setViewName("employee/employeeDetailView");
 			}else {
-				throw new MemberException("회원 상세조회에 실패하였습니다.");
+				throw new EmployeeException("회원 상세조회에 실패하였습니다.");
 			}
 			return mv;
 		}
 		
 		@RequestMapping("mupView.ap")
-		public ModelAndView memberUpdateView(ModelAndView mv, String id,
+		public ModelAndView EmployeeUpdateView(ModelAndView mv, String id,
 											@RequestParam("page") Integer page) {
 			
-			Member member = mService.selectMember(id);
+			Employee Employee = eService.selectEmployee(id);
 			
-			System.out.println(member);
+			System.out.println(Employee);
 			
-			mv.addObject("member", member)
+			mv.addObject("employee", Employee)
 			  .addObject("currentPage", page)
-			  .setViewName("member/memberUpdateForm");
+			  .setViewName("employee/EmployeeUpdateForm");
 			
 			return mv;
 		}
 		
 		@RequestMapping("mupdate.ap")
-		public ModelAndView memberUpdate(ModelAndView mv, Member m,
+		public ModelAndView EmployeeUpdate(ModelAndView mv, Employee m,
 										 HttpServletRequest request,
 										 @RequestParam("page") Integer page,
 										 @RequestParam(value="reloadFile", required=false) MultipartFile file) {
@@ -191,13 +192,13 @@ public class MemberController {
 				}
 			}
 			
-			int result = mService.updateMember(m);
+			int result = eService.updateEmployee(m);
 			
 			if(result > 0) {
 				mv.addObject("page", page)
-				  .setViewName("redirect:goMemberSystem.ap");
+				  .setViewName("redirect:goEmployeeSystem.ap");
 			}else {
-				throw new MemberException("회원정보 수정에 실패하였습니다.");
+				throw new EmployeeException("회원정보 수정에 실패하였습니다.");
 			}
 			
 			return mv;
@@ -214,14 +215,14 @@ public class MemberController {
 		}
 		
 		@RequestMapping("msearch.ap")
-		public String memberSearch(Search search, Model model) {
-			ArrayList<Member> searchList = mService.searchList(search);
+		public String EmployeeSearch(Search search, Model model) {
+			ArrayList<Employee> searchList = eService.searchList(search);
 		
 			/*System.out.println(list);*/
 			
 			model.addAttribute("list", searchList);
 			model.addAttribute("search", search);
 			
-			return "member/goMemberSystem";
+			return "employee/goEmployeeSystem";
 		}
 }
