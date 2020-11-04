@@ -84,7 +84,7 @@ li p{
 			<div class="main">
 				<h2 style="font-weight:normal">${ hb.title }</h2>
 				<p style="float:left">작성 : ${ date } ${ hb.writerName }</p>
-				<c:if test="${ hb.writer eq loginUser.empId }">
+				<c:if test="${ hb.writer eq loginUser.id }">
 					<div id="btnDiv" style="float:right">
 						<input type="password" name="pwd" placeholder="비밀번호 입력 ">
 						<button id="editBtn" onclick="checkPwd('edit')">수정하기</button>

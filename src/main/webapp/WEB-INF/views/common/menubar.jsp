@@ -25,17 +25,17 @@ scope="application"/>
 			<c:url var="goSchd" value="calendar.ap">
 				<c:param name="scd_sq" value="1"/>
 			</c:url>
-			<c:url var="goItem" value="itemList.ap"/>
-			<c:url var="goMail" value="mail.ap"/>
-			<c:url var="goTask" value="diagnosisList.ap"/>
-			<c:url var="goMail" value="mail.ap"/>
-			<c:url var="goApproval" value="approvalMain.ap"/>
-
+			<c:url var="goItem" value="itemList.ap" scope="application"/>
+			<c:url var="goMail" value="mail.ap" scope="application"/>
+			<c:url var="goTask" value="diagnosisList.ap" scope="application"/>
+			<c:url var="goApproval" value="approvalMain.ap" scope="application"/>
+			<c:url var="goNotice" value="notice.ap" scope="application"/>
+			<c:url var="goMessenger" value="messenger.ap" scope="application"/>
       
 			<a href="${ goSchd }">일정관리</a>
 			<a href="${ goApproval }">전자결재</a>
-			<a href="#">게시판</a>
-			<a href="#">메신저</a> 
+			<a href="${ goNotice }">게시판</a>
+			<a href="${ goMessenger }">메신저</a> 
 			<a href="${ goMail }">메일</a>
 			<%-- <c:if test="${ loginUser.id eq 'admin && loginUser.category eq '인사'}"> --%>
 			<a href="${ goMemberSystem }">인사관리</a>

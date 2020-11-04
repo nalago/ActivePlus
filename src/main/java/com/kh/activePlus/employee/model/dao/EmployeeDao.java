@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.TNA;
 
 @Repository("eDao")
 public class EmployeeDao {
@@ -44,6 +45,18 @@ public class EmployeeDao {
 
 	public Employee selectEmployee1(String id) {
 		return sqlSession.selectOne("employeeMapper.selectOne1", id);
+	}
+
+	public int startWorking(TNA tna) {
+		return sqlSession.insert("employeeMapper.startWorking", tna);
+	}
+
+	public ArrayList<TNA> selectTNA(String empId) {
+		return (ArrayList)sqlSession.selectList("employeeMapper.selectTNA", empId);
+	}
+
+	public int endWorking(int tid) {
+		return sqlSession.update("employeeMapper.endWorking", tid);
 	}
 
 }
