@@ -170,7 +170,7 @@ select {
 							<td><input type="text" name="writerName" id="writerName"
 								value="${ loginUser.name }" readonly> <input
 								type="hidden" name="writer" id="writer"
-								value="${ loginUser.empId }" readonly></td>
+								value="${ loginUser.id }" readonly></td>
 						</tr>
 						<tr>
 							<th>작성일</th>

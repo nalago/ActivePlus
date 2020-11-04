@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,21 +16,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.paging.Pagination;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.exception.EmployeeException;
 import com.kh.activePlus.employee.model.service.EmployeeService;
 import com.kh.activePlus.employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.TNA;
 
 
 
 @Controller
-@SessionAttributes({"loginUser", "msg"})
+@SessionAttributes({"loginUser", "msg", "TNA"})
 public class EmployeeController {
 	
 	@Autowired
@@ -47,15 +51,27 @@ public class EmployeeController {
 	public String EmployeeLogin(Employee m, Model model) {
 		Employee loginUser = eService.loginEmployee(m);
 		
-		
+		// 출퇴근 확인
+		Date d = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String today = sdf.format(d);
+		String tnaDay = null;
 		if(loginUser != null) {
+			// 출-퇴근 확인
+			ArrayList<TNA> tList = eService.selectTNA(loginUser.getId());
 			
+				if(tList != null) {
+					tnaDay = sdf.format(tList.get(0).getStartDate());
+					if(today.equals(tnaDay)){
+						model.addAttribute("TNA", tList);
+					}
+				}
 			model.addAttribute("loginUser", loginUser);
 		}else {
 			throw new EmployeeException("로그인에 실패하였습니다.");
 		}
-		
 		return "redirect:main.ap";
+		
 	}
 	
 	@RequestMapping("goEmployeeSystem")
@@ -224,5 +240,29 @@ public class EmployeeController {
 			model.addAttribute("search", search);
 			
 			return "employee/goEmployeeSystem";
+		}
+		
+		// 출근 버튼 클릭
+		@RequestMapping("workstart.ap")
+		@ResponseBody
+		public String StartWorking(String id, HttpServletRequest req) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar c = Calendar.getInstance();
+			Date d = new Date(c.getTimeInMillis());
+			String now = sdf.format(d);
+			// System.out.println("출근 시각 d : " + d);
+			// System.out.println("출근 시각 (now): " + now);
+			
+			// 세팅
+			TNA tna = new TNA(d, id);
+			
+			ArrayList<TNA> tList = eService.startWorking(tna);
+			if(tList != null) {
+				req.getSession().setAttribute("TNA", tList);
+			}
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
+			System.out.println("결과 : " + tList);
+			
+			return gson.toJson(tList);
 		}
 }
