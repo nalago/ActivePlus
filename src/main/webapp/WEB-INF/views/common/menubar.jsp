@@ -25,10 +25,10 @@ scope="application"/>
 			<c:url var="goSchd" value="calendar.ap">
 				<c:param name="scd_sq" value="1"/>
 			</c:url>
-			<c:url var="goItem" value="itemList.ap"/>
-			<c:url var="goMail" value="mail.ap"/>
-			<c:url var="goTask" value="diagnosisList.ap"/>
-			<c:url var="goApproval" value="approvalMain.ap"/>
+			<c:url var="goItem" value="itemList.ap" scope="application"/>
+			<c:url var="goMail" value="mail.ap" scope="application"/>
+			<c:url var="goTask" value="diagnosisList.ap" scope="application"/>
+			<c:url var="goApproval" value="approvalMain.ap" scope="application"/>
 			<c:url var="goNotice" value="notice.ap" scope="application"/>
 			<c:url var="goMessenger" value="messenger.ap" scope="application"/>
       

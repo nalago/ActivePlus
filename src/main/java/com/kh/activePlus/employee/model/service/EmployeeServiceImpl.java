@@ -1,21 +1,31 @@
 package com.kh.activePlus.employee.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.kh.activePlus.board.model.dao.BoardDao;
+import com.kh.activePlus.board.model.vo.HosBoard;
+import com.kh.activePlus.board.model.vo.Notice;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.dao.EmployeeDao;
 import com.kh.activePlus.employee.model.vo.Employee;
 import com.kh.activePlus.employee.model.vo.TNA;
+import com.kh.activePlus.mail.model.dao.MailDao;
+import com.kh.activePlus.mail.model.vo.Email;
 
 @Service("eService")
 public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	private EmployeeDao eDao;
+	@Autowired
+	private MailDao mDao;
+	@Autowired
+	private BoardDao bDao;
 	
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
@@ -73,6 +83,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		ArrayList<TNA> rTna = null;
 		if(result > 0) {
 			rTna = eDao.selectTNA(tna.getEmpId());
+			rTna.get(0).setTid(result);;
 		}
 		return rTna;
 	}
@@ -82,7 +93,28 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return eDao.selectTNA(id);
 	}
 	
+	@Override
+	public HashMap<String, ArrayList> selectMainList(String empId){
+		HashMap<String, ArrayList> hMap = new HashMap<>();
+		ArrayList<Email> mList = mDao.selectInList(empId, "inMail", null);
+		ArrayList<Notice> nList = bDao.selectList(null);
+		ArrayList<HosBoard> hbList = bDao.selectHBList(null);
+		
+		hMap.put("mList", mList);
+		hMap.put("nList", nList);
+		hMap.put("hbList", hbList);
+		
+		return hMap;
+	}
+
+	// 퇴근
+	@Override
+	public int endWorking(int tid) {
+		return eDao.endWorking(tid);
+	}
 	
-
-
 }
+
+
+
+

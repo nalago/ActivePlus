@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	<resultMap type="TNA" id="TNAResultSet">
 		<id property="tid" column="TID"/>
 		<result property="startDate" column="START_DATE"/>
-		<result property="LeaveDate" column="LEAVE_DATE"/>
+		<result property="leaveDate" column="LEAVE_DATE"/>
 		<result property="reason" column="REASON"/>
 		<result property="empId" column="EMP_ID"/>
 	</resultMap>
@@ -89,6 +89,10 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	<insert id="startWorking" parameterType="TNA">
 		INSERT INTO TNA (TID, START_DATE, EMP_ID)
 		VALUES(SEQ_TID.NEXTVAL, #{startDate}, #{empId})
+		
+		<selectKey keyProperty="tid" resultType="Integer" order="AFTER">
+			SELECT SEQ_TID.CURRVAL FROM DUAL
+		</selectKey>
 	</insert>
 	
 	<select id="selectTNA" parameterType="String" resultMap="TNAResultSet">
@@ -99,6 +103,12 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		AND ROWNUM <= 5
 	]]>	
 	</select>
+	
+	<update id="endWorking" parameterType="TNA">
+		UPDATE TNA
+		SET LEAVE_DATE = SYSDATE, REASON='퇴근'
+		WHERE TID = #{tid}
+	</update>
 
 
 

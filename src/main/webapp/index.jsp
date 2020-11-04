@@ -18,7 +18,6 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 </head>
 <body>
 	<div align="center">
-		<button onclick="location.href='main.ap'">로그인</button>
 	</div>
 </body>
 </html>
