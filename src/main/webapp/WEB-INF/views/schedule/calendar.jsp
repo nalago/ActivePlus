@@ -452,9 +452,9 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 			}
 			
 			var param = year + "-" + str;
-			var writer = '<c:out value="${loginUser.userName}"/>';
-			var wId = '<c:out value="${loginUser.ID}"/>';
-			var dpt_nm = '<c:out value="${loginUser.userTeam}"/>';
+			var writer = '<c:out value="${loginUser.name}"/>';
+			var wId = '<c:out value="${loginUser.id}"/>';
+			var dpt_nm = '<c:out value="${loginUser.category}"/>';
 			
 			//console.log(writer + dpt_nm);
 			
@@ -707,7 +707,7 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 	<nav id="side">
 		
 		<div id="profile">
-			<span id="user" class="profile">${ loginUser.userTeam }, ${ loginUser.userName }님</span>
+			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님</span>
 			<span ><a id="info" class="profile" href="#">개인정보</a></span>
 			<a href="main.ap">
 			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">
@@ -761,7 +761,7 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 						<form>
 							<c:choose>
 								<%-- 일정 수정/삭제 Modal창 --%>
-								<c:when test="${loginUser.userName eq '최나라'}">
+								<c:when test="${loginUser.name eq '최나라'}">
 									<div class="form-group">
 										<input type="hidden" class="form-control" id="sId_up"
 											name="sId_up" readonly="readonly">
@@ -835,7 +835,7 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 
 					<div class="modal-footer">
 						<c:choose>
-							<c:when test="${loginUser.userName eq '최나라' }">
+							<c:when test="${loginUser.name eq '최나라' }">
 								<button type="button" id="updateSchedule"
 									class="btn btn-default">수정</button>
 								<button type="button" id="deleteSchedule"
@@ -892,10 +892,10 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 							<div class="form-group">
 								<label for="writer1">작성자</label>
 								<div>
-								<input type="text" readonly name="writer" value="${ loginUser.userName }" >
+								<input type="text" readonly name="writer" value="${ loginUser.name }" >
 								</div>
-								<input type="hidden"  name="wId" value="${ loginUser.ID }" size="50">
-								<input type="hidden"  name="dpt_nm" value="${ loginUser.userTeam }" size="50">						
+								<input type="hidden"  name="wId" value="${ loginUser.id }" size="50">
+								<input type="hidden"  name="dpt_nm" value="${ loginUser.category }" size="50">						
 								</div>
 							<div class="form-group">
 								<label for="scheduleStart1">시작일</label>

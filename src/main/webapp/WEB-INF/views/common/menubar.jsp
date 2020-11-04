@@ -15,7 +15,7 @@ scope="application"/>
 <body>
 	
 		<div id="profile">
-			<span id="user" class="profile">${ loginUser.name }, ${ loginUser.name }님</span>
+			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님</span>
 			<span ><a id="info" class="profile" href="#">개인정보</a></span>
 			<a href="main.ap">
 			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">
