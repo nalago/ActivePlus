@@ -10,6 +10,7 @@ import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.dao.EmployeeDao;
 import com.kh.activePlus.employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.TNA;
 
 @Service("eService")
 public class EmployeeServiceImpl implements EmployeeService{
@@ -23,10 +24,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public Employee loginEmployee(Employee m) {
 		Employee loginUser = eDao.selectEmployee(m);
 		System.out.println(loginUser);
-		if(loginUser != null &&
+		/*if(loginUser != null &&
 				!bcryptPasswordEncoder.matches(m.getPwd(), loginUser.getPwd())) {
 			loginUser = null;
-		}
+		}*/
 		return loginUser;
 	}
 
@@ -65,6 +66,23 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public Employee selectEmployee1(String id) {
 		return eDao.selectEmployee1(id);
 	}
+
+	@Override
+	public ArrayList<TNA> startWorking(TNA tna) {
+		int result = eDao.startWorking(tna);
+		ArrayList<TNA> rTna = null;
+		if(result > 0) {
+			rTna = eDao.selectTNA(tna.getEmpId());
+		}
+		return rTna;
+	}
+
+	@Override
+	public ArrayList<TNA> selectTNA(String id) {
+		return eDao.selectTNA(id);
+	}
+	
+	
 
 
 }

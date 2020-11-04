@@ -15,7 +15,7 @@ scope="application"/>
 <body>
 	
 		<div id="profile">
-			<span id="user" class="profile">${ loginUser.name }, ${ loginUser.name }님</span>
+			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님</span>
 			<span ><a id="info" class="profile" href="#">개인정보</a></span>
 			<a href="main.ap">
 			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">
@@ -28,14 +28,14 @@ scope="application"/>
 			<c:url var="goItem" value="itemList.ap"/>
 			<c:url var="goMail" value="mail.ap"/>
 			<c:url var="goTask" value="diagnosisList.ap"/>
-			<c:url var="goMail" value="mail.ap"/>
 			<c:url var="goApproval" value="approvalMain.ap"/>
-
+			<c:url var="goNotice" value="notice.ap" scope="application"/>
+			<c:url var="goMessenger" value="messenger.ap" scope="application"/>
       
 			<a href="${ goSchd }">일정관리</a>
 			<a href="${ goApproval }">전자결재</a>
-			<a href="#">게시판</a>
-			<a href="#">메신저</a> 
+			<a href="${ goNotice }">게시판</a>
+			<a href="${ goMessenger }">메신저</a> 
 			<a href="${ goMail }">메일</a>
 			<%-- <c:if test="${ loginUser.id eq 'admin && loginUser.category eq '인사'}"> --%>
 			<a href="${ goMemberSystem }">인사관리</a>
