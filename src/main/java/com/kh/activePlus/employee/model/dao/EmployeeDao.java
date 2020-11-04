@@ -55,4 +55,8 @@ public class EmployeeDao {
 		return (ArrayList)sqlSession.selectList("employeeMapper.selectTNA", empId);
 	}
 
+	public int endWorking(int tid) {
+		return sqlSession.update("employeeMapper.endWorking", tid);
+	}
+
 }

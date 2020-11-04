@@ -77,6 +77,7 @@ thead {
 	height:40px;
 	margin-left:25px;
 	margin-top:5px;
+	color:#ff4d4d;
 }
 .TNABtn{
 	background:none;
@@ -101,8 +102,16 @@ thead {
 	font-weight:500;
 	color:#8d8d8d;
 }
-.mainT th, td, h3{
+.mainT th, td, h3, section a{
 	font-family:'S-CoreDream-3Light', serif;
+}
+a{
+	text-decoration:none;
+	color:#2f2f2f;
+	font-weight:500;
+}
+table a:hover{
+	text-decoration:underline;
 }
 
 </style>
@@ -114,7 +123,9 @@ thead {
 	<section>
 		<div id="userInfo">
 			<div id="basic">
-				<div id="picture"></div>
+				<div id="picture">
+					<img src="">
+				</div>
 
 				<div class="user">${ loginUser.id } ${ loginUser.category }, ${ loginUser.name }</div>
 			</div>
@@ -123,10 +134,15 @@ thead {
 			<c:if test="${ empty TNA }">
 				<button type="button" class="TNABtn" id="work">출근</button>
 			</c:if>
+			<c:if test="${ Tmsg eq 'END' }">
+				<p style="color:#ff4d4d; text-align:center">오늘의 업무를 마치셨습니다.</p>
+			</c:if>
 			<c:if test="${ !empty TNA }">
-				<!-- 출근 버튼 클릭 후 아래 버튼을 보이게한다. -->
-				<button type="button" class="TNABtn half" style="margin-left:20px; color:#ff4d4d" id="endWork">퇴근</button>
-				<button type="button" class="TNABtn half" id="halfWork">반차</button>
+				<c:if test="${ Tmsg ne 'END' }">
+					<!-- 출근 버튼 클릭 후 아래 버튼을 보이게한다. -->
+					<button type="button" class="TNABtn half" style="margin-left:20px; color:#ff4d4d" id="endWork">퇴근</button>
+					<button type="button" class="TNABtn half" id="halfWork">반차</button>
+				</c:if>
 				<div align="center" style="border-bottom:1px solid #f6f6f6; border-top:1px solid #f6f6f6">
 				<a href="#" style="text-decoration:none; color:#2f2f2f">휴가 신청하기</a>
 				</div> 
@@ -169,21 +185,19 @@ thead {
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>최나라</td>
-					<td>오랜만이에여</td>
-					<td>2020-09-22</td>
-				</tr>
-				<tr>
-					<td>최나라</td>
-					<td>오랜만이에여</td>
-					<td>2020-09-22</td>
-				</tr>
-				<tr>
-					<td>최나라</td>
-					<td>오랜만이에여</td>
-					<td>2020-09-22</td>
-				</tr>
+			<c:if test="${ !empty mList }">
+				<c:forEach var="m" items="${ mList }">
+					<fmt:formatDate value="${ m.sendDate }" var="editDate" pattern="yyyy-MM-dd"/>
+					<tr>
+						<td>${ m.mwName }</td>
+						<td>${ m.title }</td>
+						<td>${ editDate }</td>
+					</tr>
+				</c:forEach>	
+			</c:if>
+			<c:if test="${ empty mList }">
+				<tr><td colspan="3" rowspan="3">조회된 메일이 없습니다.</td></tr>
+			</c:if>
 			</tbody>
 			</table>
 			<h3>공지사항</h3>
@@ -192,31 +206,28 @@ thead {
 			<table align="center" class="mainT">
 			<thead>
 				<tr>
-					<th>제목</th>
+					<th>분류</th>
+					<th width="40%">제목</th>
 					<th>작성자</th>
-					<th>날짜</th>
+					<th width="20%">날짜</th>
 				</tr>
 			</thead>	
 			<tbody>	
-				<tr>
-					<td>테스트용 공지사항 입니다.</td>
-					<td>관리자</td>
-					<td>2020-09-22</td>
-				</tr>
-				<tr>
-					<td>수업 듣기 너무 귀찮다..</td>
-					<td>관리자</td>
-					<td>2020-09-22</td>
-				</tr>
-				<tr>
-					<td>반가워요. kh병원 직원 여러분</td>
-					<td>관리자</td>
-					<td>2020-09-22</td>
-				</tr>
+			<c:if test="${ !empty nList }">
+				<c:forEach var="n" items="${nList}">
+				<fmt:formatDate value="${ n.createDate }" var="editDate" pattern="yyyy-MM-dd"/>
+					<tr>
+						<td>${ n.category }</td>
+						<td><a href="noticedetail.ap?nId=${n.noticeId}">${ n.title }</a></td>
+						<td>${ n.writerName }</td>
+						<td>${ editDate }</td>
+					</tr>
+				</c:forEach>
+			</c:if>
 			</tbody>	
 			</table>
 			<h3>게시판</h3>
-			<a href="${ goHosboard }" style="float:right; text-decoration:none; color:#63ab68">더보기</a>
+			<a href="hosboard.ap" style="float:right; text-decoration:none; color:#63ab68">더보기</a>
 			<br clear="right">
 			<table align="center" class="mainT">
 			<thead>
@@ -224,25 +235,19 @@ thead {
 					<th>제목</th>
 					<th>작성자</th>
 					<th>날짜</th>
-					
 				</tr>
 			</thead>
 			<tbody>	
-				<tr>
-					<td>반가워!!!</td>
-					<td>반가워!!!</td>
-					<td>반가워!!!</td>
-				</tr>
-				<tr>
-					<td>반가워!!!</td>
-					<td>반가워!!!</td>
-					<td>반가워!!!</td>
-				</tr>
-				<tr>
-					<td>반가워!!!</td>
-					<td>반가워!!!</td>
-					<td>반가워!!!</td>
-				</tr>
+			<c:if test="${ !empty hbList }">
+				<c:forEach var="hb" items="${hbList}">
+				<fmt:formatDate value="${ hb.createDate }" var="editDate" pattern="yyyy-MM-dd"/>
+					<tr>
+						<td><a href="boarddetail.ap?hbId=${hb.hbId}">${ hb.title }</a></td>
+						<td>${ hb.writerName }</td>
+						<td>${ editDate }</td>
+					</tr>
+				</c:forEach>
+			</c:if>
 			</tbody>
 			</table>
 		</div>
@@ -257,9 +262,8 @@ thead {
 				dataType:"json",
 				success:function(data){
 					if(data != null){
-						$("#work").css("display","none");
-						$(".half").css({display:'inline-block'});
-						console.log("data : " + data);
+						alert("출근 완료");
+						location.href="main.ap";
 					} else {
 						alert("출근 처리에 실패했습니다. 잠시후 다시 시도해주세요.");
 					}
@@ -272,10 +276,30 @@ thead {
 		});
 		
 		$("#endWork").on("click",function(){
+			var tid = "${ tid }";
 			
+			$.ajax({
+				url:"workend.ap",
+				type:"POST",
+				data:{tid:tid},
+				success:function(data){
+					if(data != null){
+						alert("퇴근 완료");
+						location.href="main.ap";
+					} else {
+						alert("퇴근 처리에 실패했습니다. 잠시후 다시 시도해주세요.");
+					}
+				},
+				error:function(e){
+					console.log(e);
+				}
+			
+			});
 		});
 	
-	
+	$(document).ready(function(){
+		console.log("TMsg = " + "${Tmsg}");
+	});
 	</script>
 </body>
 </html>

@@ -37,6 +37,7 @@
 			<mapper resource="mappers/schedule-mapper.xml"/>
 			<mapper resource="mappers/employee-mapper.xml"/>
 			<mapper resource="mappers/board-mapper.xml"/>
+			<mapper resource="mappers/mail-mapper.xml"/>
 		</mappers>
 
 

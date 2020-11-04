@@ -10,7 +10,7 @@ import com.kh.activePlus.mail.model.vo.Email;
 public interface MailService {
 	public int sendMail(Email e,EmailReceive er);
 
-	public ArrayList<Email> selectInList(String receiver, PageInfo pi);
+	public ArrayList<Email> selectInList(String receiver, String kind, PageInfo pi);
 
 	public int getListCount(String receiver, String kind);
 }

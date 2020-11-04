@@ -125,7 +125,7 @@ button {
 							<td><input type="text" name="writerName" id="writerName"
 								value="${ loginUser.name }" readonly> <input
 								type="hidden" name="writer" id="writer"
-								value="${ loginUser.empId }"></td>
+								value="${ loginUser.id }"></td>
 						</tr>
 						<tr>
 							<th>내용</th>

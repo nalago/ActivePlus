@@ -34,7 +34,7 @@ import com.kh.activePlus.employee.model.vo.TNA;
 
 
 @Controller
-@SessionAttributes({"loginUser", "msg", "TNA"})
+@SessionAttributes({"loginUser","msg", "TNA", "Tmsg"})
 public class EmployeeController {
 	
 	@Autowired
@@ -47,25 +47,11 @@ public class EmployeeController {
 	
 	}
 	
-	@RequestMapping(value="login.ap", method=RequestMethod.POST)
+	@RequestMapping("login.ap")
 	public String EmployeeLogin(Employee m, Model model) {
 		Employee loginUser = eService.loginEmployee(m);
 		
-		// 출퇴근 확인
-		Date d = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String today = sdf.format(d);
-		String tnaDay = null;
 		if(loginUser != null) {
-			// 출-퇴근 확인
-			ArrayList<TNA> tList = eService.selectTNA(loginUser.getId());
-			
-				if(tList != null) {
-					tnaDay = sdf.format(tList.get(0).getStartDate());
-					if(today.equals(tnaDay)){
-						model.addAttribute("TNA", tList);
-					}
-				}
 			model.addAttribute("loginUser", loginUser);
 		}else {
 			throw new EmployeeException("로그인에 실패하였습니다.");
@@ -245,7 +231,7 @@ public class EmployeeController {
 		// 출근 버튼 클릭
 		@RequestMapping("workstart.ap")
 		@ResponseBody
-		public String StartWorking(String id, HttpServletRequest req) {
+		public String startWorking(String id, HttpServletRequest req) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar c = Calendar.getInstance();
 			Date d = new Date(c.getTimeInMillis());
@@ -264,5 +250,22 @@ public class EmployeeController {
 			System.out.println("결과 : " + tList);
 			
 			return gson.toJson(tList);
+		}
+		
+		// 퇴근 버튼 클릭
+		@RequestMapping("workend.ap")
+		@ResponseBody
+		public String endWorking(int tid, HttpServletRequest req) {
+			
+			// 세팅
+			System.out.println("tid가 넘어오나?"+tid);
+			int result = eService.endWorking(tid);
+			
+			if(result > 0) {
+				req.getSession().setAttribute("Tmsg", "END");
+				return "success";
+			}
+			return "failed";
+			
 		}
 }
