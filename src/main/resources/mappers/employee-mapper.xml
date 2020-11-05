@@ -19,6 +19,8 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="license" column="LICENSE"/>
 		<result property="license_no" column="LICENSE_NO"/>
 		<result property="license_date" column="LICENSE_DATE"/>
+		<result property="originalFileName" column="ORIGINAL_FILENAME"/>
+		<result property="renameFileName" column="RENAME_FILENAME"/>
 	</resultMap>
 	<resultMap type="TNA" id="TNAResultSet">
 		<id property="tid" column="TID"/>
@@ -108,6 +110,27 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		UPDATE TNA
 		SET LEAVE_DATE = SYSDATE, REASON='퇴근'
 		WHERE TID = #{tid}
+	</update>
+	
+	<update id="updateEmployee" parameterType="Employee">
+		UPDATE EMPLOYEE
+		SET EMP_ID=#{id}, PWD=#{pwd}, EMAIL=#{email}, BIRTH=#{birth},
+			CATEGORY=#{category}, SALARY=#{salary}, ACC_NO=#{acc_no},
+			ADDRESS=#{address}, HIRE_DATE=#{hire_date}, STATUS=#{status},
+			LICENSE=#{license}, LICENSE_NO=#{license_no}, LICENSE_DATE=#{license_date},
+			ORIGINAL_FILENAME=#{originalFileName}, RENAME_FILENAME=#{renameFileName}
+		WHERE EMP_ID=#{id}
+	</update>
+	
+	<update id="deleteEmployee" parameterType="String">
+		UPDATE EMPLOYEE
+		SET STATUS='퇴직'
+		WHERE EMP_ID=#{id}
+	</update>
+	
+	<update id="updatePass" parameterType="Employee">
+		UPDATE EMPLOYEE
+		SET PWD=#{pwd}
 	</update>
 
 

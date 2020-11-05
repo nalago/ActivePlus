@@ -1,54 +1,35 @@
 package com.kh.activePlus.employee.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.kh.activePlus.board.model.dao.BoardDao;
-import com.kh.activePlus.board.model.vo.HosBoard;
-import com.kh.activePlus.board.model.vo.Notice;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.dao.EmployeeDao;
 import com.kh.activePlus.employee.model.vo.Employee;
-import com.kh.activePlus.employee.model.vo.TNA;
-import com.kh.activePlus.mail.model.dao.MailDao;
-import com.kh.activePlus.mail.model.vo.Email;
+
 
 @Service("eService")
 public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	private EmployeeDao eDao;
-	@Autowired
-	private MailDao mDao;
-	@Autowired
-	private BoardDao bDao;
-	
-	@Autowired
-	private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
 	@Override
-	public Employee loginEmployee(Employee m) {
-		Employee loginUser = eDao.selectEmployee(m);
-		System.out.println(loginUser);
-		/*if(loginUser != null &&
-				!bcryptPasswordEncoder.matches(m.getPwd(), loginUser.getPwd())) {
-			loginUser = null;
-		}*/
+	public Employee loginEmployee(Employee e) {
+		Employee loginUser = eDao.selectEmployee(e);
+		
+		System.out.println("서비스" + e);
+		System.out.println("서비스 " + loginUser);
+		
 		return loginUser;
 	}
 
 	@Override
-	public int insertEmployee(Employee m) {
-		return eDao.insertEmployee(m);
-	}
-
-	@Override
-	public int updateEmployee(Employee m) {
-		return 0;
+	public int insertEmployee(Employee e) {
+		return eDao.insertEmployee(e);
 	}
 
 	@Override
@@ -64,6 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public Employee selectEmployee(String id) {
+		System.out.println("serviceid :" + id);
 		return eDao.selectEmployee(id);
 	}
 
@@ -74,47 +56,26 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public Employee selectEmployee1(String id) {
-		return eDao.selectEmployee1(id);
+		return eDao.selectEmployee(id);
 	}
 
 	@Override
-	public ArrayList<TNA> startWorking(TNA tna) {
-		int result = eDao.startWorking(tna);
-		ArrayList<TNA> rTna = null;
-		if(result > 0) {
-			rTna = eDao.selectTNA(tna.getEmpId());
-			rTna.get(0).setTid(result);;
-		}
-		return rTna;
+	public int updateEmployee(Employee e) {
+		return eDao.updateEmployee(e);
 	}
 
 	@Override
-	public ArrayList<TNA> selectTNA(String id) {
-		return eDao.selectTNA(id);
+	public int deleteEmployee(String id) {
+		return eDao.deleteEmployee(id);
 	}
+
+	@Override
+	public int updatePass(Employee e) {
+		return eDao.updatePass(e);
+	}
+
 	
-	@Override
-	public HashMap<String, ArrayList> selectMainList(String empId){
-		HashMap<String, ArrayList> hMap = new HashMap<>();
-		ArrayList<Email> mList = mDao.selectInList(empId, "inMail", null);
-		ArrayList<Notice> nList = bDao.selectList(null);
-		ArrayList<HosBoard> hbList = bDao.selectHBList(null);
-		
-		hMap.put("mList", mList);
-		hMap.put("nList", nList);
-		hMap.put("hbList", hbList);
-		
-		return hMap;
-	}
-
-	// 퇴근
-	@Override
-	public int endWorking(int tid) {
-		return eDao.endWorking(tid);
-	}
 	
+
+
 }
-
-
-
-
