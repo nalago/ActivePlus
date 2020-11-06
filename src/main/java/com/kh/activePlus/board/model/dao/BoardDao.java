@@ -30,9 +30,18 @@ public class BoardDao {
 	
 	/*공지사항 리스트*/
 	public ArrayList<Notice> selectList(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		int offset = 0;
+		RowBounds rowBounds = null;
 		
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		if(pi != null) {
+			offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+			rowBounds = new RowBounds(offset, pi.getBoardLimit());
+			
+		} else {
+			// 메인화면 select
+			offset = 0;
+			rowBounds = new RowBounds(offset, 3);
+		}
 		return (ArrayList)sqlSession.selectList("boardMapper.selectList", null, rowBounds);
 	}
 	public int getListCount() {
@@ -85,9 +94,17 @@ public class BoardDao {
 	}
 
 	public ArrayList<HosBoard> selectHBList(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		int offset = 0;
+		RowBounds rowBounds = null;
+		if(pi != null) {
+			offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+			rowBounds = new RowBounds(offset, pi.getBoardLimit());
+			
+		} else {
+			// 메인화면 select
+			offset = 0;
+			rowBounds = new RowBounds(offset, 3);
+		}
 		
 		return (ArrayList)sqlSession.selectList("boardMapper.selectHBList",null,rowBounds);
 	}

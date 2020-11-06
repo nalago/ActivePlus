@@ -11,33 +11,25 @@ import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.dao.EmployeeDao;
 import com.kh.activePlus.employee.model.vo.Employee;
 
+
 @Service("eService")
 public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	private EmployeeDao eDao;
 	
-	@Autowired
-	private BCryptPasswordEncoder bcryptPasswordEncoder;
-	
 	@Override
-	public Employee loginEmployee(Employee m) {
-		Employee loginUser = eDao.selectEmployee(m);
-		System.out.println(loginUser);
-		/*if(loginUser != null &&
-				!bcryptPasswordEncoder.matches(m.getPwd(), loginUser.getPwd())) {
-			loginUser = null;
-		}*/
+	public Employee loginEmployee(Employee e) {
+		Employee loginUser = eDao.selectEmployee(e);
+		
+		System.out.println("서비스" + e);
+		System.out.println("서비스 " + loginUser);
+		
 		return loginUser;
 	}
 
 	@Override
-	public int insertEmployee(Employee m) {
-		return eDao.insertEmployee(m);
-	}
-
-	@Override
-	public int updateEmployee(Employee m) {
-		return 0;
+	public int insertEmployee(Employee e) {
+		return eDao.insertEmployee(e);
 	}
 
 	@Override
@@ -53,6 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public Employee selectEmployee(String id) {
+		System.out.println("serviceid :" + id);
 		return eDao.selectEmployee(id);
 	}
 
@@ -63,8 +56,26 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public Employee selectEmployee1(String id) {
-		return eDao.selectEmployee1(id);
+		return eDao.selectEmployee(id);
 	}
+
+	@Override
+	public int updateEmployee(Employee e) {
+		return eDao.updateEmployee(e);
+	}
+
+	@Override
+	public int deleteEmployee(String id) {
+		return eDao.deleteEmployee(id);
+	}
+
+	@Override
+	public int updatePass(Employee e) {
+		return eDao.updatePass(e);
+	}
+
+	
+	
 
 
 }

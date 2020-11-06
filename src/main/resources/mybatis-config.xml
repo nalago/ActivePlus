@@ -21,6 +21,7 @@
 		<typeAlias type="com.kh.activePlus.employee.model.vo.Employee" alias="Employee"/>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.ApprovalApvDoc" alias="ApprovalApvDoc"/>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.Sign" alias="Sign"/>
+		<typeAlias type="com.kh.activePlus.employee.model.vo.TNA" alias="TNA"/> master
 
 		<typeAlias type="com.kh.activePlus.schedule.model.vo.Schedule" alias="Schedule"/>
 		<typeAlias type="com.kh.activePlus.common.search.Search" alias="Search"/>
@@ -37,6 +38,8 @@
 			<mapper resource="mappers/approval-mapper.xml"/>
 			<mapper resource="mappers/schedule-mapper.xml"/>
 			<mapper resource="mappers/employee-mapper.xml"/>
+			<mapper resource="mappers/board-mapper.xml"/>
+			<mapper resource="mappers/mail-mapper.xml"/>
 		</mappers>
 
 

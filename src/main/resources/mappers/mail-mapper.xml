@@ -24,17 +24,62 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="rIptMark" column="MRIMPOTANT_MARK"/>
 	</resultMap>
 	
-	<select id="selectListCount" parameterType="map" resultType="Integer">
+	<select id="selectListCount" parameterType="hashMap" resultType="Integer">
+		SELECT COUNT(*)
+		FROM M_VIEW
+		<where>
+			<choose>
+				<when test="kind == in">
+					RECEIVER = #{empId}
+					AND MR_STATUS='Y'
+				</when>
+				<when test="kind == send">
+					MWRITER = #{empId}
+					AND M_STATUS='C'
+				</when>
+				<when test="kind == temporary">
+					MWRITER = #{empId}
+					AND M_STATUS='T'
+				
+				</when>
+				<when test="kind == important">
+					(MWRITER = #{empId} OR RECEIVER = #{empId})
+					AND (IMPORTANT_MARK ='I' OR MRIMPORTANT_MARK = 'I')
+				</when>
+				<when test="kind == waste">
+					(MWRITER = #{empId} OR RECEIVER = #{empId})
+					AND (M_STATUS ='D' OR MR_STATUS='D')
+				</when>
+			</choose>
+		</where>
+	</select>
+	<select id="selectList" parameterType="hashMap" resultMap="emailResultSet">
 		SELECT *
 		FROM M_VIEW
 		<where>
 			<choose>
-			
-				<when test="kind == in">
+				<when test="kind == inMail">
+					RECEIVER = #{empId}
+					AND MR_STATUS='Y'
 				</when>
-		
+				<when test="kind == send">
+					MWRITER = #{empId}
+					AND M_STATUS='C'
+				</when>
+				<when test="kind == temporary">
+					MWRITER = #{empId}
+					AND M_STATUS='T'
+				
+				</when>
+				<when test="kind == important">
+					(MWRITER = #{empId} OR RECEIVER = #{empId})
+					AND (IMPORTANT_MARK ='I' OR MRIMPORTANT_MARK = 'I')
+				</when>
+				<when test="kind == waste">
+					(MWRITER = #{empId} OR RECEIVER = #{empId})
+					AND (M_STATUS ='D' OR MR_STATUS='D')
+				</when>
 			</choose>
-		
 		</where>
 	</select>
 

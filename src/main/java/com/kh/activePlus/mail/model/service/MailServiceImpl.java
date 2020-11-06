@@ -23,8 +23,8 @@ public class MailServiceImpl implements MailService{
 	}
 
 	@Override
-	public ArrayList<Email> selectInList(String receiver, PageInfo pi) {
-		return mDao.selectInList(receiver,pi);
+	public ArrayList<Email> selectInList(String receiver, String kind,PageInfo pi) {
+		return mDao.selectInList(receiver, kind,pi);
 	}
 
 	@Override

@@ -15,18 +15,15 @@
         <h1>login design</h1>
         <form action="login.ap" method="post" id="loginmember">
             <div class="int-area">
-                <input type="text" name="id" id="id"
-                autocomplete="off" required>
+                <input type="text" name="id" id="id" autocomplete="off" required>
                 <label for="id">User Name</label>
             </div>
             <div class="int-area">
-                <input type="password" name="pwd" id="pwd"
-                autocomplete="off" required>
+                <input type="password" name="pwd" id="pwd" autocomplete="off" required>
                 <label for="pwd">User Pass</label>
             </div>
             <div class="btn-area">
-                <button id="btn" 
-                type="submit">Login</button>
+                <button id="btn" type="submit">Login</button>
             </div>
         </form>
         <div class="caption">

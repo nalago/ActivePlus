@@ -16,12 +16,13 @@ public class EmployeeDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	public int insertEmployee(Employee m) {
-		return sqlSession.insert("employeeMapper.insertEmployee", m);
+	public int insertEmployee(Employee e) {
+		return sqlSession.insert("employeeMapper.insertemployee", e);
 	}
 
-	public Employee selectEmployee(Employee m) {
-		return sqlSession.selectOne("employeeMapper.selectOne", m);
+	public Employee selectEmployee(Employee e) {
+		System.out.println("dao : "+e);
+		return sqlSession.selectOne("employeeMapper.selectOne", e);
 	}
 
 	public int selectListCount() {
@@ -29,21 +30,34 @@ public class EmployeeDao {
 	}
 
 	public ArrayList<Employee> selectList(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		int offset = (pi.getCurrentPage() - 1) * pi.getEmployeeLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getEmployeeLimit());
 		return (ArrayList)sqlSession.selectList("employeeMapper.selectList", null, rowBounds);
 	}
 
-	public Employee selectEmployee(String name) {
-		return sqlSession.selectOne("employeeMapper.selectOne", name);
-	}
+	/*public Employee selectEmployee(String name) {
+		return sqlSession.selectOne("EmployeeMapper.selectOne", name);
+	}*/
 
 	public ArrayList<Employee> searchList(Search search) {
 		return (ArrayList)sqlSession.selectList("employeeMapper.searchList", search);
 	}
 
-	public Employee selectEmployee1(String id) {
+	public Employee selectEmployee(String id) {
+		System.out.println("Dao" + id);
 		return sqlSession.selectOne("employeeMapper.selectOne1", id);
+	}
+
+	public int updateEmployee(Employee e) {
+		return sqlSession.update("employeeMapper.updateEmployee", e);
+	}
+
+	public int deleteEmployee(String id) {
+		return sqlSession.update("employeeMapper.deleteEmployee", id);
+	}
+
+	public int updatePass(Employee e) {
+		return sqlSession.update("employeeMapper.updatePass", e);
 	}
 
 }

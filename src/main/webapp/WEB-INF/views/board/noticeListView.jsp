@@ -197,7 +197,7 @@ img:hover{
 				<img alt="search-icon" src="${contextPath}/resources/images/board/search-icon.png"
 					class="basic" id="search-icon" />
 					&nbsp;&nbsp;<input type="checkbox" id="myN" name="myN"
-					 value="${ loginUser.empId }" ${ check }>
+					 value="${ loginUser.id }" ${ check }>
 					<label for="myN" style="color:#404040; font-size:13px"> 내 작성글</label>
 				<button type="button" id="writeBtn" class="basic">글작성</button>
 			</form>	

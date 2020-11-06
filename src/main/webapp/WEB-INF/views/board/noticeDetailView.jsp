@@ -98,7 +98,7 @@ li p{
 				<h3 style="color:#63ab68; font-weight:normal;">${ notice.category }</h3>
 				<h2 style="font-weight:normal">${notice.title }</h2>
 				<p style="float:left">작성 : ${date} ${ notice.writerName }</p>
-				<c:if test="${ notice.writer eq loginUser.empId }">
+				<c:if test="${ notice.writer eq loginUser.id }">
 					<div id="btnDiv" style="float:right">
 						<input type="password" name="pwd" placeholder="비밀번호 입력 ">
 						<button id="editBtn" onclick="checkPwd('edit')">수정하기</button>
