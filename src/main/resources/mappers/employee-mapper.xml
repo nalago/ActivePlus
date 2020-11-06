@@ -19,7 +19,13 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="license" column="LICENSE"/>
 		<result property="license_no" column="LICENSE_NO"/>
 		<result property="license_date" column="LICENSE_DATE"/>
+		<!-- 직급 -->
+		<result property="department" column="DEPARTMENT"/>
+		<result property="jobGrade" column="JOB_GRADE"/>
+		<result property="field" column="FIELD"/>
+		<result property="grade" column="GRADE"/>
 	</resultMap>
+	
 	<resultMap type="TNA" id="TNAResultSet">
 		<id property="tid" column="TID"/>
 		<result property="startDate" column="START_DATE"/>
@@ -104,13 +110,31 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	]]>	
 	</select>
 	
-	<update id="endWorking" parameterType="TNA">
+	<update id="endWorking" parameterType="hashMap">
 		UPDATE TNA
-		SET LEAVE_DATE = SYSDATE, REASON='퇴근'
+		SET LEAVE_DATE = SYSDATE, 
+			<if test="kind == 'end'">
+				REASON='퇴근'
+			</if>
+			<if test="kind == 'half'">
+				REASON='반차'
+			</if>
+		
 		WHERE TID = #{tid}
 	</update>
-
-
+	<select id="selectEmpList" resultMap="employeeResultSet">
+		SELECT *
+		FROM EMP_TEAM 
+		WHERE STATUS = 'Y'
+	</select>
+	<select id="getHalfCount" parameterType="hashMap"  resultType="_int">
+		SELECT COUNT(*)
+		FROM TNA
+		WHERE LEAVE_DATE BETWEEN TO_DATE(#{startYear}, 'YYYY-MM-DD')
+		AND TO_DATE(#{endYear},'YYYY-MM-DD')
+		AND EMP_ID=#{empId}
+		AND REASON='반차'
+	</select>
 
 
 

@@ -62,7 +62,6 @@ public class HomeController {
 					// 출퇴근 모두 했을 경우
 					model.addAttribute("Tmsg", "END");
 					
-					
 				}
 			}
 		}

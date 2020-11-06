@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,96 +49,32 @@
 						</tr>
 					</thead>
 					<tbody align="center">
+						<c:forEach var="send" items="${ sendList }">
 						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>보낸 메일함 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
+							<td><input type="checkbox" value="${ send.mailId }" class="check" name="checkList"></td>
+							<td>${ send.mrName }</td>
+							<td><a href="${contextPath}/mailread.ap?mNo=${send.mailId}">${ send.title }</a></td>
+							<c:if test="${ send.attStock > 0 }">
+								<td><img src="${contextPath}/resources/images/mail/clip.png" style="width:20px; height:20px"></td>
+							</c:if>
+							<c:if test="${ send.attStock <= 0 }">
+								<td></td>
+							</c:if>
+							<td>${ send.sendDate }</td>
+							<td>${ send.readValue }</td>
+							<c:if test="${ send.rIptMark eq 'Y'  }">
+								<td><img src="${contextPath}/resources/images/mail/impMark.jpg" style="width:20px; height:20px"></td>
+							</c:if>
+							<c:if test="${ send.rIptMark ne 'N' }">
+								<td></td>
+							</c:if>
 						</tr>
+					</c:forEach>
+					<c:if test="${ empty sendList }">
 						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>메일 테스트 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
+							<td colspan="7">보낸 메일함이 비었습니다.</td>
 						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>메일 테스트 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>메일 테스트 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>메일 테스트 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>메일 테스트 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>메일 테스트 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>메일 테스트 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>메일 테스트 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>메일 테스트 가데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>읽음</td>
-							<td>중요</td>
-						</tr>
+					</c:if>	
 					</tbody>
 				</table>
 				<button class="mailSend" id="writeBtn">메일쓰기</button>

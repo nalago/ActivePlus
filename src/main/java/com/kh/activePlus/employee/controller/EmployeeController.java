@@ -247,7 +247,7 @@ public class EmployeeController {
 				req.getSession().setAttribute("TNA", tList);
 			}
 			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
-			System.out.println("결과 : " + tList);
+			// System.out.println("결과 : " + tList);
 			
 			return gson.toJson(tList);
 		}
@@ -255,11 +255,27 @@ public class EmployeeController {
 		// 퇴근 버튼 클릭
 		@RequestMapping("workend.ap")
 		@ResponseBody
-		public String endWorking(int tid, HttpServletRequest req) {
+		public String endWorking(int tid, String kind, HttpServletRequest req) {
+			int result = 0;
+			int hCount = 0;
+			Employee emp = (Employee)req.getSession().getAttribute("loginUser");
+			String empId = emp.getId();
 			
-			// 세팅
-			System.out.println("tid가 넘어오나?"+tid);
-			int result = eService.endWorking(tid);
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY");
+			Calendar c = Calendar.getInstance();
+			Date d = new Date(c.getTimeInMillis());
+			String now = sdf.format(d);
+			
+			if(kind.equals("end")) {
+				result = eService.endWorking(tid,kind);
+			} else {
+				hCount = eService.halfEnd(now, empId);
+				if(hCount < 12) {
+					result = eService.endWorking(tid,kind);
+				} else {
+					return "overHalf";
+				}
+			}
 			
 			if(result > 0) {
 				req.getSession().setAttribute("Tmsg", "END");

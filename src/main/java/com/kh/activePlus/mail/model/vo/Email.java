@@ -26,7 +26,7 @@ public class Email extends EmailReceive{
 	private String status;
 	private String iptMark;
 	private Date sendDate;
-	private String attStock;
+	private int attStock;
 	private Date deleteDate;
 	
 }
