@@ -31,11 +31,11 @@
       <jsp:include page="../common/menubar.jsp" />
    </nav>
    <div class="wrap">
-        <center><h1>입 사 지 원 서</h1></center>
+        <center><h1>회원 등록 페이지</h1></center>
         <br><br>
         <div>
         <!--사진 및 기본 인적사항-->
-        <form action="minsert.ap" method="post" enctype="multipart/form-data">
+        <form action="einsert.ap" method="post" enctype="multipart/form-data">
         <table id="table1" align="center" border="1">
         <!--1줄-->
         <tr id="tr1">
@@ -62,7 +62,7 @@
         <!--2줄-->
         <tr>
            <td colspan="2" align="center" bgcolor="#c4ffe1">생 년 월 일</td>
-           <td colspan="3" ><input type="date" name="birth" style="width:100%;"></td>
+           <td colspan="3" ><input type="date" name="birth" style="width:50%;"></td>
         </tr>
         <tr>
            <td colspan="2" align="center" bgcolor="#c4ffe1">부 서</td>

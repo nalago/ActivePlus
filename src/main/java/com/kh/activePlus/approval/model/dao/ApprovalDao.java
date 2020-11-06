@@ -1,19 +1,22 @@
 package com.kh.activePlus.approval.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.activePlus.employee.model.vo.Employee;
 import com.kh.activePlus.approval.model.vo.Approval;
+import com.kh.activePlus.approval.model.vo.ApprovalApvDoc;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
-import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.common.attachment.Attachment;
+import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.common.paging.PageInfo;
-import com.kh.activePlus.employee.model.vo.Employee;
+import com.kh.activePlus.approval.model.vo.Sign;
 
 @Repository("aDao")
 public class ApprovalDao {
@@ -21,27 +24,37 @@ public class ApprovalDao {
 	private SqlSessionTemplate sqlSession;
 
 	public ArrayList<ApvDoc> selectApvDocList(ApprovalSearch search) throws Exception {
-		return (ArrayList)sqlSession.selectList("approvalMapper.selectApvDocList", search);
+		ArrayList<ApvDoc> result = new ArrayList<>();
+		if(search.getApvDocStatus().equals("1")) {
+			result = (ArrayList)sqlSession.selectList("approvalMapper.selectMainApvDocList", search);
+		}else if(search.getApvDocStatus().equals("4")) {
+			result = (ArrayList)sqlSession.selectList("approvalMapper.selectMainCompApvDocList", search);
+		}else {
+			result = (ArrayList)sqlSession.selectList("approvalMapper.selectApvDocList", search);
+		}
+		
+		
+		return result;
 	}
 
-	public ArrayList<Doc> selectDocTypeList(String docType, PageInfo pi) {
+	public ArrayList<Doc> selectDocTypeList(ApprovalSearch as, PageInfo pi) {
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlSession.selectList("approvalMapper.selectDocTypeList", docType, rowBounds);
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectDocTypeList", as, rowBounds);
 	}
 
-	public int selectAllDocTypeListCount() {
-		return sqlSession.selectOne("approvalMapper.selectAllDocTypeListCount");
+	public int selectAllDocTypeListCount(String eId) {
+		return sqlSession.selectOne("approvalMapper.selectAllDocTypeListCount", eId);
 	}
 
-	public ArrayList<Doc> selectAllDocTypeList(PageInfo pi) {
+	public ArrayList<Doc> selectAllDocTypeList(String eId, PageInfo pi) {
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlSession.selectList("approvalMapper.selectAllDocTypeList",null, rowBounds);
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectAllDocTypeList", eId, rowBounds);
 	}
 
-	public int selectDocTypeListCount(String docType) {
-		return sqlSession.selectOne("approvalMapper.selectDocTypeListCount", docType);
+	public int selectDocTypeListCount(ApprovalSearch as) {
+		return sqlSession.selectOne("approvalMapper.selectDocTypeListCount", as);
 	}
 
 	public int selectPrivateListCount(String eId) {
@@ -64,19 +77,19 @@ public class ApprovalDao {
 		return (ArrayList)sqlSession.selectList("approvalMapper.selectTemporaryList", eId,rowBounds);
 	}
 
-	public ArrayList<ApvDoc> selectApprovalObtainList(String eId, PageInfo pi) {
+	public ArrayList<ApprovalApvDoc> selectApprovalObtainList(String eId, PageInfo pi) {
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return (ArrayList)sqlSession.selectList("approvalMapper.selectApprovalObtainList",eId,rowBounds );
 	}
 
-	public ArrayList<ApvDoc> selectApprovalList(String eId, PageInfo pi) {
+	public ArrayList<ApprovalApvDoc> selectApprovalList(String eId, PageInfo pi) {
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return (ArrayList)sqlSession.selectList("approvalMapper.selectApprovalList",eId, rowBounds);
 	}
 
-	public ArrayList<ApvDoc> selectApprovalCompleteList(String eId, PageInfo pi) {
+	public ArrayList<ApprovalApvDoc> selectApprovalCompleteList(String eId, PageInfo pi) {
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return (ArrayList)sqlSession.selectList("approvalMapper.selectApprovalCompleteList",eId,rowBounds);
@@ -138,7 +151,7 @@ public class ApprovalDao {
 		return sqlSession.selectOne("approvalMapper.selectTempDoc", searchTemp);
 	}
 
-	public ArrayList<Attachment> selectTempAt(int docNo) {
+	public ArrayList<Attachment> selectTempAt(String docNo) {
 		return (ArrayList)sqlSession.selectList("approvalMapper.selectTempAt", docNo);
 	}
 
@@ -146,8 +159,58 @@ public class ApprovalDao {
 		return sqlSession.delete("approvalMapper.deleteTempDoc", apvDocNo);
 	}
 
-	public int deleteAttachment(int docNo) {
+	public int deleteAttachment(String docNo) {
 		return sqlSession.delete("approvalMapper.deleteAttachment", docNo);
+	}
+
+	public ArrayList<Approval> selectApprovalfromObtainDoc(int apvDocNo) {
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectApprovalfromObtainDoc",apvDocNo);
+	}
+
+	public ArrayList<Attachment> selectApvDocAtList(String apvDocNo) {
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectApvDocAtList",apvDocNo);
+	}
+
+	public ArrayList<Sign> selectSignList(ArrayList<String> eList) {
+		HashMap smap = new HashMap();
+		smap.put("eList", eList);
+		return (ArrayList)sqlSession.selectList("approvalMapper.selectSignList", smap);
+	}
+
+	public int draftingRetrieve(int dId) {
+		return sqlSession.update("approvalMapper.draftingRetrieve", dId);
+	}
+
+	public int deleteprocedureList(int apvDocNo) {
+		return sqlSession.delete("approvalMapper.deleteprocedureList", apvDocNo);
+	}
+
+	public int approval(Approval apv) {
+		int result = 0;
+		if(apv.getApvResult() == 2) {
+			result += sqlSession.update("approvalMapper.returnApprovalDoc",apv);
+		}else {			
+			result += sqlSession.update("approvalMapper.approvalDoc", apv);
+		}
+		result += sqlSession.update("approvalMapper.approval", apv);
+		return result;
+	}
+
+	public ApprovalApvDoc checkApproval(int apvDocNo) {
+		return sqlSession.selectOne("approvalMapper.checkApproval", apvDocNo);
+	}
+
+	public int apvDocComplete(int apvDocNo) {
+		return sqlSession.update("approvalMapper.apvDocComplete", apvDocNo);
+	}
+
+	public int approvalCancel(Approval apv) {
+		sqlSession.update("approvalMapper.apvDocCancel",apv.getApvDocNo());
+		return sqlSession.update("approvalMapper.approvalCancel", apv);
+	}
+
+	public int insetAtListToApvDocFromTemp(String refId) {
+		return sqlSession.update("approvalMapper.insertAtListToApvDocFromTemp", refId);
 	}
 
 }
