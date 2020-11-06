@@ -27,6 +27,13 @@ public interface EmployeeService {
 
 	public int deleteEmployee(String id);
 
+
+	public int endWorking(int tid, String kind);
+
+	public ArrayList<Employee> selectEmpList();
+
+	public int halfEnd(String now, String empId);
+
 	public int updatePass(Employee e);
 
 

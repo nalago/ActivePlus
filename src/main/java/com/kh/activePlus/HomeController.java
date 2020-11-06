@@ -22,7 +22,48 @@ public class HomeController {
 
 	
 	@RequestMapping(value = "/main.ap", method = RequestMethod.GET)
+	public String home(Locale locale, Model model, @SessionAttribute("loginUser") Employee e) {
+		// 메일, 게시판 select
+		String empId = "";
+
+		if (e != null)
+			empId = e.getId();
+
+		// 출퇴근 확인
+		Date d = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String today = sdf.format(d);
+		String tnaDay = null;
+		// 출-퇴근 확인
+		ArrayList<TNA> tList = eService.selectTNA(empId);
+
+		if (tList != null) {
+			tnaDay = sdf.format(tList.get(0).getStartDate());
+			// System.out.println("확인 : " + tnaDay.equals(today));
+			// System.out.println("퇴근 시간 : "+tList.get(0).getLeaveDate());
+			if (today.equals(tnaDay)) {
+				model.addAttribute("TNA", tList);
+				model.addAttribute("tid",tList.get(0).getTid());
+				if (tList.get(0).getLeaveDate() == null) {
+					// 출근 후 퇴근하지 않았을 경우
+					model.addAttribute("Tmsg", "WORK");
+				} else {
+					// 출퇴근 모두 했을 경우
+					model.addAttribute("Tmsg", "END");
+					
+				}
+			}
+		}
+
+		HashMap<String, ArrayList> mainList = new HashMap<>();
+		mainList = eService.selectMainList(empId);
+
+		model.addAttribute("mList", mainList.get("mList"));
+		model.addAttribute("nList", mainList.get("nList"));
+		model.addAttribute("hbList", mainList.get("hbList"));
+
 	public String home(Locale locale, Model model) {
+
 
 		
 		/*Employee user = new Employee("100215","11234","최나라","의료");

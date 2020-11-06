@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,100 +44,29 @@
 							<th>첨부파일</th>
 							<th>작성날짜</th>
 							<th>분류</th>
-							<th>비고</th>
 						</tr>
 					</thead>
 					<tbody align="center">
+						<c:forEach var="tm" items="${ temList }">
 						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>발신</td>
-							<td><input type="button" value="보내기"></td>
+							<td><input type="checkbox" value="${ tm.mailId }" class="check" name="checkList"></td>
+							<td>${ tm.mwName }</td>
+							<td><a href="${contextPath}/mailread.ap?mNo=${tm.mailId}">${ tm.title }</a></td>
+							<c:if test="${ tm.attStock > 0 }">
+								<td><img src="${contextPath}/resources/images/mail/clip.png" style="width:20px; height:20px"></td>
+							</c:if>
+							<c:if test="${ tm.attStock <= 0 }">
+								<td></td>
+							</c:if>
+							<td>${ tm.sendDate }</td>
+							<td>${ tm.category }</td>
 						</tr>
+					</c:forEach>
+					<c:if test="${ empty temList }">
 						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>답장</td>
-							<td><input type="button" value="보내기"></td>
+							<td colspan="6">임시보관함이 비었습니다.</td>
 						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>전달</td>
-							<td><input type="button" value="보내기"></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>발신</td>
-							<td><input type="button" value="보내기"></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>발신</td>
-							<td><input type="button" value="보내기"></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>발신</td>
-							<td><input type="button" value="보내기"></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>발신</td>
-							<td><input type="button" value="보내기"></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>발신</td>
-							<td><input type="button" value="보내기"></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>발신</td>
-							<td><input type="button" value="보내기"></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>최나라</td>
-							<td>임시보관함 테스트용 데이터</td>
-							<td></td>
-							<td>2020-09-23</td>
-							<td>발신</td>
-							<td><input type="button" value="보내기"></td>
-						</tr>
+					</c:if>	
 					</tbody>
 				</table>
 				<button class="mailSend" id="writeBtn">메일쓰기</button>

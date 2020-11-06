@@ -231,9 +231,32 @@ public class EmployeeController {
 			return "employee/goEmployeeSystem";
 		}
 		
+
+		// 출근 버튼 클릭
+		@RequestMapping("workstart.ap")
+		@ResponseBody
+		public String startWorking(String id, HttpServletRequest req) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar c = Calendar.getInstance();
+			Date d = new Date(c.getTimeInMillis());
+			String now = sdf.format(d);
+			// System.out.println("출근 시각 d : " + d);
+			// System.out.println("출근 시각 (now): " + now);
+			
+			// 세팅
+			TNA tna = new TNA(d, id);
+			
+			ArrayList<TNA> tList = eService.startWorking(tna);
+			if(tList != null) {
+				req.getSession().setAttribute("TNA", tList);
+			}
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
+			// System.out.println("결과 : " + tList);
+
 		@RequestMapping("edelete.ap")
 		public String EmployeeDelete(String id, RedirectAttributes rd) {
 			int result = eService.deleteEmployee(id);
+
 			
 			if(result > 0) {
 				rd.addFlashAttribute("msg", "회원 탈퇴가 완료되었습니다.");
@@ -243,6 +266,32 @@ public class EmployeeController {
 			return "redirect:goEmployeeSystem";
 		}
 		
+
+		// 퇴근 버튼 클릭
+		@RequestMapping("workend.ap")
+		@ResponseBody
+		public String endWorking(int tid, String kind, HttpServletRequest req) {
+			int result = 0;
+			int hCount = 0;
+			Employee emp = (Employee)req.getSession().getAttribute("loginUser");
+			String empId = emp.getId();
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY");
+			Calendar c = Calendar.getInstance();
+			Date d = new Date(c.getTimeInMillis());
+			String now = sdf.format(d);
+			
+			if(kind.equals("end")) {
+				result = eService.endWorking(tid,kind);
+			} else {
+				hCount = eService.halfEnd(now, empId);
+				if(hCount < 12) {
+					result = eService.endWorking(tid,kind);
+				} else {
+					return "overHalf";
+				}
+			}
+
 		@RequestMapping("elist.ap")
 		public ModelAndView EmployeeList(ModelAndView mv,
 				@RequestParam(value="page", required=false) Integer page
@@ -252,6 +301,7 @@ public class EmployeeController {
 			
 			// 1. 전체 게시글 수 리턴 받기
 			int listCount = eService.selectListCount();
+
 			
 			// 현재 페이지 계산
 			int currentPage = page != null ? page : 1;
