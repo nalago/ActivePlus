@@ -61,8 +61,9 @@
     	background-color: rgb(62, 142, 218);
     	margin-right:50px;
     }
-    tbody tr:hover {
+    #docList tbody tr:hover {
  	background-color:#63ab68;
+ 	cursor:pointer;
  }
 </style>
 </head>

@@ -454,6 +454,7 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 			var param = year + "-" + str;
 			var writer = '<c:out value="${loginUser.name}"/>';
 			var wId = '<c:out value="${loginUser.id}"/>';
+			var dpt_nm = '<c:out value="${loginUser.name}"/>';
 			var dpt_nm = '<c:out value="${loginUser.category}"/>';
 			
 			//console.log(writer + dpt_nm);
@@ -708,6 +709,7 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 		
 		<div id="profile">
 			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님</span>
+
 			<span ><a id="info" class="profile" href="#">개인정보</a></span>
 			<a href="main.ap">
 			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">

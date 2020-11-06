@@ -133,13 +133,13 @@
                             <h5 style="display: inline-block;">첨부파일</h5>
                             <input type="button" id="filedelete">
                             <label for="filedelete" id="filedeletelabel"></label>
-                            <input type="file" id="apvfile" name="apvfiles" files="${ tempAt }"
+                            <input multiple="multiple" type="file" id="apvfile" name="apvfiles"
                             onchange="showFileList(this.files, value);"
                             multiple>
                             <label for="apvfile" id="apvfilelabel"></label>
                             <div id="apvfilelist">
                                 <c:forEach var="at" items="${tempAt}">
-									<a href="${ contextPath }/resources/approval/duploadFiles/${ at.rename }" download="${ at.original }">${ at.original }</a><br>
+									<a href="${ contextPath }/resources/approval/duploadFiles/${ at.renameFile }" download="${ at.originalFile }">${ at.originalFile }</a><br>
                                 </c:forEach> 
                                 </div>
                             <script>
@@ -170,12 +170,15 @@
                                 	$("#filedelete").on("click", function(){
                                 		$("#apvfilelist").html("");
                                 		$("#apvfile").attr("files","");
+                                		$("#apvfile").val("");
                                 	})
                                 })
                                 </script>
                 </div>
             </div>
             <script>
+            
+            
             /* 모달창 열고 닫기 */
             function openmodal(){
                 $("#apvmodalwrap").css("display","block");

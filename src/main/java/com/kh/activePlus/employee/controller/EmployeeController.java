@@ -53,7 +53,6 @@ public class EmployeeController {
 		System.out.println("controller : " + loginUser );
 		
 		if(loginUser != null) {
-			
 			model.addAttribute("loginUser", loginUser);
 		}else {
 			throw new EmployeeException("로그인에 실패하였습니다.");

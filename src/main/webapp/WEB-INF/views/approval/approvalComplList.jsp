@@ -63,7 +63,7 @@
     text-decoration: none;
 }
 #modalwrap{
-        
+        display:none;
         top:0;
         left: 0;
         width: 100%;
@@ -180,14 +180,26 @@
         background-color: rgb(62, 142, 218) ;
         margin-right: 20px;
     }
-     tbody tr:hover {
+    #docList tbody tr:hover {
  	background-color:#63ab68;
  	cursor:pointer;
- }
+ }#doc input[type="text"]{
+ 		border:0;
+ 	}
+ 	#doc input[type="text"]{
+ 		outline:none;
+ 	} 
 </style>
 </head>
 <body>
 <jsp:include page="../common/menubar.jsp"/>
+<jsp:include page="popup/alert.jsp"/>
+<c:if test="${ !empty msg }">
+		<script>
+			alert('${msg}');
+		</script>
+		<c:remove var="msg" scope="session"/>
+</c:if>
 		<section>
         <jsp:include page="submenu/topMenu.jsp"/>
             <jsp:include page="submenu/docTypeList.jsp"/>
@@ -211,7 +223,30 @@
                     </tr>
                     </c:if>
                     <c:if test="${ !empty cList }">
-                    
+                    	<c:forEach var="c" items="${ cList }">
+                    		<tr>
+                    			<td>${c.apvDocNo }</td>
+                    			<td>${c.apvDocTitle }</td>
+                    			<td>${c.EName }</td>
+                    			<td>${c.apdCreateDate }</td>
+                    			<td>
+                    				<c:choose>
+                    					<c:when test="${ c.apvDocStatus == 1 }">
+                    						대기
+                    					</c:when>
+                    					<c:when test="${ c.apvDocStatus == 2 }">
+                    						심사
+                    					</c:when>
+                    					<c:when test="${ c.apvDocStatus == 3 }">
+                    						반려
+                    					</c:when>
+                    					<c:when test="${ c.apvDocStatus == 4 }">
+                    						결재완료
+                    					</c:when>
+                    				</c:choose>
+                    			</td>
+                    		</tr>
+                    	</c:forEach>
                     </c:if>
                     </tbody>
                 </table>
@@ -221,7 +256,7 @@
                 	&lt;
                 </c:if>
                 <c:if test="${pi.currentPage < 1 }">
-                	<c:url var="before" value="draftingList.ap">
+                	<c:url var="before" value="approvalCompleteList.ap">
                 		<c:param name="page" value="${ pi.currentPage - 1 }"/>
                 	</c:url>                
 	                 <a class="paging" href="${ before }">&lt;</a>
@@ -231,7 +266,7 @@
                 	<font color="green" size="4">${ p }</font>
                 	</c:if>
                 	<c:if test="${ p ne pi.currentPage }">
-                		<c:url var="pagination" value="draftingList.ap">
+                		<c:url var="pagination" value="approvalCompleteList.ap">
                 			<c:param name="page" value="${ p }"/>
                 		</c:url>
                 		<a href="${pagination }">${ p }</a>
@@ -241,7 +276,7 @@
                  	&gt;
                  </c:if>
                  <c:if test="${ pi.endPage < pi.maxPage }">
-                 	<c:url var="after" value="draftingList.ap">
+                 	<c:url var="after" value="approvalCompleteList.ap">
                  		<c:param name="page" value="${ pi.currentPage + 1 }"/>
                  	</c:url>
 	                 <a class="paging" href="${ after }">&gt;</a>                 
@@ -250,10 +285,11 @@
             </div>
 
     </section>
+    <form id="cDocForm" method="post">
     <div id="modalwrap">
         <div id="modal">
             <div id="modaltitle">
-                <h4>양식명
+                <h4>
                     <svg id="modalclose"  viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                         <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
@@ -262,176 +298,11 @@
             </div>
             <div id="modalcontent">
                 <div id="doc">
-                	<!-- 결재문서 양식 예 -->
-                	<div id="sign-table-wrapper">
-                        <div id="table-wrap">
-                            <table id="sign-table">
-                                <tbody><tr>
-                                    <td>관리자</td>
-                                </tr>
-                                <tr>
-                                    <td><img id="sign" src="${contextPath }/resources/approval/images/sign.png"></td>
-                                </tr>
-                                <tr>
-                                    <td>이름</td>
-                                </tr>
-                                <tr>
-                                    <td>날짜</td>
-                                </tr>
-                            </tbody></table>
-                        </div>
-                    </div>
-                   
-                    <hr>
-                    &nbsp;
-                    <input type="text" id="sign_title" placeholder="기안 제목">
-                    <hr>&nbsp;
-                    직위/직책 <input type="text" id="job" readonly="" placeholder="관리자">
-                    <hr>&nbsp;
-                    작성자명 <input type="text" id="name" readonly="" placeholder="윤영관">
-                    <hr>&nbsp;
-                    작성일 <input type="text" id="sign_date" readonly="">
-                    <hr>&nbsp;
-                    기안 내용
-                    <br><br>
-
-                
-                    <p> </p>
-
-<table cellspacing="0" style="border-collapse:collapse; width:596px">
-<tbody>
-    <tr>
-        <td colspan="10" rowspan="2" style="border-bottom:.7px solid black; border-left:1px solid black; border-right:.7px solid black; border-top:1px solid black; height:94px; text-align:center; vertical-align:middle; white-space:nowrap; width:597px"><span style="font-size:24px"><strong><span style="font-family:돋움,monospace">구   매   품   의   서</span></strong></span></td>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:none; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:none; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:none; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:none; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:none; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:none; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:none; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:none; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:98px; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td colspan="2" style="background-color:#f2f2f2; border-bottom:none; border-left:1px solid black; border-right:.7px solid black; border-top:1px solid black; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">구매목적</span></span></td>
-        <td colspan="6" style="border-bottom:none; border-left:none; border-right:.7px solid black; border-top:1px solid black; vertical-align:middle; white-space:normal; width:435px"><span style="font-size:14px"><span style="font-family:돋움,monospace">어떤한 사유로..<br />
-        아래와 같이 물품 구매를 하려고 합니다.<br />
-        재가하여 주시기 바랍니다.</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:normal; width:22px"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:1px solid black; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">품번</span></span></td>
-        <td colspan="4" style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:none; border-right:.7px solid black; border-top:1px solid black; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">품명</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:1px solid black; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">단가</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:1px solid black; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">수량</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:1px solid black; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">소계</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">1</span></span></td>
-        <td colspan="4" style="border-bottom:1px solid black; border-left:none; border-right:.7px solid black; border-top:1px solid black; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">0</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">2</span></span></td>
-        <td colspan="4" style="border-bottom:1px solid black; border-left:none; border-right:.7px solid black; border-top:1px solid black; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">0</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">3</span></span></td>
-        <td colspan="4" style="border-bottom:1px solid black; border-left:none; border-right:.7px solid black; border-top:1px solid black; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">0</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">4</span></span></td>
-        <td colspan="4" style="border-bottom:1px solid black; border-left:none; border-right:.7px solid black; border-top:1px solid black; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">0</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">5</span></span></td>
-        <td colspan="4" style="border-bottom:1px solid black; border-left:none; border-right:.7px solid black; border-top:1px solid black; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">0</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><strong><span style="font-family:돋움,monospace">　</span></strong></span></td>
-        <td colspan="5" style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:1px solid black; border-right:.7px solid black; border-top:1px solid black; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">합계</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">0</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">0</span></span></td>
-        <td style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">0</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td rowspan="3" style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">구매처정보</span></span></td>
-        <td colspan="7" rowspan="3" style="border-bottom:.7px solid black; border-left:1px solid black; border-right:.7px solid black; border-top:1px solid black; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:normal; width:22px"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:normal; width:22px"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td rowspan="3" style="background-color:#f2f2f2; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:14px"><span style="font-family:돋움,monospace">특기사항</span></span></td>
-        <td colspan="7" rowspan="3" style="border-bottom:.7px solid black; border-left:1px solid black; border-right:.7px solid black; border-top:1px solid black; vertical-align:middle; white-space:normal; width:512px"><span style="font-size:14px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:normal; width:22px"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:normal; width:22px"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td style="border-bottom:none; border-left:1px solid black; border-right:none; border-top:none; height:28px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-        <td style="border-bottom:none; border-left:none; border-right:1px solid black; border-top:none; vertical-align:middle; white-space:nowrap"><span style="font-size:15px"><span style="font-family:돋움,monospace">　</span></span></td>
-    </tr>
-    <tr>
-        <td colspan="10" rowspan="5" style="border-bottom:.7px solid black; border-left:1px solid black; border-right:.7px solid black; border-top:none; height:154px; text-align:center; vertical-align:middle; white-space:nowrap"><span style="font-size:24px"><strong><span style="font-family:돋움,monospace">주식회사 회사명</span></strong></span></td>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-    </tr>
-</tbody>
-</table>               
+                	
                 </div>
                 <div id="docmenu">
                     <!--결재 취소 버튼-->
-                    <button id="approvalCancel">
+                    <button id="approvalCancel" type="button">
                         <svg width="40px" color="gray" viewBox="0 0 16 16" class="bi bi-file-earmark-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4 0h5.5v1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h1V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/>
                             <path d="M9.5 3V0L14 4.5h-3A1.5 1.5 0 0 1 9.5 3z"/>
@@ -457,17 +328,18 @@
                 <h5>&nbsp;알림</h5>
             </div>
             <div id="confirmcontent">
-                <h4>취소하시겠습니까?</h4>
+                <h4></h4>
                 <button id="confirmOk">OK</button>
-                <button id="confirmCancel">CANCEL</button>
+                <button id="confirmCancel" type="button">CANCEL</button>
             </div>
         </div>
     </div>
- 
+ </form>
     <script>
-        function confirm(){
-            $("#confrimwrap").css("display","block");
-        }
+    var cancelStatus = false; 
+    function openmodal(){
+        $("#modalwrap").css("display","block");
+    };
         /* modal창 닫기 */
         $(function(){
             $("#modalclose").on("click",function(){
@@ -480,6 +352,193 @@
                 $("#confirmwrap").css("display","none");
             });
         });
+        $("#approvalCancel").on("click", function(){
+        	if(cancelStatus == true){
+        		confirm("취소하시겠습니까?");
+        		
+        	}
+        });
+        
+        
+        /* 수정 해야됨 */
+        window.confirm = function(message){
+            $("#confirmwrap").css("display","block");
+            var confirmContent = $("#confirmcontent");
+            var confirmMsg = confirmContent.children().eq(0);
+            confirmMsg[0].innerHTML = message;
+           	var apvDocNo = $("#apvDocNo").html();
+           	console.log("보낼거"+apvDocNo);
+           		$("#confirmOk").on("click", function () {
+           			$("#cDocForm").attr("action", "approvalCancel.ap?apvDocNo="+apvDocNo);
+                   	return true;
+                });
+           	
+        }
+        $(function(){
+        	$("td").on("click", function(){
+        		var apvDocNo = $(this).parent().children().eq(0).text();
+        		console.log(apvDocNo);
+   				if(apvDocNo.includes("결재")){
+   					return false;
+   				}
+   				var apvprocedure = document.getElementById("apvprocedure");
+   				var apvfile = document.getElementById("apvfile");
+   				var apvcomment = document.getElementById("apvcomment");
+   				
+   				apvprocedure.innerHTML = "결재순서";
+   				apvfile.innerHTML = "첨부파일";
+   				apvcomment.innerHTML = "의견";
+   				
+   				  $.ajax({
+   					url:"selectApprovalObtainDoc.ap",
+   					data:{apvDocNo:apvDocNo},
+   					dataType:"json",
+   					success:function(data){
+   						openmodal();
+   		   				showDocContent(apvDocNo);
+   		   				$("#modaltitle h4 span").remove();
+   		   				$("#modaltitle h4").prepend("<span id='apvDocNo'>"+apvDocNo+"</span>");
+   		   				var job = document.getElementById("job");
+   		   				var name = document.getElementById("name");
+   		   				
+   						var $aList = data.aList;
+   						var $atList = data.atList;
+   						var $signList = data.signList;
+   						var apvType;
+   						var apvResult;
+   						if(!(Array.isArray($aList) && $aList.length === 0)){
+   								for(var i = 0; i < $aList.length; i++){
+   										if($aList[i].apvType == 0){
+   											apvType = "(기안)";
+   										}else if($aList[i].apvType == 1){
+   											apvType = "(합의)";
+   										}else if($aList[i].apvType == 2){
+   											apvType = "(결재)";
+   										}
+   										 if($aList[i].apvResult == 0){
+   											apvResult = "대기";
+   										}else if($aList[i].apvResult == 1){
+   											apvResult = "승인";
+   										}else if($aList[i].apvResult == 2){
+   											apvResult = "반려";	
+   										}
+   									apvprocedure.innerHTML += "<br>"+ 
+   										i +" "+$aList[i].empId + " " + $aList[i].eName + 
+   										apvType + apvResult;
+   									
+   									console.log("의견 : "+ ($aList[i].apvComment == undefined));
+   									if(!$aList[i].apvComment == undefined){
+   										apvcomment += aList[i].eName + ": " + $aList[i].apvComment;
+   									}
+   									if($aList[i].empId == ${loginUser.id}){
+   										if($aList[i+1] != null && $aList[i+1].apvResult == 0){
+   											cancelStatus = true;
+   										}
+   									}
+   									
+   								}
+   							
+   						}
+   						
+   						if(!(Array.isArray($atList)&& $atList.length === 0)){
+   							for(var i = 0; i < $atList.length; i++){
+   								apvfile.innerHTML += "<br>"+
+   								"<a href='${contextPath}/resources/approval/duploadFiles/"+$atList[i].renameFile+"' download='"+$atList[i].originalFile+"'>"+$atList[i].originalFile+"</a>";
+   							}
+   							
+   							
+   							
+   						}
+   						
+   						if(!(Array.isArray($signList)&& $signList.length === 0)){
+   							var $tableBody = $("#sign-table tBody");
+   							$tableBody.html("");
+   								var $trJob = $("<tr>")
+   							for(var i = 0; i < $aList.length; i++){
+   								console.log($signList[i]);
+   								if(job != undefined){
+   									
+   								job.value = $signList[0].jobGrade;
+   								}
+   								var $job = $("<td class='sign job'>");
+   								$job.text($signList[i].jobGrade);
+   								$trJob.append($job);
+   							}
+   								var $trSign = $("<tr>")
+   							for(var i = 0; i < $aList.length; i++){
+   								var $sign = $("<td class='signature'>");
+   								if($aList[i].apvStep == 0){
+   									$sign.html("<img class='signature' src='${contextPath}/resources/approval/images/"+$signList[i].rename+"'>");
+   								}else if($aList[i].apvResult != 0){
+   									$sign.html("<img class='signature' src='${contextPath}/resources/approval/images/"+$signList[i].rename+"'>");
+   								}else{
+   									$sign.text("");
+   								}
+   								
+   								$trSign.append($sign);
+   							}
+   								var $trName = $("<tr>")
+   							for(var i = 0; i < $aList.length; i++){
+   								var $name = $("<td class='sign name'>");
+   								if(name != undefined){
+   									
+   								name.value = $aList[0].eName;
+   								}
+   								$name.text($aList[i].eName);
+   								$trName.append($name);
+   							}
+   								var $trDate = $("<tr>")
+   							for(var i = 0; i < $aList.length; i++){
+   								var $comp = $("<td class='sign date'>");
+   								$comp.text($aList[i].apvCompDate);
+   								$trDate.append($comp);
+   							}
+   							$tableBody.append($trJob);
+   							$tableBody.append($trSign);
+   							$tableBody.append($trName);
+   							$tableBody.append($trDate);
+   						}
+   						
+   					},
+   					error:function(e){
+   						console.log("error"+e);
+   					}
+   				}); 
+   				
+        	});
+        });
+        function showDocContent(apvDocNo){
+        	var doc = document.getElementById("doc");
+        	console.log("show"+apvDocNo);
+        	<c:forEach var='ap' items='${cList}'>
+        	console.log('${ap}');
+        		if(apvDocNo == '${ap.apvDocNo}'){
+        			doc.innerHTML = '${ap.apvDocContent}';
+        			$("#doc").children('input').attr('readonly', true);
+        			$("#start_date").attr('readOnly', true);
+        			$("#end_date").attr('readOnly', true);
+        			$("#apvcomment").html("의견<br><textarea id='apvComment' name='apvComment'></textarea>");
+        			$("#apvComment").css({'overflow-y':'scroll', 'width':'100%', 'height':'90%', 'resize':'none'});
+					console.log('${ap}');
+        			var title = document.getElementById("apvDocTitle") || document.getElementById("sign_title");
+        			if(title != undefined){
+        				title.value = '${ap.apvDocTitle}';
+        				console.log(title.attributes);
+        				title.style.fontSize = "x-large";
+        				title.style.textAlign = "center";
+        			}
+        			var date = document.getElementById("sign_date");
+        			if(date != undefined){
+        				date.value = '${ap.apdCreateDate}';
+        				
+        			}
+        		
+        			
+        			
+        		};
+        	</c:forEach>
+        };
+        
     </script>
 
 </body>

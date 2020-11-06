@@ -60,16 +60,16 @@
         <div class="expectedList Wrap">
             <h4 class="title">결재 예정 문서</h4>
             <div id="expectedList">
-				<c:if test="${ empty apvDocList }">
-					<h3>저장 된 임시 문서가 없습니다.</h3>
+				<c:if test="${ empty apvList }">
+					<h3>결재 예정 문서가 없습니다.</h3>
 				</c:if>
-				<c:if test="${ !empty apvDocList }">
-					<c:forEach var="a" items="${ apvDocList }" begin="0" end="5">
+				<c:if test="${ !empty apvList }">
+					<c:forEach var="a" items="${ apvList }" begin="0" end="5">
 						<table>
 							<tr>
 								<td width="50">${ a.apvDocNo }</td>
 								<td width="200">${ a.apvDocTitle }</td>
-								<td width="200">${ a.apvCreateDate }</td>
+								<td width="200">${ a.apdCreateDate }</td>
 							</tr>
 						</table>
 					</c:forEach>
@@ -80,16 +80,16 @@
         <div class="completeList Wrap">
             <h4 class="title">결재 완료 문서</h4>
             <div id="completeList">
-				<c:if test="${ empty compDocList }">
-					<h3>저장 된 임시 문서가 없습니다.</h3>
+				<c:if test="${ empty apvCompList }">
+					<h3>결재 완료 문서가 없습니다.</h3>
 				</c:if>
-				<c:if test="${ !empty compDocList }">
-					<c:forEach var="co" items="${ compDocList }" begin="0" end="5">
+				<c:if test="${ !empty apvCompList }">
+					<c:forEach var="co" items="${ apvCompList }" begin="0" end="5">
 						<table>
 							<tr>
 								<td width="50">${ co.apvDocNo }</td>
 								<td width="200">${ co.apvDocTitle }</td>
-								<td width="200">${ co.apvCreateDate }</td>
+								<td width="200">${ co.apdCreateDate }</td>
 							</tr>
 						</table>
 					</c:forEach>
