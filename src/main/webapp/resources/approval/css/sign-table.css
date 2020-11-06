@@ -7,14 +7,25 @@
     float: right;
     table-layout: fixed;
     border-collapse: collapse;
+    width:80px;
 }
 #sign-table td{
     border: 1px solid black;
     text-align: center;
     min-width: 80px;
-    max-width: 100px;
+    max-width: 80px;
+}
+.signature{
+    width: 60px;
+    height:60px;
+}
+.sign{
+	width:80px;
+}
+.date{
+	font-size : small;
 }
 #sign{
-    width: 80px;
-    height: 60px;
-}
+    	width:60px;
+    	height:60px;
+    }

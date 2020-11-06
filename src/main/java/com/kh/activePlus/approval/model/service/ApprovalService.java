@@ -4,13 +4,15 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
+import com.kh.activePlus.employee.model.vo.Employee;
 import com.kh.activePlus.approval.model.vo.Approval;
+import com.kh.activePlus.approval.model.vo.ApprovalApvDoc;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
-import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.common.attachment.Attachment;
+import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.common.paging.PageInfo;
-import com.kh.activePlus.employee.model.vo.Employee;
+import com.kh.activePlus.approval.model.vo.Sign;
 
 @Service
 public interface ApprovalService {
@@ -18,31 +20,29 @@ public interface ApprovalService {
 	
 	public int draftingDoc(ApvDoc doc);
 	
-	public int TemporaryDocSave(Doc tempDoc);
+	
 	
 	public int deleteTempDoc(int apvDocNo);
 	
-	public int insertPriDoc(Doc doc);
+
 	
 	public int draftingRetrieve(int dId);
 	
-	public int returnApproval(Doc doc);
 	
-	public int docApproval(Doc doc);
 	
-	public int approvalCancel(int dId);
+	public int approvalCancel(Approval cApv);
 	
-	public ArrayList<Doc> selectDocTypeList(String docType, PageInfo pi);
+	public ArrayList<Doc> selectDocTypeList(ApprovalSearch as, PageInfo pi);
 	
-	public ArrayList<ApvDoc> selectDocList();
+
 
 	public ArrayList<ApvDoc> selectApvDocList(ApprovalSearch search) throws Exception;
 
-	public int selectAllDocTypeListCount();
+	public int selectAllDocTypeListCount(String eId);
 
-	public ArrayList<Doc> selectAllDocTypeList(PageInfo pi);
+	public ArrayList<Doc> selectAllDocTypeList(String eId, PageInfo pi);
 
-	public int selectDocTypeListCount(String docType);
+	public int selectDocTypeListCount(ApprovalSearch as);
 
 	public int selectPrivateListCount(String eId);
 
@@ -58,11 +58,11 @@ public interface ApprovalService {
 
 	public int selectAprrovalCompleteListCount(String eId);
 
-	public ArrayList<ApvDoc> selectApprovalObtainList(String eId, PageInfo pi);
+	public ArrayList<ApprovalApvDoc> selectApprovalObtainList(String eId, PageInfo pi);
 
-	public ArrayList<ApvDoc> selectApprovalList(String eId, PageInfo pi);
+	public ArrayList<ApprovalApvDoc> selectApprovalList(String eId, PageInfo pi);
 
-	public ArrayList<ApvDoc> selectApprovalCompleteList(String eId, PageInfo pi);
+	public ArrayList<ApprovalApvDoc> selectApprovalCompleteList(String eId, PageInfo pi);
 
 	public Doc selectDoc(int docNo);
 
@@ -82,9 +82,25 @@ public interface ApprovalService {
 
 	public ApvDoc selectTempDoc(ApvDoc searchTemp);
 
-	public ArrayList<Attachment> selectTempAt(int docNo);
+	public ArrayList<Attachment> selectTempAt(String a);
 
-	public int deleteAttachment(int docNo);
+	public int deleteAttachment(String a);
+
+	public ArrayList<Approval> selectApprovalfromObtainDoc(int apvDocNo);
+
+	public ArrayList<Attachment> selectApvDocAtList(String apvDocNo);
+
+	public ArrayList<Sign> selectSignList(ArrayList<String> eList);
+
+	public int deleteprocedureList(int apvDocNo);
+
+	public int approval(Approval apv);
+
+	public ApprovalApvDoc checkApproval(int apvDocNo);
+
+	public int apvDocComplete(int apvDocNo);
+
+	public int insertAtListToApvDocFromTemp(String refId);
 
 
 	

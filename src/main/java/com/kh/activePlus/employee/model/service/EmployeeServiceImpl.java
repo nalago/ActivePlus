@@ -23,10 +23,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public Employee loginEmployee(Employee m) {
 		Employee loginUser = eDao.selectEmployee(m);
 		System.out.println(loginUser);
-		if(loginUser != null &&
+		/*if(loginUser != null &&
 				!bcryptPasswordEncoder.matches(m.getPwd(), loginUser.getPwd())) {
 			loginUser = null;
-		}
+		}*/
 		return loginUser;
 	}
 

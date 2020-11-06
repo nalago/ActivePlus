@@ -25,9 +25,9 @@ public class HomeController {
 	public String home(Locale locale, Model model) {
 
 		
-		Employee user = new Employee("100215","11234","최나라","의료");
+		/*Employee user = new Employee("100215","11234","최나라","의료");
 		
-		model.addAttribute("loginUser", user);
+		model.addAttribute("loginUser", user);*/
 		
 		return "main/main";
 	}

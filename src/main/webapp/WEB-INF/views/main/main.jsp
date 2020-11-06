@@ -90,7 +90,7 @@ thead {
 			<div id="basic">
 				<div id="picture"></div>
 
-				<div class="user">${ loginUser.empId } ${ loginUser.category }, ${ loginUser.name }</div>
+				<div class="user">${ loginUser.id } ${ loginUser.category }, ${ loginUser.name }</div>
 			</div>
 			<div id="TNA">
 				<!-- <button type="button" class="TNABtn" id="work">출근</button> -->

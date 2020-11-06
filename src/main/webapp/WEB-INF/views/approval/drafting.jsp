@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -216,6 +217,7 @@
    		width:300px;
    		hegiht:30px;
    		font-size:25px;
+ 		
    	}
     
     </style>
@@ -233,20 +235,18 @@
             
                 <div id="doc">
                 <!-- 기안 문서 양식 예 -->
-                <c:if test="${ d.docType != 'PRIVATE' }">
+                 <c:if test="${ d.docType ne 'PRIVATE' }">
 	               	${ d.docContent }                
                	<textarea id="editor" name="draftContent">내용 입력</textarea>
                 </c:if>
                	
                	<c:if test="${ d.docType eq 'PRIVATE' }"> 
-               	<div id="docContent">
-               		<input id="apvDocTitle" type="text" name="apvDocTitle" placeholder="문서 제목 입력"/>
-               	</div>
-	               	<textarea id="editor" name="draftContent">${ d.docContent }</textarea>
-               	</c:if>
-               	
-               	<c:if test="${ d.docType eq 'PRIVATE' }">
-               	</c:if>
+               	<input type="text" id="apvDocTitle" value='${ d.docTitle }'/>
+               		${d.docContent }
+	               	<textarea id="editor" name="draftContent"></textarea>
+               	</c:if> 
+               		<%-- ${d.docContent }
+               		<textarea id="editor" name="draftContent"></textarea> --%>
                	</div>
                	<input type="text" id="docNo" name="docNo" value="${ d.docNo }" readonly/>
                	<input type="text" id="docDiv" name="apvDocContent" readonly/>
@@ -293,12 +293,32 @@
                         <div id="person">
                             <!-- 직원정보 출력하는곳 -->
                             
-                            <ul> 
+                            <ul>
                             <h5>인사</h5>
                             <c:forEach var="e" items="${ eList }">
-                            	<c:if test="${ e.department eq '인사' }">
-                            		<li class="userName"><input type="radio" id="${e.userName}" name="userName" value="${ e.userName}[${e.ID}]">
-                            		<label for="${ e.userName }" style=margin:0;>${ e.userName }</label>
+                            	<c:if test="${ e.category eq '인사' }">
+                            		<li class="userName"><input type="radio" id="${e.name}" name="userName" value="${ e.name }[${e.id}]">
+                            		<label for="${ e.name }" style=margin:0;>${ e.name }</label>
+                            		</li>
+                            	</c:if>
+                            </c:forEach>
+                            </ul>
+                            <ul>
+                            <h5>사무</h5>
+                            <c:forEach var="e" items="${ eList }">
+                            	<c:if test="${ e.category eq '사무' }">
+                            		<li class="userName"><input type="radio" id="${e.name}" name="userName" value="${ e.name }[${e.id}]">
+                            		<label for="${ e.name }" style=margin:0;>${ e.name }</label>
+                            		</li>
+                            	</c:if>
+                            </c:forEach>
+                            </ul>
+                            <ul>
+                            <h5>의료</h5>
+                            <c:forEach var="e" items="${ eList }">
+                            	<c:if test="${ e.category eq '의료' }">
+                            		<li class="userName"><input type="radio" id="${e.name}" name="userName" value="${ e.name }[${e.id}]">
+                            		<label for="${ e.name }" style=margin:0;>${ e.name }</label>
                             		</li>
                             	</c:if>
                             </c:forEach>
@@ -320,191 +340,270 @@
                 </div>
             </div>
         </div>
-        
-        <script>
-           /* alert */
-            (function(proxied) {
-            	  window.alert = function(msg) {
-            		 var text =  document.getElementById("alertText");
-            		 $("#alertwrap").css("display","block");
-                  	 text.value = msg;
-            	    	return false;
-            	  };
-            })(window.alert);
-            
-           /* confirm */
-            window.confirm = function(message){
-            	var apvprocedureNames = document.getElementsByName('apvprocedureNames');
-                $("#confirmwrap").css("display","block");
-                var confirmContent = $("#confirmcontent");
-                var confirmMsg = confirmContent.children().eq(0);
-                confirmMsg[0].innerHTML = message;
-                if(message.includes("임시저장")){
-                	console.log(apvprocedureNames.value);
-                	$("#docform").attr("action","temporaryDoc.ap")
-                	if($("#sign_title").val()==""){
-                		$("#sign_title").val(" "); 
-                	}else if($("#apvDocTitle").val() == ""){
-                		$("#apvDocTitle").val(" ");
-                	}else if(apvprocedureNames.value == undefined){
-                		apvprocedureNames.value = " ";
-                	}
-                	$("#confirmOk").on("click", function () {
-                        return true;
-                    });
-                }
-                
-                if(message.includes("기안")){
-                	$("#docform").attr("action","drafting.ap");
-                	if(apvprocedureNames.length == 0){
-                		closeconfirm();
-                		alert("결재선 지정이 필요합니다.");
-                	}else if($("#sign_title").val()=="" || $("#apvDocTitle").val() == ""){
-                		closeconfirm();
-                		alert("기안문서 제목을 입력해주세요.");
-                	}
-                	
-                	
-                	$("#confirmOk").on("click", function () {
-                        return true;
-                    });
-                }
-            }
-            
-            /* 모달창 열고 닫기 */
-            function openmodal(){
-                $("#apvmodalwrap").css("display","block");
-            };
-            /* 결재선 등록 버튼 */
-            $("#enroll").on("click", function(){
-            	var procedureList = $("#procedure").children();
-            	var apvprocedure = document.getElementById("apvprocedure");
-            	apvprocedure.innerHTML = "";
-            	for(var i = 0; i < procedureList.length; i++){
-            		apvprocedure.insertAdjacentHTML("beforeend", "<input type='text' class='apvprocedureNames' name='apvprocedureNames' value='"+ (i+1) + " " 
-            									+ procedureList[i].firstChild.value+"' readonly />");
-            	}
-            	
-            	$("#apvmodalwrap").css("display","none");
-            });
-            
-            /*취소버튼*/
-            function closemodal(){
-                $("#apvmodalwrap").css("display","none");
-                
-            }
-            /* X 버튼 */
-            $(function(){
-                $("#modalclose").on("click",function(){
-                    $("#apvmodalwrap").css("display","none");
-                    
-                });
-            });
-           
-            function closeconfirm(){
-                $("#confirmwrap").css("display", "none");
-            }
-            
-            /* 결재선 직원 클릭 시 선택 효과 */
-            $(function(){
-            	$(".userName").on("click",function(){
-            		$(".userName").css("background","");
-            		$(this).css("background","#63ab68");
-            	});
-            });
-            /* 결재선 지정 펑션 */
-            $(function(){
-            	$("#approverButton").on("click",function(){
-            		var name = $('input[name="userName"]:Checked').val();
-            		var procedure = document.getElementById('procedure');
-            		var list = $("#procedure").children();
-            		
-            		for(var i = 0; i < list.length; i++){
-            			
-            		
-            		if(list[i].id == "procedure"+name && name != undefined){
-            			return;
-            			procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='apv"+name+"' class='procedureNames' name='procedureName' value='"+name+" (결재)' readonly>"+
-						"<button id='"+name+"' class='procedureCancel'>X</button></div>");
-            		}
-            		}
-            		 if(name != undefined){
-            			
-						procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='apv"+name+"' class='procedureNames' name='procedureName' value='"+name+" (결재)' readonly>"+
-								"<button id='"+name+"' class='procedureCancel'>X</button></div>");
-            		 } 
-            	});
-            });
-            
-            /* 결재선 X 버튼 */
-            $("#procedure").on('click',function(e){
-            	if(e.target.classList.contains('procedureCancel')){
-            		document.getElementById("procedure"+$(e.target).attr("id")).remove();
-            	}
-            });
-            
-            /* 합의자 지정 펑션 */
-            $(function(){
-            	$("#consensusButton").on("click",function(){
-            		var name = $('input[name="userName"]:Checked').val();
-            		var procedure = document.getElementById('procedure');
-            		var list = $("#procedure").children();
-            		
-            		
-            		for(var i = 0; i < list.length; i++){
-            			
-            		if(list[i].id == "procedure"+name && name != undefined){
-            			
-            			return;
-            			procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='con"+name+"' class='procedureNames' name='procedureName' value='"+name+" (합의)' readonly>"+
-						"<button id='"+name+"' class='procedureCancel'>X</button></div>");
-            		}
-            		}
-            		 if(name != undefined){
-            			
-						procedure.insertAdjacentHTML("beforeend", "<div id='procedure"+name+"'><input type='text' id='con"+name+"' class='procedureNames' name='procedureName' value='"+name+" (합의)' readonly>"+
-								"<button id='"+name+"' class='procedureCancel'>X</button></div>");
-            		 }
-            	});
-            });
-            
-            /* 직원리스트에서 검색한 이름만 보여주는 펑션 */
-            $(function(){
-            	$("#searchperson").keyup(function(){
-            		var searchName = $(this).val();
-            		
-            		$("#person > ul > li").hide();
-            		
-            		var temp = $("#person > ul > li > label:contains('"+ searchName +"')");
-            		
-            		console.log($(temp).parent());
-            		
-            		$(temp).parent().show();
-            	})
-            });
-            
-            docform.onsubmit = function(){
-            	/* 문서의 기본 div 내용 */
-            	var docContent = document.getElementById("docContent").innerHTML;
-            	/* 문서 div 내용 담을 input태그 */
-            	var apvdocContent = document.getElementById("docDiv");
-            	
-            	/* 에디터 안의 내용 */
-            	var editorText = CKEDITOR.instances.editor.getData();
-            	apvdocContent.value = docContent+"@"+editorText;
-            	
-            	console.log(apvdocContent.value);
-            	var docNo = document.getElementsByName('docNo');
-            	docNo = ${d.docNo};
-            	
-            
-            	return true;
-            }
-            
-            
-            
-            
-            
-        </script>
+
+	<script>
+     
+		var start = document.getElementById("start_date");
+		var end = document.getElementById("end_date");
+		var content = document.getElementById("docContent");
+		$('#start_date').on("change", function() {
+			console.log(start.value);
+			start.outerHTML = "<input type='date' id='start_date' value='"+$(this).val()+"'/>";
+			console.log(start);
+			console.log($(this));
+			console.log(content.innerHTML);
+		});
+		$('#end_date').on("change", function() {
+			console.log(end.value);
+			end.outerHTML = "<input type='date' id='end_date' value='"+$(this).val()+"'/>";
+			if (end.value < start.value) {
+				alert("종료일을 확인해주세요.");
+				end.value = "";
+			}
+			
+		});
+
+		$(function() {
+			var title = document.getElementById("sign_title");
+			if (title.value == "") {
+				title.value = '${doc.docTitle}';
+			}
+			console.log(start);
+		});
+
+		/* alert */
+		(function(proxied) {
+			window.alert = function(msg) {
+				var text = document.getElementById("alertText");
+				$("#alertwrap").css("display", "block");
+				text.value = msg;
+				return false;
+			};
+		})(window.alert);
+
+		/* confirm */
+		window.confirm = function(message) {
+			var apvprocedureNames = document
+					.getElementsByName('apvprocedureNames');
+			$("#confirmwrap").css("display", "block");
+			var confirmContent = $("#confirmcontent");
+			var confirmMsg = confirmContent.children().eq(0);
+			confirmMsg[0].innerHTML = message;
+			if (message.includes("임시저장")) {
+				console.log(apvprocedureNames.value);
+				$("#docform").attr("action", "temporaryDoc.ap")
+				if ($("#sign_title").val() == "") {
+					$("#sign_title").val(" ");
+				} else if ($("#apvDocTitle").val() == "") {
+					$("#apvDocTitle").val(" ");
+				} else if (apvprocedureNames.value == undefined) {
+					apvprocedureNames.value = " ";
+				}
+				$("#confirmOk").on("click", function() {
+					return true;
+				});
+			}
+
+			if (message.includes("기안")) {
+				$("#docform").attr("action", "drafting.ap");
+				if (apvprocedureNames.length == 0) {
+					closeconfirm();
+					alert("결재선 지정이 필요합니다.");
+				} else if ($("#sign_title").val() == ""
+						|| $("#apvDocTitle").val() == "") {
+					closeconfirm();
+					alert("기안문서 제목을 입력해주세요.");
+				}
+
+				$("#confirmOk").on("click", function() {
+					return true;
+				});
+			}
+		}
+
+		/* 모달창 열고 닫기 */
+		function openmodal() {
+			$("#apvmodalwrap").css("display", "block");
+		};
+		/* 결재선 등록 버튼 */
+		$("#enroll").on(
+				"click",
+				function() {
+					var procedureList = $("#procedure").children();
+					var apvprocedure = document.getElementById("apvprocedure");
+					apvprocedure.innerHTML = "";
+					for (var i = 0; i < procedureList.length; i++) {
+						apvprocedure.insertAdjacentHTML("beforeend",
+								"<input type='text' class='apvprocedureNames' name='apvprocedureNames' value='"
+										+ (i + 1) + " "
+										+ procedureList[i].firstChild.value
+										+ "' readonly />");
+					}
+
+					$("#apvmodalwrap").css("display", "none");
+				});
+
+		/*취소버튼*/
+		function closemodal() {
+			$("#apvmodalwrap").css("display", "none");
+
+		}
+		/* X 버튼 */
+		$(function() {
+			$("#modalclose").on("click", function() {
+				$("#apvmodalwrap").css("display", "none");
+
+			});
+		});
+
+		function closeconfirm() {
+			$("#confirmwrap").css("display", "none");
+		}
+
+		/* 결재선 직원 클릭 시 선택 효과 */
+		$(function() {
+			$(".userName").on("click", function() {
+				$(".userName").css("background", "");
+				$(this).css("background", "#63ab68");
+			});
+		});
+		/* 결재선 지정 펑션 */
+		$(function() {
+			$("#approverButton")
+					.on(
+							"click",
+							function() {
+								var name = $('input[name="userName"]:Checked')
+										.val();
+								var procedure = document
+										.getElementById('procedure');
+								var list = $("#procedure").children();
+
+								for (var i = 0; i < list.length; i++) {
+
+									if (list[i].id == "procedure" + name
+											&& name != undefined) {
+										return;
+										procedure
+												.insertAdjacentHTML(
+														"beforeend",
+														"<div id='procedure"+name+"'><input type='text' id='apv"
+																+ name
+																+ "' class='procedureNames' name='procedureName' value='"
+																+ name
+																+ " (결재)' readonly>"
+																+ "<button id='"+name+"' class='procedureCancel'>X</button></div>");
+									}
+								}
+								if (name != undefined) {
+
+									procedure
+											.insertAdjacentHTML(
+													"beforeend",
+													"<div id='procedure"+name+"'><input type='text' id='apv"
+															+ name
+															+ "' class='procedureNames' name='procedureName' value='"
+															+ name
+															+ " (결재)' readonly>"
+															+ "<button id='"+name+"' class='procedureCancel'>X</button></div>");
+								}
+							});
+		});
+
+		/* 결재선 X 버튼 */
+		$("#procedure").on(
+				'click',
+				function(e) {
+					if (e.target.classList.contains('procedureCancel')) {
+						document.getElementById(
+								"procedure" + $(e.target).attr("id")).remove();
+					}
+				});
+
+		/* 합의자 지정 펑션 */
+		$(function() {
+			$("#consensusButton")
+					.on(
+							"click",
+							function() {
+								var name = $('input[name="userName"]:Checked')
+										.val();
+								var procedure = document
+										.getElementById('procedure');
+								var list = $("#procedure").children();
+
+								for (var i = 0; i < list.length; i++) {
+
+									if (list[i].id == "procedure" + name
+											&& name != undefined) {
+
+										return;
+										procedure
+												.insertAdjacentHTML(
+														"beforeend",
+														"<div id='procedure"+name+"'><input type='text' id='con"
+																+ name
+																+ "' class='procedureNames' name='procedureName' value='"
+																+ name
+																+ " (합의)' readonly>"
+																+ "<button id='"+name+"' class='procedureCancel'>X</button></div>");
+									}
+								}
+								if (name != undefined) {
+
+									procedure
+											.insertAdjacentHTML(
+													"beforeend",
+													"<div id='procedure"+name+"'><input type='text' id='con"
+															+ name
+															+ "' class='procedureNames' name='procedureName' value='"
+															+ name
+															+ " (합의)' readonly>"
+															+ "<button id='"+name+"' class='procedureCancel'>X</button></div>");
+								}
+							});
+		});
+
+		/* 직원리스트에서 검색한 이름만 보여주는 펑션 */
+		$(function() {
+			$("#searchperson").keyup(
+					function() {
+						var searchName = $(this).val();
+
+						$("#person > ul > li").hide();
+
+						var temp = $("#person > ul > li > label:contains('"
+								+ searchName + "')");
+
+						console.log($(temp).parent());
+
+						$(temp).parent().show();
+					})
+		});
+
+		docform.onsubmit = function() {
+			/* 문서의 기본 div 내용 */
+			var docContent = document.getElementById("docContent").innerHTML;
+
+			console.log(docContent);
+			/* 문서 div 내용 담을 input태그 */
+			var apvdocContent = document.getElementById("docDiv");
+
+			/* 에디터 안의 내용 */
+			var editorText = CKEDITOR.instances.editor.getData();
+			apvdocContent.value = docContent + editorText;
+			
+
+			console.log(apvdocContent.value);
+			var docNo = document.getElementsByName('docNo');
+			docNo = $
+			{
+				d.docNo
+			}
+			;
+
+			return true;
+		}
+	</script>
 </body>
 </html>

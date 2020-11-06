@@ -19,6 +19,8 @@
 		<typeAlias type="com.kh.activePlus.approval.model.vo.Approval" alias="Approval"/>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.ApprovalSearch" alias="ApprovalSearch"/>
 		<typeAlias type="com.kh.activePlus.employee.model.vo.Employee" alias="Employee"/>
+		<typeAlias type="com.kh.activePlus.approval.model.vo.ApprovalApvDoc" alias="ApprovalApvDoc"/>
+		<typeAlias type="com.kh.activePlus.approval.model.vo.Sign" alias="Sign"/>
 
 		<typeAlias type="com.kh.activePlus.schedule.model.vo.Schedule" alias="Schedule"/>
 		<typeAlias type="com.kh.activePlus.common.search.Search" alias="Search"/>

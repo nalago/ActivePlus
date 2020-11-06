@@ -7,9 +7,9 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/base.css"/>
-<link rel="stylesheet" href="${contextPath }/resources/approval/css/sign-table.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/doc.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/submenu.css"/>
+<link rel="stylesheet" href="${contextPath }/resources/approval/css/sign-table.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/fontello/css/fontello.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script src="${contextPath }/resources/approval/ckeditor/ckeditor.js"></script>
@@ -290,9 +290,29 @@
                             <ul>
                             <h5>인사</h5>
                             <c:forEach var="e" items="${ eList }">
-                            	<c:if test="${ e.department eq '인사' }">
-                            		<li class="userName"><input type="radio" id="${e.userName}" name="userName" value="${ e.userName }[${e.ID}]">
-                            		<label for="${ e.userName }" style=margin:0;>${ e.userName }</label>
+                            	<c:if test="${ e.category eq '인사' }">
+                            		<li class="userName"><input type="radio" id="${e.name}" name="userName" value="${ e.name }[${e.id}]">
+                            		<label for="${ e.name }" style=margin:0;>${ e.name }</label>
+                            		</li>
+                            	</c:if>
+                            </c:forEach>
+                            </ul>
+                            <ul>
+                            <h5>사무</h5>
+                            <c:forEach var="e" items="${ eList }">
+                            	<c:if test="${ e.category eq '사무' }">
+                            		<li class="userName"><input type="radio" id="${e.name}" name="userName" value="${ e.name }[${e.id}]">
+                            		<label for="${ e.name }" style=margin:0;>${ e.name }</label>
+                            		</li>
+                            	</c:if>
+                            </c:forEach>
+                            </ul>
+                            <ul>
+                            <h5>의료</h5>
+                            <c:forEach var="e" items="${ eList }">
+                            	<c:if test="${ e.category eq '의료' }">
+                            		<li class="userName"><input type="radio" id="${e.name}" name="userName" value="${ e.name }[${e.id}]">
+                            		<label for="${ e.name }" style=margin:0;>${ e.name }</label>
                             		</li>
                             	</c:if>
                             </c:forEach>
@@ -315,6 +335,35 @@
             </div>
         </div>
         <script>
+        var start = document.getElementById("start_date");
+		var end = document.getElementById("end_date");
+		var content = document.getElementById("docContent");
+		$('#start_date').on("change", function() {
+			console.log(start.value);
+			start.outerHTML = "<input type='date' id='start_date' value='"+$(this).val()+"'/>";
+			console.log(start);
+			console.log($(this));
+			console.log(content.innerHTML);
+		});
+		$('#end_date').on("change", function() {
+			console.log(end.value);
+			end.outerHTML = "<input type='date' id='end_date' value='"+$(this).val()+"'/>";
+			if (end.value < start.value) {
+				alert("종료일을 확인해주세요.");
+				end.value = "";
+			}
+			
+		});
+        
+        $(function(){
+        	var title = document.getElementById("sign_title");
+        	if(title.value == ""){
+        		title.value = '${d.apvDocTitle}';
+        	}
+        	
+        });
+        
+        
         (function(proxied) {
       	  window.alert = function(msg) {
       		 var text =  document.getElementById("alertText");
@@ -363,7 +412,7 @@
         	
         	/* 에디터 안의 내용 */
         	var editorText = CKEDITOR.instances.editor.getData();
-        	apvdocContent.value = docContent+"@"+editorText;
+        	apvdocContent.value = docContent+editorText;
         	
         	console.log(apvdocContent.value);
         	var docNo = document.getElementsByName('docNo');
