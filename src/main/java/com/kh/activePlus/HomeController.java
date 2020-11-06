@@ -1,37 +1,26 @@
 package com.kh.activePlus;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.kh.activePlus.employee.model.service.EmployeeService;
 import com.kh.activePlus.employee.model.vo.Employee;
-import com.kh.activePlus.employee.model.vo.TNA;
 
 /**
  * Handles requests for the application home page.
  */
-@SessionAttributes("tid")
+@SessionAttributes("loginUser")
 @Controller
 public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	@Autowired
-	private EmployeeService eService;
 
+	
 	@RequestMapping(value = "/main.ap", method = RequestMethod.GET)
 	public String home(Locale locale, Model model, @SessionAttribute("loginUser") Employee e) {
 		// 메일, 게시판 select
@@ -73,7 +62,15 @@ public class HomeController {
 		model.addAttribute("nList", mainList.get("nList"));
 		model.addAttribute("hbList", mainList.get("hbList"));
 
+	public String home(Locale locale, Model model) {
+
+
+		
+		/*Employee user = new Employee("100215","11234","최나라","의료");
+		
+		model.addAttribute("loginUser", user);*/
+		
 		return "main/main";
 	}
-
+	
 }

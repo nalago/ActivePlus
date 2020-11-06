@@ -38,19 +38,29 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="apvCompDate" column="APV_COMP_DATE"/>
 		<result property="reciveDate" column="RECIVE_DATE"/>
 		<result property="empId" column="EMP_ID"/>
+		<result property="eName" column="NAME"/>
 	</resultMap>
 	
 	<resultMap id="EmployeeResultSet" type="Employee">
-		<id property="ID" column="EMP_ID"/>
-		<result property="userPwd" column="PWD"/>
-		<result property="userName" column="NAME"/>
-		<result property="userTeam" column="CATEGORY"/>
-		<result property="department" column="DEPARTMENT"/>
-		<result property="job" column="JOB_GRADE"/>
+		<id property="id" column="EMP_ID"/>
+		<result property="pwd" column="PWD"/>
+		<result property="email" column="EMAIL"/>
+		<result property="name" column="NAME"/>
+		<result property="phone" column="PHONE"/>		
+		<result property="birth" column="BIRTH"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="salary" column="SALARY"/>
+		<result property="acc_no" column="ACC_NO"/>
+		<result property="address" column="ADDRESS"/>
+		<result property="hire_date" column="HIRE_DATE"/>		
+		<result property="status" column="STATUS"/>
+		<result property="license" column="LICENSE"/>
+		<result property="license_no" column="LICENSE_NO"/>
+		<result property="license_date" column="LICENSE_DATE"/>
 	</resultMap>
 	
 	<resultMap id="AttachmentResultSet" type="Attachment">
-		<id property="fId" column="FID"/>
+		<id property="atId" column="FID"/>
 		<result property="originalFile" column="A_ORIGINNAME"/>
 		<result property="renameFile" column="A_RENAME"/>
 		<result property="filePath" column="FILE_PATH"/>
@@ -59,15 +69,49 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="refId" column="REF_ID"/>
 	</resultMap>
 	
+	<resultMap id="ApprovalApvDocResultSet" type="ApprovalApvDoc">
+		<id property="apvDocNo" column="APVDOCNO"/>
+		<result property="apvDocTitle" column="APVDOCTITLE"/>
+		<result property="apvDocContent" column="APVDOCCONTENT"/>
+		<result property="apvDocStatus" column="APVDOCSTATUS"/>
+		<result property="apdCreateDate" column="APD_CREATE_DATE"/>
+		<result property="apdModifyDate" column="APD_MODIFY_DATE"/>
+		<result property="apdStep" column="APDSTEP"/>
+		<result property="apdPath" column="APDPATH"/>
+		<result property="docNo" column="DOCNO"/>
+		<result property="empId" column="EMP_ID"/>
+		<result property="apvDocFileCount" column="APVDOCFILECOUNT"/>
+		<result property="eName" column="NAME"/>
+		<result property="apvCompDate" column="APV_COMP_DATE"/>
+		<result property="apvType" column="APVTYPE"/>
+		<result property="apvStep" column="APVSTEP"/>
+	</resultMap>
+	
+	<resultMap id="SignResultSet" type="Sign">
+		<id property="fId" column="FID"/>
+		<result property="original" column="A_ORIGINNAME"/>
+		<result property="rename" column="A_RENAME"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="status" column="STATUS"/>
+		<result property="refTable" column="REF_TABLE"/>
+		<result property="refId" column="REF_ID"/>
+		<result property="empId" column="EMP_ID"/>
+		<result property="department" column="DEPARTMENT"/>
+		<result property="jobGrade" column="JOB_GRADE"/>
+	</resultMap>
+	
+	
 	<select id="selectAllDocTypeListCount" resultType="_int">
 		SELECT COUNT(*)
 		FROM DOC_TYPE
 		WHERE DOCSTATUS = 'Y'
+		AND (EMP_ID IS NULL OR EMP_ID = #{id})
 	</select>
 	<select id="selectAllDocTypeList" resultMap="DocResultSet">
 		SELECT * 
 		FROM DOC_TYPE
 		WHERE DOCSTATUS = 'Y'
+		AND (EMP_ID IS NULL OR EMP_ID = #{id})
 		ORDER BY DOCTITLE
 	</select>
 
@@ -79,19 +123,38 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		AND ROWNUM <![CDATA[<=]]> 5
 		ORDER BY APVDOCNO DESC
 	</select>
-
-	<select id="selectDocTypeList" parameterType="String" resultMap="DocResultSet">
-		SELECT *
-		FROM DOC_TYPE
-		WHERE DOCTYPE LIKE '%'||#{docType}||'%'
-		AND DOCSTATUS = 'Y'
+	<select id="selectMainApvDocList" parameterType="ApprovalSearch" resultMap="ApvDocResultSet">
+	SELECT *
+	FROM APPROVAL AP
+	JOIN APV_DOC AD USING(APVDOCNO)
+	WHERE AP.EMP_ID = #{empId}
+	AND APVSTEP != 0
+	AND AD.APVDOCSTATUS NOT IN ('0','3','4')
 	</select>
 
-	<select id="selectDocTypeListCount" parameterType="String" resultType="_int">
+	<select id="selectDocTypeList" parameterType="ApprovalSearch" resultMap="DocResultSet">
+		SELECT *
+		FROM DOC_TYPE
+		WHERE DOCTYPE LIKE '%'||#{apvDocStatus}||'%'
+		AND (EMP_ID IS NULL OR EMP_ID = #{empId})
+		AND DOCSTATUS = 'Y'
+	</select>
+	<select id="selectMainCompApvDocList" parameterType="ApprovalSearch" resultMap="ApvDocResultSet">
+	SELECT *
+	FROM APPROVAL AP
+	JOIN APV_DOC AD USING(APVDOCNO)
+	WHERE AP.EMP_ID = #{empId}
+	AND APVRESULT != 0
+	AND APVDOCSTATUS = #{apvDocStatus}
+	</select>
+
+	<select id="selectDocTypeListCount" parameterType="ApprovalSearch" resultType="_int">
 		SELECT COUNT(*)
 		FROM DOC_TYPE
-		WHERE DOCTYPE LIKE '%'||#{docType}||'%'
+		WHERE DOCTYPE LIKE '%'||#{apvDocStatus}||'%'
+		AND (EMP_ID IS NULL OR EMP_ID = #{empId})
 		AND DOCSTATUS = 'Y'
+		
 	</select>
 	
 	<select id="selectPrivateListCount" parameterType="String" resultType="_int">
@@ -127,32 +190,32 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		ORDER BY APVDOCNO DESC
 	</select>
 
-	<select id="selectApprovalObtainList" parameterType="String" resultMap="ApvDocResultSet">
-		SELECT APVDOCNO, AD.APVDOCTITLE, AD.APVDOCCONTENT, AD.APVDOCSTATUS, AD.APD_CREATE_DATE, AD.APD_MODIFY_DATE,
-		AD.APDSTEP, AD.APDPATH, AD.DOCNO, AD.EMP_ID, AD.APVDOCFILECOUNT
-		FROM APPROVAL AP
-        LEFT JOIN APV_DOC AD USING(APVDOCNO)
-		WHERE AD.EMP_ID = #{eId}
-		AND AP.APVTYPE = '0'
-        AND AD.APVDOCSTATUS != '0'
-		ORDER BY APVDOCNO DESC
+	<select id="selectApprovalObtainList" parameterType="String" resultMap="ApprovalApvDocResultSet">
+		SELECT *
+		FROM APPROVAL_APVDOC
+		WHERE EMP_ID = #{eId}
+		AND APVTYPE = '0'
+		AND APVDOCSTATUS != '0'
+		AND APVDOCSTATUS != '4'
 	</select>
 	
-	<select id="selectApprovalList" parameterType="String" resultMap="ApvDocResultSet">
-		SELECT AD.APVDOCNO, AD.APVDOCTITLE, AD.APVDOCCONTENT, AD.APVDOCSTATUS, AD.APD_CREATE_DATE, AD.APD_MODIFY_DATE,
-		AD.APDSTEP, AD.APDPATH, AD.DOCNO, EMP_ID, AD.APVDOCFILECOUNT
-		FROM APV_DOC AD
-		JOIN APPROVAL AP USING(EMP_ID)
+	<select id="selectApprovalList" parameterType="String" resultMap="ApprovalApvDocResultSet">
+		SELECT *
+		FROM APPROVAL A
+		JOIN APV_DOC D USING(APVDOCNO)
+		JOIN EMPLOYEE E ON(D.EMP_ID = E.EMP_ID)
+		WHERE A.EMP_ID = #{eId}
 		AND APVTYPE != '0'
-		ORDER BY APVDOCNO DESC
+		AND APVRESULT = '0'
+		AND APVDOCSTATUS != '3'
 	</select>
 
-	<select id="selectApprovalCompleteList" parameterType="String" resultMap="ApvDocResultSet">
-		SELECT AD.APVDOCNO, AD.APVDOCTITLE, AD.APVDOCCONTENT, AD.APVDOCSTATUS, AD.APD_CREATE_DATE, AD.APD_MODIFY_DATE,
-		AD.APDSTEP, AD.APDPATH, AD.DOCNO, EMP_ID, AD.APVDOCFILECOUNT
-		FROM APV_DOC AD
-		JOIN APPROVAL AP USING(EMP_ID)
-		WHERE EMP_ID = #{eId}
+	<select id="selectApprovalCompleteList" parameterType="String" resultMap="ApprovalApvDocResultSet">
+		SELECT *
+		FROM APPROVAL AP
+		JOIN APV_DOC AD USING(APVDOCNO)
+		JOIN EMPLOYEE E ON(AD.EMP_ID = E.EMP_ID)
+		WHERE AP.EMP_ID = #{eId}
 		AND APVRESULT != '0'
 		ORDER BY APVDOCNO DESC
 	</select>
@@ -176,22 +239,25 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		WHERE AD.EMP_ID = #{eId}
 		AND AP.APVTYPE = '0'
         AND AD.APVDOCSTATUS != '0'
+        AND APVDOCSTATUS != '4'
 	</select>
 	
 	<select id="selectApprovalListCount" parameterType="String" resultType="_int">
 		SELECT COUNT(*)
-		FROM APV_DOC
-		JOIN APPROVAL USING(EMP_ID)
+		FROM APPROVAL A
+		JOIN APV_DOC D USING(APVDOCNO)
 		WHERE APVTYPE!='0'
-		AND EMP_ID = #{eId}
+		AND APVRESULT = '0'
+		AND APVDOCSTATUS != '3'
+		AND A.EMP_ID = #{eId}
 	</select>
 	
 	<select id="selectApprovalCompleteListCount" parameterType="String" resultType="_int">
 		SELECT COUNT(*)
-		FROM APV_DOC
-		JOIN APPROVAL USING(EMP_ID)
-		WHERE APVRESULT != '0'
-		AND EMP_ID = #{eId}
+		FROM APPROVAL AP
+		JOIN APV_DOC AD USING(APVDOCNO)
+		WHERE AP.EMP_ID = #{eId}
+		AND APVRESULT != '0'
 	</select>
 	
 	<select id="selectEmpId" parameterType="String" resultType="String">
@@ -202,19 +268,26 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	<!-- 기안 -->
 	<insert id="draftingDoc" parameterType="ApvDoc">
 		INSERT INTO APV_DOC
-		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '1', SYSDATE, NULL, #{apdStep}, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
+		VALUES(SEQ_APVDOC.NEXTVAL, #{apvDocTitle}, #{apvDocContent}, '1', SYSDATE, NULL, 1, #{apdPath}, #{docNo}, #{empId}, #{apvDocFileCount} )
 	</insert> 
 	<!-- 결재선 추가-->
 	
 	<insert id="insertApproval" parameterType="Approval">
 		INSERT INTO APPROVAL
-		VALUES(SEQ_APV.NEXTVAL, SEQ_APVDOC.CURRVAL, #{apvStep},#{apvType}, 0, NULL, NULL, NULL, #{empId})
+		VALUES(SEQ_APV.NEXTVAL, SEQ_APVDOC.CURRVAL, #{apvStep},#{apvType}, 0, NULL, 
+		<if test="apvStep == 0">
+			SYSDATE,
+		</if>
+		<if test="apvStep != 0">
+			NULL,
+		</if>
+		 NULL, #{empId})
 	</insert>
 	
 	<!-- 첨부파일 추가  -->
 	 <insert id="insertAttachment" parameterType="Attachment">
 		INSERT INTO ATTACHMENT
-		VALUES(SEQ_ATT.NEXTVAL, #{original},#{rename},#{filePath}, 'APV_DOC', SEQ_APVDOC.CURRVAL, DEFAULT)
+		VALUES(SEQ_ATT.NEXTVAL, #{originalFile},#{renameFile},#{filePath}, 'APV_DOC', SEQ_APVDOC.CURRVAL, DEFAULT)
 	</insert>
 	<!-- 임시문서 저장 -->
 	<insert id="insertTempDoc" parameterType="ApvDoc">
@@ -263,10 +336,113 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		WHERE APVDOCNO = #{apvDocNo}
 	</delete>
 	
-	<delete id="deleteAttachment" parameterType="_int">
+	<delete id="deleteAttachment" parameterType="String">
 		DELETE
 		FROM ATTACHMENT
 		WHERE REF_ID = #{docNo}
 	</delete>
+	
+	<select id="selectApprovalfromObtainDoc" parameterType="_int" resultMap="ApprovalResultSet">
+		SELECT *
+		FROM APPROVAL A
+		JOIN EMPLOYEE E USING(EMP_ID) 
+		WHERE APVDOCNO = #{apvDocNo}
+		ORDER BY APVSTEP
+	</select>
+	
+	<select id="selectApvDocAtList" parameterType="String" resultMap="AttachmentResultSet">
+		SELECT *
+		FROM ATTACHMENT
+		WHERE REF_ID = #{apvDocNo}
+	</select>
+	
+	<select id="selectSignList" parameterType="hashmap"  resultMap="SignResultSet">
+		SELECT *
+		FROM ATTACHMENT A
+		JOIN OFFICETEAM O ON(A.REF_ID = O.EMP_ID)
+		WHERE REF_ID IN 
+		<foreach collection="eList" item="item" separator="," open="(" close=")">
+			 #{item}
+		</foreach>
+		AND EMP_ID IN
+		<foreach collection="eList" item="item" separator="," open="(" close=")">
+			 #{item}
+		</foreach>
+	</select>
+	
+	<update id="draftingRetrieve" parameterType="_int">
+		UPDATE APV_DOC
+		SET APVDOCSTATUS = '0'
+		WHERE APVDOCNO = #{dId}
+	</update>
+	<delete id="deleteprocedureList" parameterType="_int">
+		DELETE 
+		FROM APPROVAL
+		WHERE APVDOCNO = #{apvDocNo}
+	</delete>
+	
+	<update id="approval" parameterType="Approval">
+		UPDATE
+		APPROVAL
+		SET APVRESULT = #{apvResult},
+		APVCOMMENT = #{apvComment},
+		APV_COMP_DATE = SYSDATE
+		WHERE APVDOCNO = #{apvDocNo}
+		AND EMP_ID = #{empId}
+	</update>
+	<update id="approvalDoc" parameterType="Approval">
+		UPDATE
+		APV_DOC
+		SET APDSTEP = APDSTEP + 1,
+		APVDOCSTATUS = 2
+		WHERE APVDOCNO = #{apvDocNo}
+	</update>
+	
+	<select id="checkApproval" parameterType="_int" resultMap="ApprovalApvDocResultSet">
+	SELECT *
+	FROM
+	(SELECT *
+	FROM APPROVAL A
+	JOIN APV_DOC D USING(APVDOCNO)
+	WHERE APVDOCNO = #{apvDocNo}
+	ORDER BY APVSTEP DESC)
+	WHERE ROWNUM = 1
+	</select>
+	
+	<update id="apvDocComplete" parameterType="_int">
+		UPDATE APV_DOC
+		SET APVDOCSTATUS = 4
+		WHERE APVDOCNO = #{apcDocNo}
+	</update>
+	
+	<update id="approvalCancel" parameterType="Approval">
+		UPDATE APPROVAL
+		SET APVRESULT = 0,
+		APV_COMP_DATE = NULL
+		WHERE APVDOCNO = #{apvDocNo}
+		AND EMP_ID = #{empId}
+	</update>
+	
+	<update id="apvDocCancel" parameterType="_int">
+		UPDATE APV_DOC
+		SET APDSTEP = APDSTEP - 1,
+		APVDOCSTATUS = 2
+		WHERE APVDOCNO = #{apvDocNo}
+	</update>
+	
+	<update id="returnApprovalDoc" parameterType="Approval">
+		UPDATE
+		APV_DOC
+		SET APDSTEP = APDSTEP - 1,
+		APVDOCSTATUS = 3
+		WHERE APVDOCNO = #{apvDocNo}
+	</update>
+	
+	<update id="insertAtListToApvDocFromTemp" parameterType="String">
+		UPDATE
+		ATTACHMENT
+		SET REF_ID = SEQ_APVDOC.CURRVAL
+		WHERE REF_ID = #{refId}
+	</update>
 	
 </mapper>

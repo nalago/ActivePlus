@@ -15,6 +15,15 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <title>Insert title here</title>
 <style>
+#apvDocTitle{
+    	width: 80%;
+        height: 50px;
+        font-size: 20px;
+        font-weight: 500;
+        border: 0;
+    
+    }
+
 #docListwrap{
         width: 1165px;
         float: right;
@@ -70,7 +79,7 @@
         height: 100%;
         background: rgba(0,0,0,0.5);
         position: fixed;
-        
+        display:none;
 }
 #modal{
     width: 1200px;
@@ -100,7 +109,7 @@
     #doc {
         top: 8%;
         left: 0%;
-        width: 700px;
+        width: 720px;
         height: 92%;
         overflow-y: scroll;
         display: inline-block;
@@ -134,7 +143,7 @@
     }
     #apvfile{
         width: 100%;
-        height: 23%;
+        height: 22%;
         border: 1px solid black;
     }
     /* confirm */
@@ -180,14 +189,32 @@
         background-color: rgb(62, 142, 218) ;
         margin-right: 20px;
     }
-     tbody tr:hover {
+    #docList tbody tr:hover {
  	background-color:#63ab68;
  	cursor:pointer;
  }
+ 
+ 	#doc input[type="text"], #doc input[type="date"]{
+ 		border:0;
+ 	}
+ 	#doc input[type="text"], #doc input[type="date"]{
+ 		outline:none;
+ 	}
+ 	#doc input[readonly] {
+  background-color: white !important;
+}
+ 	
 </style>
 </head>
 <body>
 <jsp:include page="../common/menubar.jsp"/>
+<jsp:include page="popup/alert.jsp"/>
+<c:if test="${ !empty msg }">
+		<script>
+			alert('${msg}');
+		</script>
+		<c:remove var="msg" scope="session"/>
+</c:if>
 		<section>
         <jsp:include page="submenu/topMenu.jsp"/>
             <jsp:include page="submenu/docTypeList.jsp"/>
@@ -215,7 +242,7 @@
                     		<tr>
                     			<td>${o.apvDocNo }</td>
                     			<td>${o.apvDocTitle }</td>
-                    			<td></td>
+                    			<td>${o.EName }</td>
                     			<td>${o.apdCreateDate }</td>
                     			<td>
                     				<c:choose>
@@ -246,7 +273,7 @@
                 	&lt;
                 </c:if>
                 <c:if test="${pi.currentPage < 1 }">
-                	<c:url var="before" value="draftingList.ap">
+                	<c:url var="before" value="approvalObtainList.ap">
                 		<c:param name="page" value="${ pi.currentPage - 1 }"/>
                 	</c:url>                
 	                 <a class="paging" href="${ before }">&lt;</a>
@@ -256,7 +283,7 @@
                 	<font color="green" size="4">${ p }</font>
                 	</c:if>
                 	<c:if test="${ p ne pi.currentPage }">
-                		<c:url var="pagination" value="draftingList.ap">
+                		<c:url var="pagination" value="approvalObtainList.ap">
                 			<c:param name="page" value="${ p }"/>
                 		</c:url>
                 		<a href="${pagination }">${ p }</a>
@@ -266,7 +293,7 @@
                  	&gt;
                  </c:if>
                  <c:if test="${ pi.endPage < pi.maxPage }">
-                 	<c:url var="after" value="draftingList.ap">
+                 	<c:url var="after" value="approvalObtainList.ap">
                  		<c:param name="page" value="${ pi.currentPage + 1 }"/>
                  	</c:url>
 	                 <a class="paging" href="${ after }">&gt;</a>                 
@@ -277,7 +304,7 @@
     <div id="modalwrap">
         <div id="modal">
             <div id="modaltitle">
-                <h4>양식명
+                <h4>
                     <svg id="modalclose"  viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                         <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
@@ -286,12 +313,10 @@
             </div>
             <div id="modalcontent">
                 <div id="doc">
-                	<!-- 결재문서 양식 예 -->
-                            
                 </div>
                 <div id="docmenu">
                     <!--회수 버튼-->
-                    <button id="retrieve">
+                    <button id="retrieve" onclick="confirm('문서를 회수하시겠습니까?');">
                         <svg width="40px" color="gray" viewBox="0 0 16 16" class="bi bi-file-earmark-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4 0h5.5v1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h1V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/>
                             <path d="M9.5 3V0L14 4.5h-3A1.5 1.5 0 0 1 9.5 3z"/>
@@ -317,7 +342,7 @@
                 <h5>&nbsp;알림</h5>
             </div>
             <div id="confirmcontent">
-                <h4>회수하시겠습니까?</h4>
+                <h4></h4>
                 <button id="confirmOk">OK</button>
                 <button id="confirmCancel">CANCEL</button>
             </div>
@@ -325,9 +350,7 @@
     </div>
  
     <script>
-        function confirm(){
-            $("#confrimwrap").css("display","block");
-        }
+        
         /* modal창 닫기 */
         $(function(){
             $("#modalclose").on("click",function(){
@@ -340,6 +363,183 @@
                 $("#confirmwrap").css("display","none");
             });
         });
+        
+        function openmodal(){
+            $("#modalwrap").css("display","block");
+        };
+        // 문서 보여주기 
+        $(function(){
+   			$("td").on("click", function(){
+   				var apvDocNo = $(this).parent().children().eq(0).text();
+   				if(apvDocNo.includes("결재")){
+   					return false;
+   				}
+   				var apvprocedure = document.getElementById("apvprocedure");
+   				var apvfile = document.getElementById("apvfile");
+   				var apvcomment = document.getElementById("apvcomment");
+   				
+   				apvprocedure.innerHTML = "결재순서";
+   				apvfile.innerHTML = "첨부파일";
+   				apvcomment.innerHTML = "의견";
+   				
+   				  $.ajax({
+   					url:"selectApprovalObtainDoc.ap",
+   					data:{apvDocNo:apvDocNo},
+   					dataType:"json",
+   					success:function(data){
+   						openmodal();
+   		   				showDocContent(apvDocNo);
+   		   				$("#modaltitle h4 span").remove();
+   		   				$("#modaltitle h4").prepend("<span>"+apvDocNo+"</span>");
+   		   				var job = document.getElementById("job");
+   		   				var name = document.getElementById("name");
+   		   				
+   						var $aList = data.aList;
+   						var $atList = data.atList;
+   						var $signList = data.signList;
+   						var apvType;
+   						var apvResult;
+   						if(!(Array.isArray($aList) && $aList.length === 0)){
+   								for(var i = 0; i < $aList.length; i++){
+   										if($aList[i].apvType == 0){
+   											apvType = "(기안)";
+   										}else if($aList[i].apvType == 1){
+   											apvType = "(합의)";
+   										}else if($aList[i].apvType == 2){
+   											apvType = "(결재)";
+   										}
+   										 if($aList[i].apvResult == 0){
+   											apvResult = "대기";
+   										}else if($aList[i].apvResult == 1){
+   											apvResult = "승인";
+   										}else if($aList[i].apvResult == 2){
+   											apvResult = "반려";	
+   										}
+   									apvprocedure.innerHTML += "<br>"+ 
+   										i +" "+$aList[i].empId + " " + $aList[i].eName + 
+   										apvType + apvResult;
+   									
+   									console.log("의견 : "+ ($aList[i].apvComment == undefined));
+   									if(!$aList[i].apvComment == undefined){
+   										apvcomment += aList[i].eName + ": " + $aList[i].apvComment;
+   									}
+   								}
+   							
+   						}
+   						
+   						if(!(Array.isArray($atList)&& $atList.length === 0)){
+   							console.log($atList);
+   							for(var i = 0; i < $atList.length; i++){
+   								apvfile.innerHTML += "<br>"+
+   								"<a href='${contextPath}/resources/approval/duploadFiles/"+$atList[i].renameFile+"' download='"+$atList[i].originalFile+"'>"+$atList[i].originalFile+"</a>";
+   							}
+   							
+   							
+   							
+   						}
+   						
+   						if(!(Array.isArray($signList)&& $signList.length === 0)){
+   							var $tableBody = $("#sign-table tBody");
+   							$tableBody.html("");
+   								var $trJob = $("<tr>")
+   							for(var i = 0; i < $aList.length; i++){
+   								console.log($signList[i]);
+   								if(job != undefined){
+   									
+   								job.value = $signList[0].jobGrade;
+   								}
+   								var $job = $("<td class='sign job'>");
+   								$job.text($signList[i].jobGrade);
+   								$trJob.append($job);
+   							}
+   								var $trSign = $("<tr>")
+   							for(var i = 0; i < $aList.length; i++){
+   								var $sign = $("<td class='signature'>");
+   								if($aList[i].apvStep == 0){
+   									$sign.html("<img class='signature' src='${contextPath}/resources/approval/images/"+$signList[i].rename+"'>");
+   								}else if($aList[i].apvResult != 0){
+   									$sign.html("<img class='signature' src='${contextPath}/resources/approval/images/"+$signList[i].rename+"'>");
+   								}else{
+   									$sign.text("");
+   								}
+   								
+   								$trSign.append($sign);
+   							}
+   								var $trName = $("<tr>")
+   							for(var i = 0; i < $aList.length; i++){
+   								var $name = $("<td class='sign name'>");
+   								if(name != undefined){
+   									
+   								name.value = $aList[0].eName;
+   								}
+   								$name.text($aList[i].eName);
+   								$trName.append($name);
+   							}
+   								var $trDate = $("<tr>")
+   							for(var i = 0; i < $aList.length; i++){
+   								var $comp = $("<td class='sign date'>");
+   								$comp.text($aList[i].apvCompDate);
+   								$trDate.append($comp);
+   							}
+   							$tableBody.append($trJob);
+   							$tableBody.append($trSign);
+   							$tableBody.append($trName);
+   							$tableBody.append($trDate);
+   						}
+   						
+   					},
+   					error:function(e){
+   						console.log("error"+e);
+   					}
+   				}); 
+   				
+   			});
+   		});
+        
+        function showDocContent(apvDocNo){
+        	var doc = document.getElementById("doc");
+        	
+        	<c:forEach var='ol' items='${oList}'>
+        		if(apvDocNo == '${ol.apvDocNo}'){
+        			doc.innerHTML = '${ol.apvDocContent}';
+        			$("#doc").children('input').attr('readonly', true);
+        			$("#start_date").attr('readOnly', true);
+        			$("#end_date").attr('readOnly', true);
+        			console.log($("#start_date"));
+					console.log('${ol}');
+        			var title = document.getElementById("apvDocTitle") || document.getElementById("sign_title");
+        			if(title != undefined){
+        			title.value = '${ol.apvDocTitle}';
+        			title.style.fontSize = "x-large";
+    				title.style.textAlign = "center";
+        			}
+        			var date = document.getElementById("sign_date");
+        			if(date != undefined){
+        				date.value = '${ol.apdCreateDate}';
+        				
+        			}
+        		}
+        	</c:forEach>
+        }
+        
+        
+        window.confirm = function(message){
+        	var apvprocedureNames = document.getElementsByName('apvprocedureNames');
+            $("#confirmwrap").css("display","block");
+            var confirmContent = $("#confirmcontent");
+            var confirmMsg = confirmContent.children().eq(0);
+            confirmMsg[0].innerHTML = message;
+           	var apvDocNo = $("#modaltitle h4 span").text();
+           	console.log(apvDocNo);
+            $("#confirmOk").on("click", function () {
+            	
+    			location.href="draftingRetrieve.ap?apvDocNo="+apvDocNo;
+               	return true;
+            });
+        }
+        
+        
+        
     </script>
 
 </body>

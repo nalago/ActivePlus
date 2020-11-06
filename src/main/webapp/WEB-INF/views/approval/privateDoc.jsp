@@ -146,8 +146,8 @@
                 <div id="pridoc">
                     <h4>&nbsp;개인 문서 양식 편집</h4>
                     <input type="text" id="priDocNo" name="docNo" value="${ priDoc.docNo }"/>
-                    <input type="text" id="priDocTitle" name="priDocTitle" placeholder="문서 제목 입력" value="${ priDoc.docTitle }"/>
                     <input type="text" id="priDocContent" name="priDocContent"/>
+                    <input type="text" id="priDocTitle" name="priDocTitle" placeholder="문서 제목 입력" value="${ priDoc.docTitle }"/>
                     <textarea id="prieditor">${ priDoc.docContent }</textarea>
                     <script>
                         CKEDITOR.replace("prieditor",{
@@ -224,9 +224,10 @@
 			
 			priDocForm.onsubmit = function(){
 				var editorText = CKEDITOR.instances.prieditor.getData();
-				
+				var signTable = '<div id="docContent"><div id="sign-table-wrapper"> <div id="table-wrap"><table id="sign-table"><tbody></tbody></table></div></div>';
+				var title = '<input id="apvDocTitle" type="text" name="apvDocTitle" placeholder="문서 제목 입력"/></div>';
 				var docContent = document.getElementById("priDocContent");
-				docContent.value = editorText;
+				docContent.value = signTable+title+editorText;
 				
 				console.log(docContent);
 				

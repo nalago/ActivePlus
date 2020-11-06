@@ -1,7 +1,10 @@
 package com.kh.activePlus.employee.model.vo;
 
+
+
 import java.sql.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -22,6 +25,7 @@ public class Employee extends Job{
    private String email;
    private String phone;
    private String name;
+/*   @DateTimeFormat(pattern = "yyyy-MM-dd")*/
    private Date birth;
    private String category;
    private String salary;
@@ -31,7 +35,7 @@ public class Employee extends Job{
    private String status;
    private String license;
    private String license_no;
-   private Date license_date;
+   private String license_date;
    private String originalFileName;
    private String renameFileName;
    /*private int m_no;*/

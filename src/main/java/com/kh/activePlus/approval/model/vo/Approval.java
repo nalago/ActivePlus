@@ -23,6 +23,9 @@ public class Approval {
 	private Date apvCompDate;
 	private Date reciveDate;
 	private String empId;
+	private String eName;
+	
+	
 	
 	public Approval(int apvStep, int apvType, String empId) {
 		super();
@@ -30,7 +33,28 @@ public class Approval {
 		this.apvType = apvType;
 		this.empId = empId;
 	}
+
+
+
+	public Approval(int apvDocNo, int apvResult, String apvComment, String empId) {
+		super();
+		this.apvDocNo = apvDocNo;
+		this.apvResult = apvResult;
+		this.apvComment = apvComment;
+		this.empId = empId;
+	}
+
+
+
+	public Approval(int apvDocNo, String empId) {
+		super();
+		this.apvDocNo = apvDocNo;
+		this.empId = empId;
+	}
 	
+	
+
+
 	
 	
 }

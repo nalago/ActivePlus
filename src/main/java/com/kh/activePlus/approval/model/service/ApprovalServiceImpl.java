@@ -5,14 +5,16 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.activePlus.employee.model.vo.Employee;
 import com.kh.activePlus.approval.model.dao.ApprovalDao;
 import com.kh.activePlus.approval.model.vo.Approval;
+import com.kh.activePlus.approval.model.vo.ApprovalApvDoc;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
-import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.common.attachment.Attachment;
+import com.kh.activePlus.approval.model.vo.Doc;
 import com.kh.activePlus.common.paging.PageInfo;
-import com.kh.activePlus.employee.model.vo.Employee;
+import com.kh.activePlus.approval.model.vo.Sign;
 
 @Service("aService")
 public class ApprovalServiceImpl implements ApprovalService {
@@ -29,60 +31,34 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return aDao.draftingDoc(doc);
 	}
 
-	@Override
-	public int TemporaryDocSave(Doc tempDoc) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public int deleteTempDoc(int apvDocNo) {
 		return aDao.deleteTempDoc(apvDocNo);
 	}
 
-	@Override
-	public int insertPriDoc(Doc doc) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public int draftingRetrieve(int dId) {
-		// TODO Auto-generated method stub
-		return 0;
+		return aDao.draftingRetrieve(dId);
+	}
+
+	
+
+	@Override
+	public int approvalCancel(Approval apv) {
+		return aDao.approvalCancel(apv);
 	}
 
 	@Override
-	public int returnApproval(Doc doc) {
-		// TODO Auto-generated method stub
-		return 0;
+	public ArrayList<Doc> selectDocTypeList(ApprovalSearch as, PageInfo pi) {
+		return aDao.selectDocTypeList(as, pi);
 	}
 
-	@Override
-	public int docApproval(Doc doc) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 
 	@Override
-	public int approvalCancel(int dId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public ArrayList<Doc> selectDocTypeList(String docType, PageInfo pi) {
-		return aDao.selectDocTypeList(docType, pi);
-	}
-
-	@Override
-	public ArrayList<ApvDoc> selectDocList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ArrayList<ApvDoc> selectApprovalList(String eId, PageInfo pi) {
+	public ArrayList<ApprovalApvDoc> selectApprovalList(String eId, PageInfo pi) {
 		return aDao.selectApprovalList(eId, pi);
 	}
 
@@ -92,18 +68,18 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int selectAllDocTypeListCount() {
-		return aDao.selectAllDocTypeListCount();
+	public int selectAllDocTypeListCount(String eId) {
+		return aDao.selectAllDocTypeListCount(eId);
 	}
 
 	@Override
-	public ArrayList<Doc> selectAllDocTypeList(PageInfo pi) {
-		return aDao.selectAllDocTypeList(pi);
+	public ArrayList<Doc> selectAllDocTypeList(String eId, PageInfo pi) {
+		return aDao.selectAllDocTypeList(eId, pi);
 	}
 
 	@Override
-	public int selectDocTypeListCount(String docType) {
-		return aDao.selectDocTypeListCount(docType);
+	public int selectDocTypeListCount(ApprovalSearch as) {
+		return aDao.selectDocTypeListCount(as);
 	}
 
 	@Override
@@ -142,12 +118,12 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public ArrayList<ApvDoc> selectApprovalObtainList(String eId, PageInfo pi) {
+	public ArrayList<ApprovalApvDoc> selectApprovalObtainList(String eId, PageInfo pi) {
 		return aDao.selectApprovalObtainList(eId, pi);
 	}
 
 	@Override
-	public ArrayList<ApvDoc> selectApprovalCompleteList(String eId, PageInfo pi) {
+	public ArrayList<ApprovalApvDoc> selectApprovalCompleteList(String eId, PageInfo pi) {
 		return aDao.selectApprovalCompleteList(eId, pi);
 	}
 
@@ -197,13 +173,53 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public ArrayList<Attachment> selectTempAt(int docNo) {
+	public ArrayList<Attachment> selectTempAt(String docNo) {
 		return aDao.selectTempAt(docNo);
 	}
 
 	@Override
-	public int deleteAttachment(int docNo) {
+	public int deleteAttachment(String docNo) {
 		return aDao.deleteAttachment(docNo);
+	}
+
+	@Override
+	public ArrayList<Approval> selectApprovalfromObtainDoc(int apvDocNo) {
+		return aDao.selectApprovalfromObtainDoc(apvDocNo);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectApvDocAtList(String apvDocNo) {
+		return aDao.selectApvDocAtList(apvDocNo);
+	}
+
+	@Override
+	public ArrayList<Sign> selectSignList(ArrayList<String> eList) {
+		return aDao.selectSignList(eList);
+	}
+
+	@Override
+	public int deleteprocedureList(int apvDocNo) {
+		return aDao.deleteprocedureList(apvDocNo);
+	}
+
+	@Override
+	public int approval(Approval apv) {
+		return aDao.approval(apv);
+	}
+
+	@Override
+	public ApprovalApvDoc checkApproval(int apvDocNo) {
+		return aDao.checkApproval(apvDocNo);
+	}
+
+	@Override
+	public int apvDocComplete(int apvDocNo) {
+		return aDao.apvDocComplete(apvDocNo);
+	}
+
+	@Override
+	public int insertAtListToApvDocFromTemp(String refId) {
+		return aDao.insetAtListToApvDocFromTemp(refId);
 	}
 
 	
