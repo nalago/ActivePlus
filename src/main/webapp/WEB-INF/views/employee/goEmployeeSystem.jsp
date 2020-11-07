@@ -93,6 +93,7 @@ thead {
 				<th>입사일</th>
 			</tr>
 			<c:forEach var="e" items="${ list }">
+			<c:if test="${ e.status ne '퇴직' }">
 			<tr>
 						<c:url var="edetail" value="edetail.ap">
 							<c:param name="id" value="${ e.id }"/>
@@ -120,6 +121,7 @@ thead {
 				${ e.hire_date }
 				</td>
 			</tr>
+			</c:if>
 			</c:forEach>
 			<!-- 페이징 처리 -->
 			<tr align="center" height="20">

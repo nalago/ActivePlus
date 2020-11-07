@@ -4,7 +4,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+ integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
@@ -42,7 +44,10 @@
         <table id="table1" align="center" border="1">
         <!--1줄-->
         <tr id="tr1">
-           <td rowspan="5" align="center" width="120" height="40" bgcolor="#ccffff"><input style="width:60%;" type="file" name="uploadFile"></td>
+           <td rowspan="5" align="center" width="120" height="40" bgcolor="#ccffff">
+           	<div id="contentArea">
+	           <img id="faceImg" style="width: 100%; object-fit:cover;" value="${ Attachment.renameFile }">
+	        </div></td>
            <td align="center" bgcolor="#c4ffe1">성 명</td>
            <td align="center" bgcolor="#c4ffe1">한 글</td>
            <td width="225"><input type="text" name="name" style="width:100%;" value="${ Employee.name }" readonly></td>
@@ -129,8 +134,42 @@
         </c:url>
         <button type="button" onclick="location.href='${ goEmployeeSystem }'">목록으로</button>
         </div>
+        
+        <div id="fileArea">
+    	   <input type="file" id="thumbnailImg1" name="reloadFile"
+        	onchange="loadImg(this,1)" > 
+         </div>
         </form>
         </div>
     </div>
+    
+    
+<script>
+$(function(){
+		$("#fileArea").hide();
+		
+		$("#contentArea").click(function(){
+			$("#thumbnailImg1").click();
+		});
+	});
+	function loadImg(value, num){
+		
+		if(value.files && value.files[0]){
+			var reader = new FileReader();
+			
+			reader.onload = function(e){
+				switch(num){
+				case 1:
+					$("#faceImg").attr("src", e.target.result);
+					break;
+				}
+			}
+			reader.readAsDataURL(value.files[0]);
+		}
+	}
+</script>    
+    
+    
+    
 </body>
 </html>

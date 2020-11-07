@@ -28,4 +28,14 @@ public class Attachment {
 		this.renameFile = renameFile;
 		this.filePath = filePath;
 	}
+
+	public Attachment(String originalFile, String renameFile, String filePath, String refTable) {
+		super();
+		this.originalFile = originalFile;
+		this.renameFile = renameFile;
+		this.filePath = filePath;
+		this.refTable = refTable;
+	}
+	
+	
 }

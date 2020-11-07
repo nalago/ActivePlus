@@ -15,21 +15,21 @@ import com.kh.activePlus.employee.model.vo.Employee;
 /**
  * Handles requests for the application home page.
  */
-@SessionAttributes("loginUser")
+@SessionAttributes({"loginUser", "msg"})
 @Controller
 public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-	
+	/*
 	@RequestMapping(value = "/main.ap", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 
 		
-		Employee user = new Employee("100215","11234","최나라","의료");
+		Employee loginUser = eService.loginEmployee;
 		
 		model.addAttribute("loginUser", user);
 		
 		return "main/main";
-	}
+	}*/
 	
 }
