@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,7 +38,7 @@
 					<thead>
 						<tr>
 							<th width="30px"></th>
-							<th>분류</th>
+							<th>작성자</th>
 							<th width="40%">제목</th>
 							<th>삭제날짜</th>
 							<th>작성날짜</th>
@@ -46,97 +47,32 @@
 						</tr>
 					</thead>
 					<tbody align="center">
+						<c:forEach var="w" items="${ temList }">
 						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>임시보관</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
+							<td><input type="checkbox" value="${ tm.mailId }" class="check" name="checkList"></td>
+							<td>${ w.mwName }</td>
+							<td><a href="${contextPath}/mailread.ap?mNo=${tm.mailId}">${ tm.title }</a></td>
+							<td>${ w.deleteDate }</td>
+							<td>${ w.sendDate }</td>
+							<c:if test="${ tm.attStock > 0 }">
+								<td><img src="${contextPath}/resources/images/mail/clip.png" style="width:20px; height:20px"></td>
+							</c:if>
+							<c:if test="${ tm.attStock <= 0 }">
+								<td></td>
+							</c:if>
+							<c:if test="${ send.rIptMark eq 'Y'  }">
+								<td><img src="${contextPath}/resources/images/mail/impMark.jpg" style="width:20px; height:20px"></td>
+							</c:if>
+							<c:if test="${ send.rIptMark ne 'N' }">
+								<td></td>
+							</c:if>
 						</tr>
+					</c:forEach>
+					<c:if test="${ empty temList }">
 						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>발신</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
+							<td colspan="7">휴지통이 비었습니다.</td>
 						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>수신</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>임시보관</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>임시보관</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>임시보관</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>임시보관</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>임시보관</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>임시보관</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="1" class="check"></td>
-							<td>임시보관</td>
-							<td>휴지통 테스트 데이터. 빔프로젝터 사고싶은데 서치하는건 귀찮은 날아..</td>
-							<td>2020-09-24</td>
-							<td>2020-09-23</td>
-							<td>◎</td>
-							<td>중요</td>
-						</tr>
-						
+					</c:if>	
 					</tbody>
 				</table>
 				<button class="mailSend" id="writeBtn">메일쓰기</button>

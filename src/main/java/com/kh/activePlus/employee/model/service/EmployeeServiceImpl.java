@@ -78,8 +78,23 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
+
+	public int endWorking(int tid, String kind) {
+		return eDao.endWorking(tid, kind);
+	}
+
+	@Override
+	public ArrayList<Employee> selectEmpList() {
+		return eDao.selectEmpList();
+	}
+
+	@Override
+	public int halfEnd(String now, String empId) {
+		return eDao.halfCount(now, empId);
+
 	public int updatePass(Employee e) {
 		return eDao.updatePass(e);
+
 	}
 
 	@Override

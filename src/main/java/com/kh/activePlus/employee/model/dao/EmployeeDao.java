@@ -1,6 +1,7 @@
 package com.kh.activePlus.employee.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -62,8 +63,30 @@ public class EmployeeDao {
 		return sqlSession.update("employeeMapper.deleteEmployee", id);
 	}
 
+
+	public int endWorking(int tid, String kind) {
+		HashMap<String,String> hmap = new HashMap<>();
+		hmap.put("tid", tid+"");
+		hmap.put("kind", kind);
+		return sqlSession.update("employeeMapper.endWorking", hmap);
+	}
+
+	public ArrayList<Employee> selectEmpList() {
+		return (ArrayList)sqlSession.selectList("employeeMapper.selectEmpList");
+	}
+
+	public int halfCount(String now, String empId) {
+		HashMap<String,String> hmap = new HashMap<>();
+		// 한 해 동안의 사용량 체크
+		hmap.put("startYear", now+"-01-01");
+		hmap.put("endYear", now+"-12-31");
+		hmap.put("empId", empId);
+		System.out.println(empId);
+		return sqlSession.selectOne("employeeMapper.getHalfCount",hmap);
+		
 	public int updatePass(Employee e) {
 		return sqlSession.update("employeeMapper.updatePass", e);
+
 	}
 
 	public Employee selectmyEmployee(Employee e) {
