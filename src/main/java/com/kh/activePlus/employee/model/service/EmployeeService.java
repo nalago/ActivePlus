@@ -2,9 +2,11 @@ package com.kh.activePlus.employee.model.service;
 
 import java.util.ArrayList;
 
+import com.kh.activePlus.common.attachment.Attachment;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.MedicalTeam;
 
 
 public interface EmployeeService {
@@ -35,6 +37,17 @@ public interface EmployeeService {
 	public int halfEnd(String now, String empId);
 
 	public int updatePass(Employee e);
+
+	public Employee selectmyEmployee(Employee e);
+
+	public int insertEmployeeAttachment(Attachment at);
+
+	public int insertMedicalTeam(MedicalTeam mt);
+
+	public /*ArrayList<Attachment>*/Attachment selectAttachment(String eid);
+
+
+
 
 
 }
