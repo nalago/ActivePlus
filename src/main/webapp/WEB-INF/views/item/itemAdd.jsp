@@ -193,8 +193,8 @@
 					<div id="photoArea">
 						<div class="filebox">
  							<label for="i_image">사진 업로드</label>
-							 <input type="file" id="i_image" name="i_image" accept="image/*" onchange="setThumbnail(event);"/> 
-							 <div id="image_container"></div>
+							 <input type="file" id="i_image" name="i_image" accept="image/*" onchange="setThumbnail(this);"/> 
+							 <div id="image_container"><img id="LoadImg"></div>
 						</div>
 						<div class="pdfbox">
 							<label for="i_pdf">제품설명서 업로드</label>
@@ -410,17 +410,16 @@
 			}
 		});
 		
-		function setThumbnail(event) { 
-			var reader = new FileReader();
+		function setThumbnail(value) { 
+			if(value.files && value.files[0]){
+				var reader = new FileReader();
+				reader.onload = function(e){
+					$("#LoadImg").attr('src', e.target.result);
+				}
+				reader.readAsDataURL(value.files[0]);
+			}
 			
-			reader.onload = function(event) { 
-				var img = document.createElement("img"); 
-				img.setAttribute("src", event.target.result);
-				document.querySelector("div#image_container").appendChild(img);
-				
-			};
-				
-				reader.readAsDataURL(event.target.files[0]);
+			
 				
 		}
 		

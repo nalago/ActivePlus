@@ -112,31 +112,32 @@ public class ItemServiceImpl implements ItemService{
 		int up_img = iDao.selectCount(i_no);
 		int up_pdf = iDao.selectCount(i_no);
 		
-		
+		System.out.println(up_img);
+		System.out.println(up_pdf);
 		
 		System.out.println("impl result : " + result  );
 		if(result > 0 && at.getOriginalFile() != null && at1.getOriginalFile() != null) {
-			if(up_img != 0) {  
-				image = iDao.updateFile(at);
-			} else {
+			if(up_img == 0) {  
 				image = iDao.enrollFile(at);
-			}
-			if(up_pdf != 0) {
-				pdf = iDao.updateFile(at1);
-			}else {
-				pdf = iDao.enrollFile(at1);
-			}
-		}else if(result > 0 && at.getOriginalFile() != null) {
-			if(up_img != 0) {  
-				image = iDao.updateFile(at);
 			} else {
-				image = iDao.enrollFile(at);
+				image = iDao.updateFile(at);
 			}
-		}else if(result > 0 && at1.getOriginalFile() == null) {
-			if(up_pdf != 0) {
-				pdf = iDao.updateFile(at1);
-			}else {
+			if(up_pdf == 0) {
 				pdf = iDao.enrollFile(at1);
+			}else {
+				pdf = iDao.updateFile(at1);
+			}
+		}else if(result > 0 && at.getOriginalFile() != null && at1.getOriginalFile() == null) {
+			if(up_img == 0) {  
+				image = iDao.enrollFile(at);
+			} else {
+				image = iDao.updateFile(at);
+			}
+		}else if(result > 0 && at1.getOriginalFile() != null && at.getOriginalFile() == null) {
+			if(up_pdf == 0) {
+				pdf = iDao.enrollFile(at1);
+			}else {
+				pdf = iDao.updateFile(at1);
 			}
 		}
 		
