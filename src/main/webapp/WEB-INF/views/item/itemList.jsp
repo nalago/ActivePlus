@@ -273,6 +273,7 @@
         		<thead>
         			<tr>
         				<th><input type="checkbox" id="checkAll" name="checkAll" class="chack" value="all" ></th>
+        				<th>No.</th>
         				<c:choose>
         					<c:when test="${ i_div == 1}"><th>제품코드</th></c:when>
         					<c:otherwise><th>약품코드</th></c:otherwise>
@@ -290,7 +291,8 @@
         			<c:forEach items="${list}" var="i">
 						<tr>
         					<th scope="row"><input type="checkbox" class="checkItem"></th>
-        					<td><input type="hidden" name="sel_i_no" id="sel_i_no" value="${i.i_no }">${i.i_id}</td>
+        					<td>${i.i_no }</td>
+        					<td>${i.i_id}</td>
 							<td>${i.category }</td>
 							<td>${i.i_name_k}</td>
         					<td>${i.unit}</td>
@@ -435,7 +437,7 @@
 			}).mouseout(function() {
 				$(this).attr("data-toggle", "tooltip");
 			}).click(function() {
-				var i_no = $("#sel_i_no").val() ;
+				var i_no = $(this).parents().children("td").eq(0).text();
 				detailItem(i_no);
 				
 			});

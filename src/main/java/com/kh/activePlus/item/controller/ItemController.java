@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.activePlus.common.attachment.Attachment;
@@ -116,9 +117,13 @@ public class ItemController {
 	@ResponseBody
 	@RequestMapping(value = "detailItem.ap", method = { RequestMethod.GET, RequestMethod.POST })
 	public Map<String, Object> iDetail(@RequestBody int i_no) {
+		System.out.println("i_no : " + i_no);
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> result = new HashMap<String, Object>();
 		Item item = iService.detailItem(i_no);
+		
+		System.out.println("item : " + item);
 		if(item != null) {
 			Attachment img = iService.detailImg(i_no, "ITEM");
 			Attachment pdf = iService.detailPdf(i_no, "ITEM");
@@ -169,9 +174,10 @@ public class ItemController {
 		if(!image.getOriginalFilename().equals("") && !pdf.getOriginalFilename().equals("")) {
 			at = saveFiles(image, request, "image");
 			at1 = saveFiles(pdf,request,"pdf");
-			if(!at.getRenameFile().equals("") && !at1.getRenameFile().equals("") )
+			if(!at.getRenameFile().equals("") && !at1.getRenameFile().equals("") ) {
 				at.setOriginalFile(image.getOriginalFilename());
 				at1.setOriginalFile(pdf.getOriginalFilename());
+			}
 		}else if(!pdf.getOriginalFilename().equals("")) {
 			at1 = saveFiles(pdf,request,"pdf");
 			if(!at1.getRenameFile().equals(""))
@@ -213,10 +219,15 @@ public class ItemController {
 	// 업데이트 요청
 	@RequestMapping("updateItem.ap")
 	public ModelAndView updateItem(Item i,String up_pdf, String up_img,HttpServletRequest request,
-			@RequestParam(value="i_image", required=false) MultipartFile image,
-			@RequestParam(value="i_pdf", required=false) MultipartFile pdf, ModelAndView mv){
+			 ModelAndView mv){
+		MultipartHttpServletRequest multi = (MultipartHttpServletRequest) request;
+        MultipartFile image = multi.getFile("i_image");
+        MultipartFile pdf = multi.getFile("i_pdf");        
+		
 		Attachment at = new Attachment();
 		Attachment at1 = new Attachment();
+		
+		System.out.println("imaage  : " + image.getOriginalFilename());
 		
 		int i_div = i.getI_div();
 		System.out.println("i_div : " + i_div);
@@ -230,11 +241,11 @@ public class ItemController {
 			at.setRefTable("ITEM");
 			at1.setRefId(i.getI_no()+"");
 			at1.setRefTable("ITEM");
-			if(!at.getRenameFile().equals("") && !at1.getRenameFile().equals("")) {
+			if(!at.getRenameFile().equals("") || !at1.getRenameFile().equals("")) {
 				at.setOriginalFile(image.getOriginalFilename());
 				at1.setOriginalFile(pdf.getOriginalFilename());
 			}
-		}else if(image != null) {
+		}else if(image != null && pdf == null) {
 			deleteFile(up_img, request, "img");
 			at = saveFiles(image, request,"image");
 			at.setRefId(i.getI_no()+"");
@@ -242,7 +253,7 @@ public class ItemController {
 			if(!at.getRenameFile().equals("")) {
 				at.setOriginalFile(image.getOriginalFilename());
 			}
-		}else if(pdf != null) {
+		}else if(pdf != null ) {
 			deleteFile(up_pdf,request,"pdf");
 			at1 = saveFiles(pdf, request, "pdf");
 			at1.setRefId(i.getI_no()+"");
