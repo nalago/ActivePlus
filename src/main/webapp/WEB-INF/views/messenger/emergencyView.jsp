@@ -82,35 +82,35 @@ a{
 		</div>
 		<h1 id="submenuTitle" style="color:red">긴급메시지</h1>
 		<div id="contentDiv">
-			<form action="" align="center">
+			<div align="center">
 				<a style="color:red">*** 모든 직원에게 발송되는 메시지 입니다. 긴급 상황시에만 작성해주세요. ***</a>
 				<br><br>
 				<span id="topBox">
-					<select id="code" onchange="messageChange(value)">
-						<option >코드</option>
-						<option value="white">화이트</option>
-						<option value="gray">그레이</option>
-						<option value="purple">퍼플</option>
-						<option value="blue">블루</option>
-						<option value="green">그린</option>
-						<option value="orange">오렌지</option>
-						<option value="red">레드</option>
-						<option value="pink">핑크</option>
-						<option value="yellow">옐로우</option>
-						<option value="black">블랙</option>
+					<select id="code" onchange="messageChange(value)" name="code">
+						<option value="code">코드</option>
+						<option value="화이트">화이트</option>
+						<option value="그레이">그레이</option>
+						<option value="퍼플">퍼플</option>
+						<option value="블루">블루</option>
+						<option value="그린">그린</option>
+						<option value="오렌지">오렌지</option>
+						<option value="레드">레드</option>
+						<option value="핑크">핑크</option>
+						<option value="옐로우">옐로우</option>
+						<option value="블랙">블랙</option>
 					</select>
-					<select id="location">
-						<option style="color:red">위치</option>
+					<select id="location" name="location">
+						<option style="color:red" value="location">위치</option>
 						<option value="전체">전체</option>
 						<option value="중환자실">중환자실</option>
-						<option style="color:red">본관</option>
+						<option style="color:red" value="A">본관</option>
 						<option value="a301">301호</option>
 						<option value="a302">302호</option>
 						<option value="a303">303호</option>
 						<option value="a304">304호</option>
 						<option value="a305">305호</option>
 						<option value="a306">306호</option>
-						<option style="color:red">별관</option>
+						<option style="color:red" value="B">별관</option>
 						<option value="b401">401호</option>
 						<option value="b402">402호</option>
 						<option value="b403">403호</option>
@@ -120,9 +120,9 @@ a{
 						
 					</select>
 					<input type="text" name="message" id="message">
-					<button type="button" class="basic" id="submitBtn">긴급알림</button>
+					<button type="button" class="basic" id="submitBtn" onclick="submit()">긴급알림</button>
 				</span>
-			</form>
+				</div>
 			<div id="tableBox" align="center">
 				<table>
 					<thead>
@@ -158,55 +158,83 @@ a{
 					</tbody>
 				</table>
 			</div>
-			<div id="pagingBox">
-				
-			</div>
 		</div>
 	</section>
+	
+
 	<script>
-		$(document).ready(function(){
-			$("#submitBtn").on("click",function(){
-				$.ajax({
-					url:""
-				});
-			});
-			
-		});
 		function messageChange(value){
 			switch(value){
-			case "white":
+			case "화이트":
 				$("#message").val("전산장애가 발생했습니다.");
 				break;
-			case "gray":
-				$("#message").val("위험인물 출현, 통제 및 신고가 필요합니다.");
+			case "그레이":
+				$("#message").val("위험인물 출현. 통제 및 신고가 필요합니다.");
 				break;
-			case "purple":
+			case "퍼플":
 				$("#message").val("아동 유괴사건 발생. 의심 인물을 신고해주십시오.");
 				break;
-			case "blue":
+			case "블루":
 				$("#message").val("심정지 환자가 발생했습니다.");
 				break;
-			case "green":
-				$("#message").val("긴급재난 발생, 긴급 대피 하십시오.");
+			case "그린":
+				$("#message").val("긴급재난 발생. 긴급 대피 하십시오.");
 				break;
-			case "orange":
+			case "오렌지":
 				$("#message").val("재해 및 대량사상자 발생했습니다.");
 				break;
-			case "red":
-				$("#message").val("화재발생, 화재 진압 및 환자대피가 필요합니다.");
+			case "레드":
+				$("#message").val("화재발생. 화재 진압 및 환자대피가 필요합니다.");
 				break;
-			case "pink":
+			case "핑크":
 				$("#message").val("산부인과 응급상황이 발생했습니다.");
 				break;
-			case "yellow":
+			case "옐로우":
 				$("#message").val("환자 정보 누락 및 유실되었습니다.");
 				break;
-			case "black":
+			case "블랙":
 				$("#message").val("폭탄위협 또는 유해물질 살포가 발생했습니다. 긴급 대피가 필요합니다.");
 				break;
 			}
 			
 		}
+		
+		function submit(){
+			loca = $("#location").val();
+			code = $("#code").val();
+			writer = "${loginUser.id}";
+			msg = $("#message").val();
+			var em = loca+","+code+","+msg;
+			if(code == "code"){
+				alert("코드를 확인해주세요.");
+				
+			} else if(loca == "location" || loca == "A" || loca == "B"){
+				alert("위치를 확인해주세요.");
+				
+			} else {
+				$.ajax({
+					url:"emergencyCall.ap",
+					data:{
+						location:loca,
+						code:code,
+						writer:writer
+						},
+					success:function(data){
+						if(data == "success")
+							serverOn(em);
+					},
+					error:function(e){
+						console.log("에러 : " + e);
+					}
+					
+				})
+			}
+			
+		}
+		function serverOn(em){
+			console.log("성공!"+em);
+		}
+	
 	</script>
 </body>
 </html>

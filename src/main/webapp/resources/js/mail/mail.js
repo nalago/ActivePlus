@@ -12,26 +12,8 @@ function getContextPath(){
     return ctxPath;
 }
 
-/* 파라미터 값 받아오기 */
-function scriptQuery(){ 
-	   var script = document.getElementsByTagName('script'); // 자신을 찾기위해 <script> 태그들을 찾습니다. 
-	   script = script[script.length-1].src // 가장 마지막이 자신이 됩니다 
-	     .replace(/^[^\?]+\?/, '') // 물음표 이전을 지우고 
-	     .replace(/#.+$/, '') // 혹시 모를 해쉬도 지웁니다 
-	     .split('&') // '&'으로 나눕니다 
-	   var queries = {} // 결과용 
-	     , query; 
-	   while(script.length){ // &으로 나눈 갯수만큼 
-	        query = script.shift().split('='); // =로 나눠 
-	        queries[query[0]] = query[1]; // 앞은 배열키, 뒤는 배열 값 
-	   } 
-	   return queries; 
-} 
-
-/* paremeter */
-var param = scriptQuery();
-
 var check = 0;
+var chkId = [];
 /* 체크박스 전체 체크 */
 $("#allCheck").on("click", function() {
 	if ($("#allCheck").prop("checked")){
@@ -47,33 +29,84 @@ $("#allCheck").on("click", function() {
 /* 체크가 되었는지 확인 */
 $("input[name='checkList'").on("click",function(){
 	
-	if(this.checked)
+	if(this.checked){
 		check += 1;
-	else
+		chkId.push(this.value);
+		console.log(chkId);
+	}
+	
+	else{
 		check -= 1;
+		for(var i in chkId){
+			if(chkId[i] == this.value){
+				chkId.splice(chkId.indexOf(i), 1);
+			}
+		}
+	}
 	
 });
+/*
+function mailKind(chkId){
+	for(var i in ${})
+	
+}*/
 
 /* 전달, 답장 버튼 */
 function checkedOne(num){
+	// 1 : 전달
+	// 0 : 답장
+	// 2 : 보내기
 	if(check != 1){
 		alert("한 개의 메일을 선택해주세요.");
 		
 	} else {
-		if(num == 0)
-			console.log("sendBtn on Click!");
-		else
-			console.log("deliverBtn on Click!");
+		if(num == 0){
+			location.href="mailsend.ap?mId="+chkId[0]+"&kind=reSend";
+		}else if(num == 2){
+			location.href="send.ap?mId="+chkId[0];
+		} else{
+			location.href="mailsend.ap?mId="+chkId[0]+"&kind=deliver";
+			
+		}
 	}
 }
+jQuery.ajaxSettings.traditional = true;
 
 /* 보관, 삭제 버튼 */
-function checkedMore(num){
+function checkedMore(num,kind){
+	// 0 : 보관
+	// 1 : 삭제
+	// 2 : 보관 해제
+	// 3 : 영구삭제
 	if(check > 0){
-		if(num == 0)
-			console.log("importantBtn on Click!");
-		else 
-			console.log("deleteBtn on Click!");
+		if(num == 0){
+			set = "importantS";
+		} else if(num == 1){
+			set = "waste";
+		} else if(num == 2){
+			set = "importantN";
+		} else {
+			set = "delete"
+		}
+		$.ajax({
+			url:"mailset.ap",
+			data:{
+				chkId:chkId,
+				kind:kind,
+				set:set
+			},
+			success:function(data){
+				if(data == "success"){
+					alert("상태 변경 성공");
+					location.reload(true);
+				} else {
+					alert("상태 변경 실패");
+				}
+			}, 
+			error:function(e){
+				console.log(e);
+			}
+		});
 	} else {
 		alert("메일을 한 개 이상 선택해주세요.");
 

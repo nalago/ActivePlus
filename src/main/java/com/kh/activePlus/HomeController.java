@@ -48,7 +48,7 @@ public class HomeController {
 		// 출-퇴근 확인
 		ArrayList<TNA> tList = eService.selectTNA(empId);
 
-		if (tList != null && !tList.isEmpty()) {
+		if (tList != null) {
 			tnaDay = sdf.format(tList.get(0).getStartDate());
 			// System.out.println("확인 : " + tnaDay.equals(today));
 			// System.out.println("퇴근 시간 : "+tList.get(0).getLeaveDate());
