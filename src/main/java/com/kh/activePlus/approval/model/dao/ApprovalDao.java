@@ -49,8 +49,13 @@ public class ApprovalDao {
 
 	public List<Doc> selectAllDocTypeList(String eId, PageInfo pi) {
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
+		System.out.println("dao"+offset);
+		System.out.println(pi.getBoardLimit());
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return sqlSession.selectList("approvalMapper.selectAllDocTypeList", eId);
+
+		ArrayList<Doc> dList = (ArrayList)sqlSession.selectList("approvalMapper.selectAllDocTypeList", eId,rowBounds);
+
+		return dList;
 	}
 
 	public int selectDocTypeListCount(ApprovalSearch as) {

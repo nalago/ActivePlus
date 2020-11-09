@@ -1,10 +1,14 @@
 @charset "UTF-8";
 /* 문서 */
     #docwrap {
-        width: 800px;
+        width: 60%;
         height: 93.5vh;
         display: inline-block;
-       	
+       	position: relative;
+        float: right;
+    }
+    #docform{
+    width: 60%;
     }
     #doc{
         width: 800px;

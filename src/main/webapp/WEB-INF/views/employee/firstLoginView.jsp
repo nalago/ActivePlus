@@ -4,9 +4,67 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="resources/css/style.css">
 <title>Insert title here</title>
 </head>
 
+<body>
+    <section class="login-form">
+        <h1>최초로그인 하셨습니다<br>비밀번호를 변경해주세요</h1>
+        <form action="passUpdate.ap" method="post" id="loginmember" onsubmit="return checkValue()">
+            <div class="int-area">
+                <input type="text" name="id" id="id" autocomplete="off" required value="${ employee.id }">
+                <label for="id">User Name</label>
+            </div>
+            <div class="int-area">
+                <input type="password" name="newpassword" id="pwd" autocomplete="off" required>
+                <label for="id">new pass</label>
+            </div>
+            <div class="int-area">
+                <input type="password" name="pwd" id="pwd" autocomplete="off" required>
+                <label for="id">pass Check</label>
+            </div>
+            <input type="hidden" name="email" value="${ loginUser.email }">
+            <input type="hidden" name="name" value="${ loginUser.name }">
+            <input type="hidden" name="category" value="${ loginUser.category }">
+            <input type="hidden" name="salary" value="${ loginUser.salary }">
+            <input type="hidden" name="acc_no" value="${ loginUser.acc_no }">
+            <input type="hidden" name="address" value="${ loginUser.address }">
+            <input type="hidden" name="hire_date" value="${ loginUser.hire_date }">
+            <input type="hidden" name="status" value="${ loginUser.status }">
+            <input type="hidden" name="phone" value="${ loginUser.phone }">
+            <input type="hidden" name="birth" value="${ loginUser.birth }">
+            <input type="hidden" name="license_no" value="${ loginUser.license_no }">
+            <input type="hidden" name="license_date" value="${ loginUser.license_date }">
+            <input type="hidden" name="license" value="${ loginUser.license }">
+            <br>
+            <div class="btn-area">
+                <button class="btn" type="submit">변경</button> 
+            </div>
+            <br>
+            <div class="btn-area">
+                <button class="btn" type="button" onclick="javascript:history.back();">취소</button>
+            </div>
+        </form>
+       	
+    </section>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 <script type="text/javascript">
     
         // 회원가입 화면의 입력값들을 검사한다.
@@ -33,48 +91,6 @@
         
            
    </script>
-<body>
-<br><br>
-        <b><font size="6" color="black">최초로그인 하셨습니다<br>비밀번호를 변경해주세요</font></b>
-        <br><br><br>
-        
-        
-        <!-- 입력한 값을 전송하기 위해 form 태그를 사용한다 -->
-        <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 JoinPro.jsp -->
-        <form method="post" action="passUpdate.ap" 
-                name="userInfo" onsubmit="return checkValue()">
-            <table>
-                <tr>
-                    <td id="title">아이디</td>
-                    <td>
-                        <input type="text" id="userid" maxlength="50" value="${ employee.id }" readonly>
-                    </td>
-                </tr>
-                <!-- <tr>
-                    <td id="title">현재 비밀번호</td>
-                    <td>
-                        <input type="password" name="originpassword" maxlength="50">
-                    </td>
-                </tr> -->
-                <tr>
-                    <td id="title">변경 비밀번호</td>
-                    <td>
-                        <input type="password" name="newpassword" maxlength="50">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td id="title">비밀번호 확인</td>
-                    <td>
-                        <input type="password" name="pwd" maxlength="50">
-                    </td>
-                </tr>
-            </table>
-            <br>
-            <input type="submit" value="변경">  
-            <input type="button" value="취소" onclick="javascript:history.back();">
-        </form>
- 
 
 </body>
 </html>
