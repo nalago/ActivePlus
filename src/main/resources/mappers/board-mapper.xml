@@ -163,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	]]>	
 	</select>
 	
-	<select id="HBtSearchCount" parameterType="Search" resultType="_int">
+	<select id="HBSearchCount" parameterType="Search" resultType="_int">
 		<bind name="value" value="'%' + _parameter.getSearchValue() + '%'"/>
 		SELECT COUNT(*)
 		FROM HOS_BOARD

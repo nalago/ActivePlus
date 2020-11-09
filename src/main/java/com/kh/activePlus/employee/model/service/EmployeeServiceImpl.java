@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.kh.activePlus.board.model.dao.BoardDao;
 import com.kh.activePlus.board.model.vo.HosBoard;
 import com.kh.activePlus.board.model.vo.Notice;
+import com.kh.activePlus.common.attachment.Attachment;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.dao.EmployeeDao;
@@ -121,6 +122,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public int halfEnd(String now, String empId) {
 		return eDao.halfCount(now, empId);
+	}
+
+	@Override
+	public Attachment selectImg(String empId) {
+		return eDao.selectImg(empId);
 	}
 	
 }
