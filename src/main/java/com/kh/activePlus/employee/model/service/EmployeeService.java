@@ -1,21 +1,20 @@
 package com.kh.activePlus.employee.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import com.kh.activePlus.common.attachment.Attachment;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.vo.Employee;
-import com.kh.activePlus.employee.model.vo.MedicalTeam;
-
+import com.kh.activePlus.employee.model.vo.TNA;
 
 public interface EmployeeService {
 	
-	public Employee loginEmployee(Employee e);
+	public Employee loginEmployee(Employee m);
 
-	public int insertEmployee(Employee e);
+	public int insertEmployee(Employee m);
 
-	public int updateEmployee(Employee e);
+	public int updateEmployee(Employee m);
 
 	public int selectListCount();
 
@@ -27,27 +26,13 @@ public interface EmployeeService {
 
 	public Employee selectEmployee1(String id);
 
-	public int deleteEmployee(String id);
+	public ArrayList<TNA> startWorking(TNA tna);
 
+	public ArrayList<TNA> selectTNA(String id);
 
-	public int endWorking(int tid, String kind);
+	public HashMap<String, ArrayList> selectMainList(String empId);
 
-	public ArrayList<Employee> selectEmpList();
-
-	public int halfEnd(String now, String empId);
-
-	public int updatePass(Employee e);
-
-	public Employee selectmyEmployee(Employee e);
-
-	public int insertEmployeeAttachment(Attachment at);
-
-	public int insertMedicalTeam(MedicalTeam mt);
-
-	public /*ArrayList<Attachment>*/Attachment selectAttachment(String eid);
-
-
-
+	public int endWorking(int tid);
 
 
 }

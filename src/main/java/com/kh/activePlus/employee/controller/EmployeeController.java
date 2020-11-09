@@ -4,12 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,25 +16,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.kh.activePlus.common.attachment.Attachment;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.paging.Pagination;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.exception.EmployeeException;
 import com.kh.activePlus.employee.model.service.EmployeeService;
 import com.kh.activePlus.employee.model.vo.Employee;
-import com.kh.activePlus.employee.model.vo.MedicalTeam;
-
+import com.kh.activePlus.employee.model.vo.TNA;
 
 
 
 @Controller
-@SessionAttributes({"loginUser", "msg"})
+@SessionAttributes({"loginUser","msg", "TNA", "Tmsg"})
 public class EmployeeController {
 	
 	@Autowired
@@ -48,34 +47,20 @@ public class EmployeeController {
 	
 	}
 	
-	@RequestMapping(value="login.ap", method=RequestMethod.POST)
-	public String EmployeeLogin(Employee e, Model model) {
-		
-		Employee loginUser = eService.loginEmployee(e);
-		
-	/*	System.out.println("controller : " + loginUser );*/
+	@RequestMapping("login.ap")
+	public String EmployeeLogin(Employee m, Model model) {
+		Employee loginUser = eService.loginEmployee(m);
 		
 		if(loginUser != null) {
 			model.addAttribute("loginUser", loginUser);
 		}else {
 			throw new EmployeeException("로그인에 실패하였습니다.");
 		}
-		
 		return "redirect:main.ap";
+		
 	}
 	
-	@RequestMapping(value = "/main.ap", method = RequestMethod.GET)
-	public String home(Locale locale, Model model, Employee e) {
-
-		
-		Employee loginUser = eService.loginEmployee(e);
-		
-		model.addAttribute("loginUser", loginUser);
-		
-		return "main/main";
-	}
-	
-	@RequestMapping("goEmployeeSystem.ap")
+	@RequestMapping("goEmployeeSystem")
 	public ModelAndView EmployeeSystem(ModelAndView mv,
 			@RequestParam(value="page", required=false) Integer page
 			) {
@@ -101,54 +86,32 @@ public class EmployeeController {
 		return mv;
 	}
 	
-	@RequestMapping("einsert.ap")
-	public String EmployeeInsert(Employee e, HttpServletRequest request, MedicalTeam mt,
-			@RequestParam(value="uploadFile1", required=false) MultipartFile file1,
-			@RequestParam(value="signupload", required=false) MultipartFile file2,
-			String field, String grade) {
+	@RequestMapping("minsert.ap")
+	public String EmployeeInsert(Employee m, HttpServletRequest request,
+			@RequestParam(value="uploadFile", required=false) MultipartFile file) {
+		if(!file.getOriginalFilename().equals("")) {
+			String renameFileName = saveFile(file, request);
+			
+			if(renameFileName != null) {
+				m.setOriginalFileName(file.getOriginalFilename());
+				m.setRenameFileName(renameFileName);
+			}
+		}
 		
-		int result = eService.insertEmployee(e);
-		
-		
-		System.out.println("인서트 컨트롤러 리서트"+result);
+		int result = eService.insertEmployee(m);
+		System.out.println(m);
 		if(result > 0) {
-			if(!file1.getOriginalFilename().equals("")) {
-				String renameFileName1 = saveFile(file1, request, "Employee");
-				
-				if(renameFileName1 != null) {
-					e.setOriginalFileName(file1.getOriginalFilename());
-					e.setRenameFileName(renameFileName1);
-				}
-			}
-			if(!file2.getOriginalFilename().equals("")) {
-				String renameFileName2 = saveFile(file2, request, "Approval");
-				
-				if(renameFileName2 != null) {
-					e.setOriginalFileName(file2.getOriginalFilename());
-					e.setRenameFileName(renameFileName2);
-				}
-			}
-			if(e.getCategory().equals("의료")) {
-				
-				String id = e.getId();
-				
-				mt = new MedicalTeam(id, field, grade);
-				
-				int result1 = eService.insertMedicalTeam(mt);
-				
-				System.out.println("인서트 컨트롤러 리서트"+result1);
-			}
 			return "redirect:goEmployeeSystem.ap";
 		}else {
 			throw new EmployeeException("회원등록에 실패하였습니다.");
 		}
 	}
 	// 파일 저장을 위한 별도의 메소드
-		public String saveFile(MultipartFile file, HttpServletRequest request, String table) {
+		public String saveFile(MultipartFile file, HttpServletRequest request) {
 			// 파일이 저장 될 경로 설정
 			String root = request.getSession().getServletContext().getRealPath("resources");
 			
-			String savePath = root + "\\uploadFiles/employee";
+			String savePath = root + "\\buploadFiles";
 			
 			File folder = new File(savePath);
 			
@@ -163,11 +126,9 @@ public class EmployeeController {
 			
 			String renamePath = folder + "\\" + renameFileName;
 			
-			Attachment at = new Attachment(originFileName, renameFileName, savePath, table);
+			
 			try {
 				file.transferTo(new File(renamePath));
-				
-				int result = eService.insertEmployeeAttachment(at);
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 			}
@@ -180,7 +141,7 @@ public class EmployeeController {
 			return "employee/employeeInsertForm";
 		}
 		
-		@RequestMapping("edetail.ap")
+		@RequestMapping("mdetail.ap")
 		public ModelAndView EmployeeDetail(ModelAndView mv,
 					String id, @RequestParam("page") Integer page,
 					HttpServletRequest request,
@@ -188,14 +149,10 @@ public class EmployeeController {
 			
 			int currentPage = page !=  null ? page : 1;
 			
-			
 			Employee Employee = eService.selectEmployee(id);
-			String eid = Employee.getId(); 
-			/*ArrayList<Attachment> */Attachment Attachment = eService.selectAttachment(eid);
 			
 			if(Employee != null) {
-				mv.addObject("Employee", Employee)
-				.addObject("Attachment", Attachment)
+				mv.addObject("employee", Employee)
 				.addObject("currentPage", currentPage)
 				.setViewName("employee/employeeDetailView");
 			}else {
@@ -204,70 +161,66 @@ public class EmployeeController {
 			return mv;
 		}
 		
-		@RequestMapping("eupView.ap")
+		@RequestMapping("mupView.ap")
 		public ModelAndView EmployeeUpdateView(ModelAndView mv, String id,
 											@RequestParam("page") Integer page) {
 			
 			Employee Employee = eService.selectEmployee(id);
-			String eid = Employee.getId(); 
-			Attachment Attachment = eService.selectAttachment(eid);
 			
 			System.out.println(Employee);
 			
-			mv.addObject("Employee", Employee)
-			  .addObject("Attachment", Attachment)
+			mv.addObject("employee", Employee)
 			  .addObject("currentPage", page)
-			  .setViewName("employee/employeeUpdateForm");
+			  .setViewName("employee/EmployeeUpdateForm");
 			
 			return mv;
 		}
 		
-		@RequestMapping("eupdate.ap")
-		public String EmployeeUpdate(Employee e,
+		@RequestMapping("mupdate.ap")
+		public ModelAndView EmployeeUpdate(ModelAndView mv, Employee m,
 										 HttpServletRequest request,
 										 @RequestParam("page") Integer page,
 										 @RequestParam(value="reloadFile", required=false) MultipartFile file) {
 			if(file != null && !file.isEmpty()) {
-				if(e.getRenameFileName() != null) {
-					deleteFile(e.getRenameFileName(), request);
+				if(m.getRenameFileName() != null) {
+					deleteFile(m.getRenameFileName(), request);
 				}
 				
-				String renameFileName = saveFile(file, request,e.getId());
+				String renameFileName = saveFile(file, request);
 				
 				if(renameFileName != null) {
-					e.setOriginalFileName(file.getOriginalFilename());
-					e.setRenameFileName(renameFileName);
+					m.setOriginalFileName(file.getOriginalFilename());
+					m.setRenameFileName(renameFileName);
 				}
 			}
 			
-			int result = eService.updateEmployee(e);
-			
-		/*	System.out.println("controller e" + e);
-			
-			System.out.println("controller"+result);*/
+			int result = eService.updateEmployee(m);
 			
 			if(result > 0) {
-				return "redirect:goEmployeeSystem.ap";
+				mv.addObject("page", page)
+				  .setViewName("redirect:goEmployeeSystem.ap");
 			}else {
 				throw new EmployeeException("회원정보 수정에 실패하였습니다.");
 			}
-
+			
+			return mv;
 		}
 		
 		public void deleteFile(String fileName, HttpServletRequest request) {
 			String root = request.getSession().getServletContext().getRealPath("resources");
-			String savePath = root + "\\uploadFiles/employee";
+			String savePath = root + "\\muploadFiles";
 			
-			System.out.println(savePath);
 			File f = new File(savePath + "\\" + fileName);
 			
 			if(f.exists())
 				f.delete();
 		}
 		
-		@RequestMapping("esearch.ap")
+		@RequestMapping("msearch.ap")
 		public String EmployeeSearch(Search search, Model model) {
 			ArrayList<Employee> searchList = eService.searchList(search);
+		
+			/*System.out.println(list);*/
 			
 			model.addAttribute("list", searchList);
 			model.addAttribute("search", search);
@@ -275,7 +228,6 @@ public class EmployeeController {
 			return "employee/goEmployeeSystem";
 		}
 		
-
 		// 출근 버튼 클릭
 		@RequestMapping("workstart.ap")
 		@ResponseBody
@@ -295,118 +247,25 @@ public class EmployeeController {
 				req.getSession().setAttribute("TNA", tList);
 			}
 			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
-			// System.out.println("결과 : " + tList);
-
-		@RequestMapping("edelete.ap")
-		public String EmployeeDelete(String id, RedirectAttributes rd) {
-			int result = eService.deleteEmployee(id);
-
+			System.out.println("결과 : " + tList);
 			
-			if(result > 0) {
-				rd.addFlashAttribute("msg", "회원 탈퇴가 완료되었습니다.");
-			}else {
-				throw new EmployeeException("회원 탈퇴에 실패하였습니다.");
-			}
-			return "redirect:goEmployeeSystem";
-		}*/
+			return gson.toJson(tList);
+		}
 		
-
 		// 퇴근 버튼 클릭
 		@RequestMapping("workend.ap")
 		@ResponseBody
-		public String endWorking(int tid, String kind, HttpServletRequest req) {
-			int result = 0;
-			int hCount = 0;
-			Employee emp = (Employee)req.getSession().getAttribute("loginUser");
-			String empId = emp.getId();
+		public String endWorking(int tid, HttpServletRequest req) {
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("YYYY");
-			Calendar c = Calendar.getInstance();
-			Date d = new Date(c.getTimeInMillis());
-			String now = sdf.format(d);
-			
-			if(kind.equals("end")) {
-				result = eService.endWorking(tid,kind);
-			} else {
-				hCount = eService.halfEnd(now, empId);
-				if(hCount < 12) {
-					result = eService.endWorking(tid,kind);
-				} else {
-					return "overHalf";
-				}
-			}
-
-		@RequestMapping("elist.ap")
-		public ModelAndView EmployeeList(ModelAndView mv,
-				@RequestParam(value="page", required=false) Integer page
-				) {
-			// 커맨드 객체 사용 시 해당 파라미터가 존재하지 않을 경우 null 값을 반환함
-			// 기본 자료형인 int는 null 값을 저장할 수 없어 오류 발생하므로 Integer로 정의함
-			
-			// 1. 전체 게시글 수 리턴 받기
-			int listCount = eService.selectListCount();
-
-			
-			// 현재 페이지 계산
-			int currentPage = page != null ? page : 1;
-			
-			PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10 , 5);
-			
-			ArrayList<Employee> list = eService.selectList(pi);
-			
-			if(list != null) {
-				mv.addObject("list", list);
-				mv.addObject("pi", pi);
-				mv.setViewName("employee/goEmployeeSystem");
-			} else {
-				throw new EmployeeException("게시글 목록 조회에 실패하였습니다.");
-			}
-			
-			return mv;
-		}
-		
-		@RequestMapping("passUpdate.ap")
-		public String EmployeeUpdate(Employee e,
-									 Model model, RedirectAttributes rd) {
-			int result = eService.updatePass(e);
+			// 세팅
+			System.out.println("tid가 넘어오나?"+tid);
+			int result = eService.endWorking(tid);
 			
 			if(result > 0) {
-				model.addAttribute("loginUser", e);
-				rd.addFlashAttribute("msg", "비밀번호가 변경 되었습니다.");
-			}else {
-				throw new EmployeeException("회원 정보 수정에 실패하였습니다.");
+				req.getSession().setAttribute("Tmsg", "END");
+				return "success";
 			}
-			return "employee/loginform";
-		}
-		
-		/*@RequestMapping("myInfo.ap")
-		public String myInfoView() {
-			return "employee/mypage";
-		}*/
-		
-		@RequestMapping("myInfo.ap")
-		public ModelAndView myInfoView(ModelAndView mv,
-					Employee e, HttpSession session,
-					HttpServletRequest request,
-					HttpServletResponse response) {
-						
-			Employee loginUser = (Employee)session.getAttribute("loginUser");
+			return "failed";
 			
-			System.out.println("마이페이지컨트롤러"+loginUser);
-			
-			if(loginUser != null) {
-				mv.addObject("loginUser", loginUser)
-				.setViewName("employee/mypage");
-			}else {
-				throw new EmployeeException("회원 상세조회에 실패하였습니다.");
-			}
-			return mv;
 		}
-		
-		@RequestMapping("edelete.ap")
-		public String deleteEmp(@RequestParam("id")String id) {
-			eService.deleteEmployee(id);
-			return "redirect:goEmployeeSystem.ap";
-		}
-		
 }
