@@ -193,6 +193,7 @@
 					<div id="photoArea">
 						<div class="filebox">
  							<label for="i_image">사진 업로드</label>
+ 							<input type="hidden" id="up_img" value="${ img.originalFile }" name="up_img">
 							 <input type="file" id="i_image" name="i_image" accept="image/*" onchange="setThumbnail(this);"/> 
 							 <div id="image_container">
 							 	<c:if test="${ !empty img  }">

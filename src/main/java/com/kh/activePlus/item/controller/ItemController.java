@@ -117,13 +117,11 @@ public class ItemController {
 	@ResponseBody
 	@RequestMapping(value = "detailItem.ap", method = { RequestMethod.GET, RequestMethod.POST })
 	public Map<String, Object> iDetail(@RequestBody int i_no) {
-		System.out.println("i_no : " + i_no);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> result = new HashMap<String, Object>();
 		Item item = iService.detailItem(i_no);
 		
-		System.out.println("item : " + item);
 		if(item != null) {
 			Attachment img = iService.detailImg(i_no, "ITEM");
 			Attachment pdf = iService.detailPdf(i_no, "ITEM");
@@ -218,57 +216,70 @@ public class ItemController {
 	}
 	// 업데이트 요청
 	@RequestMapping("updateItem.ap")
-	public ModelAndView updateItem(Item i,String up_pdf, String up_img,HttpServletRequest request,
+	public ModelAndView updateItem(MultipartHttpServletRequest multi,Item i,String up_pdf, String up_img,HttpServletRequest request,
 			 ModelAndView mv){
-		MultipartHttpServletRequest multi = (MultipartHttpServletRequest) request;
+		int i_div = i.getI_div();
+		int resultI = 0;
+		int resultP = 0;
         MultipartFile image = multi.getFile("i_image");
         MultipartFile pdf = multi.getFile("i_pdf");        
 		
+        String orImg = image.getOriginalFilename();
+        String orPdf = pdf.getOriginalFilename();
+        
+        
 		Attachment at = new Attachment();
 		Attachment at1 = new Attachment();
-		
-		System.out.println("imaage  : " + image.getOriginalFilename());
-		
-		int i_div = i.getI_div();
-		System.out.println("i_div : " + i_div);
-		if(image != null && pdf != null){
-			deleteFile(up_img, request, "img");
-			deleteFile(up_pdf,request,"pdf");
-			at = saveFiles(image, request,"image");
-			at1 = saveFiles(pdf, request, "pdf");
+		if(up_img != "") {
+			if(orImg != "") {
+				deleteFile(up_img, request, "img");
+				at = saveFiles(image, request, "image");
+				at.setRefId(i.getI_no()+"");
+				at.setRefTable("ITEM");
+				if(!at.getRenameFile().equals("") ) {
+					at.setOriginalFile(orImg);
+				}
+				resultI = iService.updateFile(at);
 			
-			at.setRefId(i.getI_no()+"");
-			at.setRefTable("ITEM");
-			at1.setRefId(i.getI_no()+"");
-			at1.setRefTable("ITEM");
-			if(!at.getRenameFile().equals("") || !at1.getRenameFile().equals("")) {
-				at.setOriginalFile(image.getOriginalFilename());
-				at1.setOriginalFile(pdf.getOriginalFilename());
 			}
-		}else if(image != null && pdf == null) {
-			deleteFile(up_img, request, "img");
-			at = saveFiles(image, request,"image");
-			at.setRefId(i.getI_no()+"");
-			at.setRefTable("ITEM");
-			if(!at.getRenameFile().equals("")) {
-				at.setOriginalFile(image.getOriginalFilename());
-			}
-		}else if(pdf != null ) {
-			deleteFile(up_pdf,request,"pdf");
-			at1 = saveFiles(pdf, request, "pdf");
-			at1.setRefId(i.getI_no()+"");
-			at1.setRefTable("ITEM");
-			if(!at1.getRenameFile().equals("")) {
-				at1.setOriginalFile(pdf.getOriginalFilename());
+		}else {
+			if(orImg != "") {
+				at = saveFiles(image, request, "image");
+				at.setRefId(i.getI_no()+"");
+				at.setRefTable("ITEM");
+				if(!at.getRenameFile().equals("") ) {
+					at.setOriginalFile(orImg);
+				}
+				resultI = iService.insertFile(at);
+			
 			}
 		}
-		System.out.println("at : " + at);
-		System.out.println("at1 : " + at1);
-		int result = iService.updateItem(i, at, at1);
+		
+		if(up_pdf != "") {
+			if(orPdf != "") {
+				deleteFile(up_pdf,request,"pdf");
+				at1 = saveFiles(pdf, request, "pdf");
+				at1.setRefId(i.getI_no()+"");
+				at1.setRefTable("ITEM");
+					if(!at1.getRenameFile().equals("") ) {
+						at1.setOriginalFile(orPdf);
+					}
+					resultP =iService.updateFile(at1);
+			}
+		}else {
+			if(orPdf != "") {
+				at1 = saveFiles(pdf, request, "pdf");
+				at1.setRefId(i.getI_no()+"");
+				at1.setRefTable("ITEM");
+					if(!at1.getRenameFile().equals("") ) {
+						at1.setOriginalFile(orPdf);
+					}
+					resultP = iService.insertFile(at1);
+			}
+		}
+		int result = iService.updateItem(i);
 		
 		if(result >0) {
-			System.out.println("여기까지 왔나 : " + result);
-			
 			mv.addObject("i_div", i_div);
 			mv.setViewName("redirect:itemList.ap");
 			return mv;
@@ -330,61 +341,22 @@ public class ItemController {
 		}
 	}
 	
-	// 소모품 발주요청
-	@RequestMapping("iOrderWish.ap")
-	public String iOrder() {
-		return "item/orderWish";
-	}
-
-	// 발주 희망
-	@RequestMapping("orderWish.ap")
-	public String orderWish() {
-
-		return "item/orderWish";
-	}
-
-	// 발주 요청 확인
-	@RequestMapping("orderCheck.ap")
-	public String orderCheck() {
-
-		return "item/orderCheck";
-	}
-
-	// 소모품 정렬
-	@RequestMapping("iSort.ap")
-	public String iSort() {
-
-		return "item/itemList";
-	}
-
-	// 소모품 삭제
-	@RequestMapping("iDelete.ap")
-	public String iDelete() {
-		return "item/itemList";
-	}
-
-	// 의료품 정렬
-	@RequestMapping("mSort.ap")
-	public String mSort() {
-		return "item/mediList";
-	}
-
-	// 최근 삭제된 의료품
-	@RequestMapping("mRecentDel.ap")
-	public String mRecentDel() {
-		return "item/mRecentDel";
-	}
-
-	// 의료품 발주 요청
-	@RequestMapping("mOrderWish.ap")
-	public String mOrderWish() {
-		return "item/mediOrderWish";
-	}
+	
 
 	// 의료품 삭제
-	@RequestMapping("mDelete.ap")
-	public String mDelete() {
-		return "item/mediList";
+	@RequestMapping("itemDelete.ap")
+	public ModelAndView itemDelete(ModelAndView mv,int i_div, HttpServletRequest request, int i_no) {
+		System.out.println("i_no" + i_no);
+		int result = iService.deleteItem(i_no);
+		String refId = i_no+"";
+		int resultA = iService.deleteFile(refId);
+		if(result > 0){
+			mv.addObject("i_div", i_div);
+			mv.setViewName("redirect:itemList.ap");
+			return mv;
+		}else {
+			throw new ItemException("제품 삭제에 실패하였습니다.");
+		}
 	}
 
 }

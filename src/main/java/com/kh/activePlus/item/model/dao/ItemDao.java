@@ -80,6 +80,14 @@ public class ItemDao {
 		return sqlSession.selectOne("itemMapper.fileCount", i_no);
 	}
 
+	public int deleteFile(String refId) {
+		return sqlSession.update("itemMapper.deleteFile", refId);
+	}
+
+	public int deleteItem(int i_no) {
+		return sqlSession.update("itemMapper.deleteItem", i_no);
+	}
+
 	
 	
 	
