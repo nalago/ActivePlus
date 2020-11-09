@@ -15,9 +15,15 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
+	#list{
+		    line-height: 5;
+	}
 	a{
 	 color: black;
 	 text-decoration:none;;
+	}
+	#pdf{
+	 visibility: hidden;
 	}
 	
 	#detail_table>tbody>tr>th{
@@ -113,6 +119,10 @@
 									<th  colspan="1">용도</th>
 									<td colspan="3" id="perpose"></td>
 								</tr>
+								<tr>
+									<th  colspan="1">제품설명서</th>
+									<td colspan="3" id="viewer"></td>
+								</tr>
 								<c:if test="${i_div == 1}">
 									<th colspan="1">성분 / 함량</th>
 									<td colspan="3" id="material"></td>
@@ -192,14 +202,13 @@
 										<input type="hidden" class="form-control" id="i_no" name="i_no" readonly="readonly">
 										<input type="submit" value="수정" class="btn btn-success" id="updateItem"/>		
 									</form>
-									<form action="itemDelete" method="get" >
-										<input type="hidden" class="form-control" id="i_no" name="i_no" readonly="readonly">
+									<form action="itemDelete.ap" method="get" >
+										<input type="hidden" class="form-control" id="i_no1" name="i_no" readonly="readonly">
+										<input type="hidden" class="form-control" value="${i_div }" id="i_div" name="i_div" readonly="readonly">
 										<input type="submit" value="삭제" class="btn btn-danger" id="deleteItem">
 									</form>
 								</c:when>
-								<c:otherwise>
-									<button class="btn btn-success" id="iOrderWish">발주요청</button>
-								</c:otherwise>
+								
 							</c:choose>
 										
 						
@@ -237,33 +246,21 @@
             </div>
             
             <!-- 물품 정렬-->
-            <div id="sortItem">
-            	<form action="iSort.ap" name="sortItem">
-            	정렬▲▽
-            	<select id="sortCondition" name="sortCondition">
-            		<option value="name"<c:if test="${sortCondition == 'name'}">selected</c:if>>품명순</option>
-            		<option value="type"<c:if test="${sortCondition == 'type'}">selected</c:if>>타입별</option>
-            		<option value="location"<c:if test="${sortCondition == 'location'}">selected</c:if>>창고별</option>
-            		<option value="maker"<c:if test="${sortCondition == 'maker'}">selected</c:if>>판매처별</option>
-            		<option value="enroll"<c:if test="${sortCondition == 'enroll'}">selected</c:if>>최신순</option>
-            	</select>
-            	<button class="btn">정렬</button>
-            	</form>
-            </div>
+            
             <br><br>
         </div>
         
         <div id="func">
         	<c:if test="${loginUser.id eq '100215'}"><!-- 직급으로 구분할 예정 -->
         		<c:url var="iRecentDel" value="iRecentDel.ap" scope="application"/>
-        		<a href="iRecentDel" style="color:#ACBDB3">최근 삭제된 품목</a>
+        		
         		<form action="iAdd.ap" method="get" >
         		<input type="hidden" name="i_div" value="${i_div }">
         		<input type="submit" value="+ 신규 등록" class="btn_L" style="float: right">
         		<!-- <button  class="btn_L" onclick="location.href='iAdd.ap'">+ 물품 신규 등록</button> -->
         		</form>
         	</c:if>
-        	<button class="btn_L" id="excelBtn">⇩엑셀 다운로드</button>
+        	<!--  <button class="btn_L" id="excelBtn">⇩엑셀 다운로드</button>-->
         </div>
         
    		<br><br>
@@ -273,11 +270,8 @@
         		<thead>
         			<tr>
         				<th><input type="checkbox" id="checkAll" name="checkAll" class="chack" value="all" ></th>
-        				<th>No.</th>
-        				<c:choose>
-        					<c:when test="${ i_div == 1}"><th>제품코드</th></c:when>
-        					<c:otherwise><th>약품코드</th></c:otherwise>
-        				</c:choose>
+        				<th>NO</th>
+        				<th>제품코드</th>
         				<th>분류</th>
         				<th>품명</th>
         				<th>단위</th>
@@ -291,9 +285,9 @@
         			<c:forEach items="${list}" var="i">
 						<tr>
         					<th scope="row"><input type="checkbox" class="checkItem"></th>
-        					<td>${i.i_no }</td>
+        					<td height="20">${i.i_no }</td>
         					<td>${i.i_id}</td>
-							<td>${i.category }</td>
+							<td>${i.category_k }</td>
 							<td>${i.i_name_k}</td>
         					<td>${i.unit}</td>
 							<td>${i.stock}</td>
@@ -314,7 +308,7 @@
      
         <div id="btnArea" style="margin-left: 20px">
         	선택 품목
-      		<button class="btn_L" id="iOrderWish">발주요청</button>
+      		<!--  <button class="btn_L" id="iOrderWish">발주요청</button> -->
       		<c:if test="${ loginUser.name eq '최나라' }">
         		<button class="btn_L" id="deleteBtn" onclick="location.href='iDelete.ap'">삭제</button><!-- 특정 직급 이상만 노출 -->
         	</c:if>
@@ -474,17 +468,10 @@
 					var item = data.item;
 					var img = data.img;
 					var pdf = data.pdf;
-					/* if(data.img != null && data.pdf !=null){
-						img = data.img;
-						 pdf = data.pdf;
-					}else if(data.img != null && data.pdf == null){
-						img = data.img;
-					}else if(data.img == null && data.pdf != null){
-						pdf = data.pdf;
-					} */
+					
 					console.log("readitem : " + item);
 					console.log(img);
-					console.log("readpdf : " + pdf);
+					console.log( pdf);
 					
 					
 					$('div.modal').modal();
@@ -496,7 +483,14 @@
 						}).css("width","300px");
 						
 					}
+					if(pdf!=null){
+						var rep = pdf.renameFile;
+						$("#viewer").html('<iframe style="float: right;" src = "${contextPath}/resources/ViewerJS/#../uploadFiles/item/pdf/'+ rep + '" width="430" height="300" allowfullscreen webkitallowfullscreen></iframe>')
+					}
+					
 					$("#i_no").attr("value",item.i_no);
+					$("#i_no1").attr("value",item.i_no);
+					$("#i_div").attr("value",item.i_div);
 					$("#i_name_k").text(item.i_name_k);
 					$("#i_id").text(item.i_id);
 					$("#standard").text(item.standard);
@@ -526,6 +520,9 @@
 				}
 			});
 		}
+		
+
+			
 	</script>
 </body>
 </html>

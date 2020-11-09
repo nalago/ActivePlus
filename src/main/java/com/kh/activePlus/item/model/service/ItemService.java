@@ -23,7 +23,15 @@ public interface ItemService {
 
 	public Attachment detailPdf(int i_no, String table);
 
-	public int updateItem(Item i, Attachment at, Attachment at1);
+	public int updateFile(Attachment at);
+
+	public int updateItem(Item i);
+
+	public int insertFile(Attachment at);
+
+	public int deleteItem(int i_no);
+
+	public int deleteFile(String string);
 
 	
 

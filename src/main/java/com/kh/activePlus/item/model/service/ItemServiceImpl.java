@@ -93,56 +93,41 @@ public class ItemServiceImpl implements ItemService{
 	}
 
 	@Override
-	public int updateItem(Item i, Attachment at, Attachment at1) {
+	public int updateFile(Attachment at) {
+		return iDao.updateFile(at);
+		
+		
+	}
+
+	@Override
+	public int updateItem(Item i) {
 		int result = 0;
-		int image = 0;
-		int pdf = 0;
-		int i_div = i.getI_div();
-		int i_no = i.getI_no();
-		// 소모품일때
-		if(i_div == 1) {
-			System.out.println("소모품임");
+		if(i.getI_div() == 1) {
 			result = iDao.updateItem(i);
-			
-		}else{ // 의약품일때
-			System.out.println("의약품임");
-			 result = iDao.updateMedi(i);
+		}else {
+			result = iDao.updateMedi(i);
 		}
-		
-		int up_img = iDao.selectCount(i_no);
-		int up_pdf = iDao.selectCount(i_no);
-		
-		System.out.println(up_img);
-		System.out.println(up_pdf);
-		
-		System.out.println("impl result : " + result  );
-		if(result > 0 && at.getOriginalFile() != null && at1.getOriginalFile() != null) {
-			if(up_img == 0) {  
-				image = iDao.enrollFile(at);
-			} else {
-				image = iDao.updateFile(at);
-			}
-			if(up_pdf == 0) {
-				pdf = iDao.enrollFile(at1);
-			}else {
-				pdf = iDao.updateFile(at1);
-			}
-		}else if(result > 0 && at.getOriginalFile() != null && at1.getOriginalFile() == null) {
-			if(up_img == 0) {  
-				image = iDao.enrollFile(at);
-			} else {
-				image = iDao.updateFile(at);
-			}
-		}else if(result > 0 && at1.getOriginalFile() != null && at.getOriginalFile() == null) {
-			if(up_pdf == 0) {
-				pdf = iDao.enrollFile(at1);
-			}else {
-				pdf = iDao.updateFile(at1);
-			}
-		}
-		
 		return result;
 	}
+
+	@Override
+	public int insertFile(Attachment at) {
+		return iDao.enrollFile(at);
+		
+	}
+
+	@Override
+	public int deleteItem(int i_no) {
+		return iDao.deleteItem(i_no);
+	}
+
+	@Override
+	public int deleteFile(String i_no) {
+		return iDao.deleteFile(i_no);
+	}
+
+	
+	
 
 	
 
