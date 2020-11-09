@@ -127,6 +127,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
+
 	public int updatePass(Employee e) {
 		return eDao.updatePass(e);
 
@@ -183,6 +184,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	
+
+	public Attachment selectImg(String empId) {
+		return eDao.selectImg(empId);
+	}
+
 	
 }
 

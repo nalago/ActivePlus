@@ -33,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="reason" column="REASON" />
 		<result property="empId" column="EMP_ID" />
 	</resultMap>
+
 		
 	<resultMap id="AttachmentResultSet" type="Attachment">
       <id property="atId" column="FID"/>
@@ -48,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
       <result property="field" column="FIELD"/>
       <result property="grade" column="GRADE"/>
    </resultMap>
+
 
 	<select id="selectOne" parameterType="Employee"
 		resultMap="employeeResultSet">
@@ -149,8 +151,9 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 	</update>
 	<select id="selectEmpList" resultMap="employeeResultSet">
 		SELECT *
-		FROM EMP_TEAM
-		WHERE STATUS = 'Y'
+		FROM EMP_TEAM 
+		WHERE STATUS = '재직'
+
 	</select>
 	<select id="getHalfCount" parameterType="hashMap"
 		resultType="_int">
@@ -162,6 +165,11 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		TO_DATE(#{endYear},'YYYY-MM-DD')
 		AND EMP_ID=#{empId}
 		AND REASON='반차'
+	</select>
+	<select id="selectImg" parameterType="String" resultMap="AttachmentResultSet">
+		SELECT A_RENAME, FILE_PATH
+		FROM ATTACHMENT
+		WHERE REF_TABLE='EMPLOYEE' AND REF_ID=#{empId}
 	</select>
 
 	<update id="updateEmployee" parameterType="Employee"> UPDATE EMPLOYEE

@@ -51,7 +51,12 @@ public interface EmployeeService {
 
 	public ArrayList<Attachment> selectAttachment(String eid);
 
+
 	public String getPw(Map<String, Object> paramMap);
+=
+	public Attachment selectImg(String empId);
+
+
 
 	public String getUserPwd(String id);
 

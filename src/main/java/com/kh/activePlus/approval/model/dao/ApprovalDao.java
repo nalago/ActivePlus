@@ -2,7 +2,7 @@ package com.kh.activePlus.approval.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +47,14 @@ public class ApprovalDao {
 		return sqlSession.selectOne("approvalMapper.selectAllDocTypeListCount", eId);
 	}
 
-	public ArrayList<Doc> selectAllDocTypeList(String eId, PageInfo pi) {
+	public List<Doc> selectAllDocTypeList(String eId, PageInfo pi) {
 		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimit();
 		System.out.println("dao"+offset);
 		System.out.println(pi.getBoardLimit());
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		System.out.println(rowBounds.getLimit());
-		System.out.println(rowBounds.getOffset());
+
 		ArrayList<Doc> dList = (ArrayList)sqlSession.selectList("approvalMapper.selectAllDocTypeList", eId,rowBounds);
-		System.out.println(dList);
+
 		return dList;
 	}
 

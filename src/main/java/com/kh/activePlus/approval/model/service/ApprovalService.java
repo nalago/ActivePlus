@@ -1,18 +1,19 @@
 package com.kh.activePlus.approval.model.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.kh.activePlus.employee.model.vo.Employee;
 import com.kh.activePlus.approval.model.vo.Approval;
 import com.kh.activePlus.approval.model.vo.ApprovalApvDoc;
 import com.kh.activePlus.approval.model.vo.ApprovalSearch;
 import com.kh.activePlus.approval.model.vo.ApvDoc;
-import com.kh.activePlus.common.attachment.Attachment;
 import com.kh.activePlus.approval.model.vo.Doc;
-import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.approval.model.vo.Sign;
+import com.kh.activePlus.common.attachment.Attachment;
+import com.kh.activePlus.common.paging.PageInfo;
+import com.kh.activePlus.employee.model.vo.Employee;
 
 @Service
 public interface ApprovalService {
@@ -40,7 +41,7 @@ public interface ApprovalService {
 
 	public int selectAllDocTypeListCount(String eId);
 
-	public ArrayList<Doc> selectAllDocTypeList(String eId, PageInfo pi);
+	public List<Doc> selectAllDocTypeList(String eId, PageInfo pi);
 
 	public int selectDocTypeListCount(ApprovalSearch as);
 

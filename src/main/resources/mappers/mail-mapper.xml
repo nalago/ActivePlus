@@ -105,7 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 				</when>
 				<when test="kind == 'important'">
 					RECEIVER = #{empId}
-					AND MRIMPORTANT_MARK ='I'
+					AND (MRIMPORTANT_MARK ='I' and receiver=#{empId})
 				</when>
 				<when test="kind == 'waste'">
 					RECEIVER = #{empId}

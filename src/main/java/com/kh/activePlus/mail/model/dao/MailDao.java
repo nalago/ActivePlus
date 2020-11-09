@@ -41,11 +41,15 @@ public class MailDao {
 		if(pi != null) {
 			offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 			rowBounds = new RowBounds(offset, pi.getBoardLimit());
+			System.out.println("piDao : " + pi);
+			System.out.println("offset : " + offset);
+			System.out.println("boardLimit : " + pi.getBoardLimit());
 			
 		} else {
 			// 메인화면 select
 			offset = 0;
 			rowBounds = new RowBounds(offset, 3);
+			
 		}
 		
 		HashMap<String, String> hmap = new HashMap<>();
@@ -54,6 +58,8 @@ public class MailDao {
 		ArrayList<Email> aList = new ArrayList<>();
 		if(kind.equals("send")) {
 			// 보낸 메일함
+			System.out.println("rowBounds off : " + rowBounds.getOffset());
+			System.out.println("rowBounds off : " + rowBounds.getLimit());
 			aList = (ArrayList)sqlSession.selectList("mailMapper.selectSendList", hmap, rowBounds);
 			System.out.println("ALIST : "+aList);
 			System.out.println("여기로 들어옴!");

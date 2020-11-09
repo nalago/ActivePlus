@@ -114,6 +114,7 @@ public class EmployeeDao {
 		return sqlSession.update("employeeMapper.updateAttachment", at);
 	}
 
+
 	public MedicalTeam selectMediTeam(String eid) {
 		return sqlSession.selectOne("employeeMapper.selectMediTeam", eid);
 	}
@@ -128,4 +129,10 @@ public class EmployeeDao {
 	      return sqlSession.update("employeeMapper.updateEmployee", e);
 	   }
 	
+
+	public Attachment selectImg(String empId) {
+		return sqlSession.selectOne("employeeMapper.selectImg",empId);
+	}
+
+
 }
