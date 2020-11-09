@@ -17,15 +17,24 @@ scope="application"/>
 		<c:url var="myinfo" value="myInfo.ap" scope="application"/>
 		<c:url var="logOut" value="logOut.ap"/>
 		<div id="profile">
-			<c:if test="${ loginUser ne null }">
+
+      <c:if test="${ loginUser ne null }">
 			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님</span>
 			<span ><a id="info" class="profile" href="${ myinfo }">개인정보</a></span>
-			<span ><a id="info" class="profile" href="${ logOut }">로그아웃</a></span>			
+			<span ></span>			
 			</c:if>
-			<a href="main.ap">
-			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">
-			</a>
+			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님
+			<a id="info" class="profile" href="${ myinfo }">개인정보</a>
+      <a id="info" class="profile" href="${ logOut }">로그아웃</a>
+      </span>
 		</div>
+		<br clear="all">
+		<a href="main.ap">
+			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:left;">
+		</a>
+		<br clear="all">
+		<div class="sidenav">
+
 			<c:url var="goSchd" value="calendar.ap">
 				<c:param name="scd_sq" value="1"/>
 			</c:url>

@@ -22,7 +22,7 @@
 table
 {
     border-collapse: collapse;
-    width:100%;
+    width:90%;
 }
 th, td, td a
 {
@@ -34,8 +34,8 @@ th, td, td a
     text-align:center;
 }
 th{
-	background:#ffeef3;
-	border-top:2px solid #ff0e57;
+	background:#a5d296;
+	border-top:2px solid #63ab68;
 	
 }
 td{
@@ -72,7 +72,7 @@ select{
 #writeBtn{
 	width:80px;
 	height:30px;
-	margin-left:10%;
+	margin-right:5%;
 	border:none;
 }
 #topBox{

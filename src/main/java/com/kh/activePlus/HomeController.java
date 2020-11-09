@@ -51,7 +51,11 @@ public class HomeController {
 
 
 		Attachment at = eService.selectImg(empId);
-		String photo = "resources\\uploadFiles\\employee\\"+at.getRenameFile();
+
+		if(at != null) {
+			String photo = "resources\\uploadFiles\\employee\\"+at.getRenameFile();
+			model.addAttribute("img",photo);
+		}
 
 		if (tList != null && !tList.isEmpty()) {
 			tnaDay = sdf.format(tList.get(0).getStartDate());
@@ -74,7 +78,6 @@ public class HomeController {
 		HashMap<String, ArrayList> mainList = new HashMap<>();
 		mainList = eService.selectMainList(empId);
 		
-		model.addAttribute("img",photo);
 		model.addAttribute("mList", mainList.get("mList"));
 		model.addAttribute("nList", mainList.get("nList"));
 		model.addAttribute("hbList", mainList.get("hbList"));

@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-<link rel="stylesheet" href="${contextPath }/resources/approval/css/base.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/sign-table.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/css/doc.css"/>
 <link rel="stylesheet" href="${contextPath }/resources/approval/fontello/css/fontello.css">
@@ -224,9 +223,34 @@
 <body>
 <jsp:include page="../common/menubar.jsp"/>
 <section>
+<div id="submenu">
+        	 <ul class="navi">
+                <li>
+                <c:url var="goDrafting" value="draftingList.ap"/>
+                <c:url var="goPrivate" value="privateList.ap"/>
+                <c:url var="goTemporary" value="temporaryList.ap"/>
+                    <a class="menu" href="${goDrafting }">기안</a>
+                    <ul>
+                        <li><a class="menu" href="${goDrafting }">문서 양식</a></li>
+                        <li><a class="menu" href="${goTemporary }">임시 문서</a></li>
+                        <li><a class="menu" href="${goPrivate }">개인 양식</a></li>
+                    </ul>
+                </li>
+                <li>
+                <c:url var="goApprovalObtain" value="approvalObtainList.ap"/>
+                <c:url var="goApproval" value="approvalList.ap"/>
+                <c:url var="goApprovalComplete" value="approvalCompleteList.ap"/>
+                    <a class="menu" href="${goApprovalObtain }">결재</a>
+                    <ul>
+                        <li><a class="menu" href="${goApprovalObtain }">결재 받을 문서</a></li>
+                        <li><a class="menu" href="${goApproval }">결재 예정 문서</a></li>
+                        <li><a class="menu" href="${goApprovalComplete }">결재 완료 양식</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
 <jsp:include page="popup/alert.jsp"/>
 <c:set var="d" value="${ doc }"/>
-        <jsp:include page="submenu/topMenu.jsp"/>
             <jsp:include page="submenu/docTypeList.jsp"/>
        <form id="docform" method="post" enctype="multipart/form-data">
             <jsp:include page="submenu/apvMenu.jsp"/>
