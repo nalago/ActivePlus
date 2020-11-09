@@ -39,6 +39,9 @@
 		<typeAlias type="com.kh.activePlus.common.search.Search" alias="Search"/>
 		<typeAlias type="com.kh.activePlus.mail.model.vo.EmailReceive" alias="EmailReceive"/>
 		<typeAlias type="com.kh.activePlus.mail.model.vo.Email" alias="Email"/>
+		<typeAlias type="com.kh.activePlus.messenger.model.vo.Emergency" alias="Emergency"/>
+		<typeAlias type="com.kh.activePlus.messenger.model.vo.Messenger" alias="Messenger"/>
+		
 		<typeAlias type="com.kh.activePlus.item.model.vo.Item" alias="Item"/>
 	</typeAliases>
 	
@@ -50,6 +53,7 @@
 		<mapper resource="mappers/board-mapper.xml"/>
 		<mapper resource="mappers/mail-mapper.xml"/>
 		<mapper resource="mappers/item-mapper.xml"/>
+		<mapper resource="mappers/messenger-mapper.xml"/>
 	</mappers>
 
 

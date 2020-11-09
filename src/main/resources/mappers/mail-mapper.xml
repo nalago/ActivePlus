@@ -19,20 +19,109 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="readValue" column="READ"/>
 		<result property="readDate" column="READ_DATE"/>
 		<result property="receiver" column="RECEIVER"/>
-		<result property="rvName" column="MR"/><!-- 수신자 이름 -->
+		<result property="mrName" column="MR"/><!-- 수신자 이름 -->
 		<result property="mrStatus" column="MR_STATUS"/>
-		<result property="rIptMark" column="MRIMPOTANT_MARK"/>
+		<result property="riptMark" column="MRIMPORTANT_MARK"/>
+		<result property="mrId" column="MRID"/>
 	</resultMap>
 	
-	<select id="selectListCount" parameterType="hashMap" resultType="Integer">
-		SELECT COUNT(*)
-		FROM M_VIEW
+	<resultMap type="Attachment" id="attachmentResultSet">
+		<id property="atId" column="FID"/>
+		<result property="originalFile" column="A_ORIGINNAME"/>
+		<result property="renameFile" column="A_RENAME"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="refTable" column="REF_TABLE"/>
+		<result property="refId" column="REF_ID"/>
+		<result property="status" column="STATUS"/>
+	</resultMap>
+	
+	<select id="getReceiveListCount" parameterType="hashMap" resultType="Integer">
+		select COUNT(*)
+		from mail m
+		left join mail_receive r on (m.mid=r.mid)
+		left join employee e on(r.receiver = e.emp_id)
+		<where>
+			<choose>
+				<when test="kind == 'inMail'">
+					RECEIVER = #{receiver}
+					AND MR_STATUS='Y'
+				</when>
+				<when test="kind == 'temporary'">
+					RECEIVER = #{receiver}
+					AND MR_STATUS='T'
+				</when>
+				<when test="kind == 'important'">
+					RECEIVER = #{receiver}
+					AND MRIMPORTANT_MARK ='I'
+				</when>
+				<when test="kind == 'waste'">
+					RECEIVER = #{receiver}
+					AND MR_STATUS ='W'
+				</when>
+			</choose>
+		</where>
+	</select>
+	<select id="getSendListCount" parameterType="hashMap" resultType="Integer">
+		select count(*)
+		from mail m
+		left join mail_send s on (m.mid=s.mid)
+		left join employee e on(s.mwriter = e.emp_id)
+		<where>
+			<choose>
+				<when test="kind == 'send'">
+					MWRITER = #{receiver}
+					AND M_STATUS='C'
+				</when>
+				<when test="kind == 'temporary'">
+					MWRITER = #{receiver}
+					AND M_STATUS='T'
+				</when>
+				<when test="kind == 'important'">
+					MWRITER = #{receiver}
+					AND IMPORTANT_MARK ='I'
+				</when>
+				<when test="kind == 'waste'">
+					MWRITER = #{receiver}
+					AND M_STATUS ='W'
+				</when>
+			</choose>
+		</where>
+	</select>
+	<select id="selectReceiveList" parameterType="hashMap" resultMap="emailResultSet">
+		select m.mid, mtitle, mcontent,att_stock, mr_category, read, read_date, receiver, mr_status, mrimportant_mark, mrid, send_date, e.name MW
+		from mail m
+		left join mail_receive r on (m.mid=r.mid)
+		left join mail_send s on (s.mid = m.mid)
+		left join employee e on(s.mwriter = e.emp_id)
 		<where>
 			<choose>
 				<when test="kind == 'inMail'">
 					RECEIVER = #{empId}
 					AND MR_STATUS='Y'
 				</when>
+				<when test="kind == 'temporary'">
+					RECEIVER = #{empId}
+					AND MR_STATUS='T'
+				</when>
+				<when test="kind == 'important'">
+					RECEIVER = #{empId}
+					AND MRIMPORTANT_MARK ='I'
+				</when>
+				<when test="kind == 'waste'">
+					RECEIVER = #{empId}
+					AND MR_STATUS ='W'
+				</when>
+			</choose>
+		</where>
+		ORDER BY MID DESC
+	</select>
+	<select id="selectSendList" parameterType="hashMap" resultMap="emailResultSet">
+		select m.mid, mtitle, mcontent, att_stock, mwriter, m_category, m_status, important_mark, send_date
+		from mail m
+		left join mail_send s on (m.mid=s.mid)
+		left join employee e on(s.mwriter = e.emp_id)
+		<where>
+			<choose>
 				<when test="kind == 'send'">
 					MWRITER = #{empId}
 					AND M_STATUS='C'
@@ -40,46 +129,123 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 				<when test="kind == 'temporary'">
 					MWRITER = #{empId}
 					AND M_STATUS='T'
-				
 				</when>
 				<when test="kind == 'important'">
-					(MWRITER = #{empId} OR RECEIVER = #{empId})
-					AND (IMPORTANT_MARK ='I' OR MRIMPORTANT_MARK = 'I')
+					MWRITER = #{empId}
+					AND IMPORTANT_MARK ='I'
 				</when>
 				<when test="kind == 'waste'">
-					(MWRITER = #{empId} OR RECEIVER = #{empId})
-					AND (M_STATUS ='D' OR MR_STATUS='D')
+					MWRITER = #{empId}
+					AND M_STATUS ='W'
 				</when>
 			</choose>
 		</where>
+		ORDER BY MID DESC
 	</select>
-	<select id="selectList" parameterType="hashMap" resultMap="emailResultSet">
-		SELECT *
-		FROM M_VIEW
-		<where>
-			<choose>
-				<when test="kind == 'inMail'">
-					RECEIVER = #{empId}
-					AND MR_STATUS='Y'
-				</when>
-				<when test="kind == 'send'">
-					MWRITER = #{empId}
-					AND M_STATUS='C'
-				</when>
-				<when test="kind == 'temporary'">
-					MWRITER = #{empId}
-					AND M_STATUS='T'
-				</when>
-				<when test="kind == 'important'">
-					(MWRITER = #{empId} OR RECEIVER = #{empId})
-					AND (IMPORTANT_MARK ='I' OR MRIMPORTANT_MARK = 'I')
-				</when>
-				<when test="kind == 'waste'">
-					(MWRITER = #{empId} OR RECEIVER = #{empId})
-					AND (M_STATUS ='D' OR MR_STATUS='D')
-				</when>
-			</choose>
-		</where>
+	<select id="selectReceiver" parameterType="Email" resultType="String">
+		SELECT NAME MR
+		FROM MAIL_RECEIVE
+		LEFT JOIN EMPLOYEE ON (RECEIVER = EMP_ID)
+		WHERE MID=#{mailId}
 	</select>
-
+	
+	<!-- 메일 보내기 -->
+	<insert id="sendMail" parameterType="Email">
+		INSERT INTO MAIL
+		VALUES(SEQ_MID.NEXTVAL,#{title},#{content},	#{attStock})
+		<selectKey keyProperty="mailId" resultType="_int" order="AFTER">
+			SELECT SEQ_MID.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	<insert id="insertReceive" parameterType="Email">
+		INSERT INTO MAIL_RECEIVE
+		VALUES(#{mailId}, #{mrCategory}, DEFAULT, NULL, #{receiver},DEFAULT,DEFAULT,SEQ_MRID.NEXTVAL)
+	</insert>
+	<insert id="insertSend" parameterType="Email">
+		INSERT INTO MAIL_SEND
+		VALUES(#{mailId}, #{writer}, #{category}, DEFAULT, DEFAULT, SYSDATE)
+	</insert>
+	<insert id="insertAttachment" parameterType="Attachment">
+		INSERT INTO ATTACHMENT
+		VALUES (SEQ_FID.NEXTVAL, #{originalFile}, #{renameFile}, #{filePath}, #{refTable}, #{refId}, DEFAULT)
+	</insert>
+	
+	<select id="selectMail" parameterType="Email" resultMap="emailResultSet">
+		SELECT M.MID, MTITLE, MCONTENT, SEND_DATE, ATT_STOCK
+		FROM MAIL M
+		JOIN MAIL_SEND S ON (M.MID = S.MID)
+		WHERE M.MID=#{mailId}
+	</select>
+	
+	<select id="selectAtt" parameterType="Attachment" resultMap="attachmentResultSet">
+		SELECT A_ORIGINNAME , A_RENAME, FILE_PATH
+		FROM ATTACHMENT
+		WHERE REF_TABLE='MAIL' AND REF_ID=#{refId}
+	</select>
+	
+	<!-- 상태 변경 -->
+	<update id="setMailRec" parameterType="hashMap">
+		UPDATE MAIL_RECEIVE
+		<set>
+				<if test="sett == 'importantS'">
+					 MRIMPORTANT_MARK = 'I'
+				</if>
+				<if test="sett == 'importantN'">
+					 MRIMPORTANT_MARK = 'N'
+				</if>
+				<if test="sett == 'waste'">
+					 MR_STATUS = 'W'
+				</if>
+				<if test="sett == 'restore'">
+					 MR_STATUS = 'C'
+				</if>
+				<if test="sett == 'delete'">
+					 M_STATUS = 'D'
+				</if>
+		</set>
+		WHERE RECEIVER = #{empId} AND MID = #{chkId}
+	</update>
+	<update id="setMailSend" parameterType="hashMap">
+		UPDATE MAIL_SEND
+		<set>
+				<if test="sett == 'importantS'">
+					 IMPORTANT_MARK = 'I'
+				</if>
+				<if test="sett == 'importantN'">
+					 IMPORTANT_MARK = 'N'
+				</if>
+				<if test="sett == 'waste'">
+					 M_STATUS = 'W'
+				</if>
+				<if test="sett == 'restore'">
+					 M_STATUS = 'C'
+				</if>
+				<if test="sett == 'delete'">
+					 M_STATUS = 'D'
+				</if>
+		</set>
+		WHERE MWRITER = #{empId} AND MID = #{chkId}
+	</update>
+	<select id="selectMailSend" parameterType="_int" resultMap="emailResultSet">
+		SELECT MID, MTITLE, MCONTENT
+		FROM MAIL 
+		WHERE MID=#{mId}
+	</select>
+	<!-- 임시메일 발송 -->
+	<update id="sendTemp" parameterType="_int">
+		UPDATE MAIL_SEND
+		SET M_STATUS = 'T'
+		WHERE MID = #{mNo}
+	</update>
+	<!-- 메일 읽을 때 -->
+	<update id="readMail" parameterType="Email">
+		UPDATE MAIL_RECEIVE
+		SET READ = '읽음', READ_DATE = SYSDATE
+		WHERE MID=#{mailId} AND RECEIVER = #{receiver}
+	</update>
+	
+	
+	
+	
+	
 </mapper>

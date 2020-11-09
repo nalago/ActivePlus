@@ -14,9 +14,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 @ToString
-public class Email extends EmailReceive{
+public class Email {
 	private int mailId;
 	private String category;
 	private String title;
@@ -28,5 +27,14 @@ public class Email extends EmailReceive{
 	private Date sendDate;
 	private int attStock;
 	private Date deleteDate;
+	/*receive*/
+	private String mrCategory;
+	private String readValue;
+	private Date readDate;
+	private String receiver;
+	private String mrName;
+	private String mrStatus;
+	private String riptMark;
+	private int mrId;
 	
 }
