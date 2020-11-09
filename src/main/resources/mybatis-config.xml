@@ -13,6 +13,7 @@
 		<typeAlias type="com.kh.spring.notice.model.vo.Notice" alias="Notice"/>
 		
 	</typeAliases> -->
+	
 	<typeAliases>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.Doc" alias="Doc"/>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.ApvDoc" alias="ApvDoc"/>
@@ -24,26 +25,32 @@
 
 		<typeAlias type="com.kh.activePlus.approval.model.vo.ApprovalApvDoc" alias="ApprovalApvDoc"/>
 		<typeAlias type="com.kh.activePlus.approval.model.vo.Sign" alias="Sign"/>
+
+		
+
 		<typeAlias type="com.kh.activePlus.employee.model.vo.TNA" alias="TNA"/>
+
 
 		<typeAlias type="com.kh.activePlus.schedule.model.vo.Schedule" alias="Schedule"/>
 		<typeAlias type="com.kh.activePlus.common.search.Search" alias="Search"/>
-
 		<typeAlias type="com.kh.activePlus.board.model.vo.Notice" alias="Notice"/>
 		<typeAlias type="com.kh.activePlus.board.model.vo.HosBoard" alias="HosBoard"/>
 		<typeAlias type="com.kh.activePlus.common.attachment.Attachment" alias="Attachment"/>
 		<typeAlias type="com.kh.activePlus.common.search.Search" alias="Search"/>
 		<typeAlias type="com.kh.activePlus.mail.model.vo.EmailReceive" alias="EmailReceive"/>
 		<typeAlias type="com.kh.activePlus.mail.model.vo.Email" alias="Email"/>
+		<typeAlias type="com.kh.activePlus.item.model.vo.Item" alias="Item"/>
 	</typeAliases>
+	
 
-		<mappers>
-			<mapper resource="mappers/approval-mapper.xml"/>
-			<mapper resource="mappers/schedule-mapper.xml"/>
-			<mapper resource="mappers/employee-mapper.xml"/>
-			<mapper resource="mappers/board-mapper.xml"/>
-			<mapper resource="mappers/mail-mapper.xml"/>
-		</mappers>
+	<mappers>
+		<mapper resource="mappers/approval-mapper.xml"/>
+		<mapper resource="mappers/schedule-mapper.xml"/>
+		<mapper resource="mappers/employee-mapper.xml"/>
+		<mapper resource="mappers/board-mapper.xml"/>
+		<mapper resource="mappers/mail-mapper.xml"/>
+		<mapper resource="mappers/item-mapper.xml"/>
+	</mappers>
 
 
 </configuration>

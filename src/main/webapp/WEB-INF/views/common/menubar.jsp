@@ -4,8 +4,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://code.jquery.com/jquery-3.5.1.js" 
-integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.js" 
+integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script> -->
 <c:set var="contextPath" value="${ pageContext.servletContext.contextPath }"
 scope="application"/>
 <meta charset="UTF-8">
@@ -26,7 +26,9 @@ scope="application"/>
 			<c:url var="goSchd" value="calendar.ap">
 				<c:param name="scd_sq" value="1"/>
 			</c:url>
-			<c:url var="goItem" value="itemList.ap" scope="application"/>
+			<c:url var="goItem" value="itemList.ap" scope="application">
+        		<c:param name="i_div" value="1" />
+        	</c:url>
 			<c:url var="goMail" value="mail.ap" scope="application"/>
 			<c:url var="goTask" value="diagnosisList.ap" scope="application"/>
 			<c:url var="goApproval" value="approvalMain.ap" scope="application"/>
@@ -36,6 +38,7 @@ scope="application"/>
       
 			<a href="${ goSchd }">일정관리</a>
 			<a href="${ goApproval }">전자결재</a>
+			<a href="${ goItem }">물품관리</a>
 			<a href="${ goNotice }">게시판</a>
 			<a href="${ goMessenger }">메신저</a> 
 			<a href="${ goMail }">메일</a>

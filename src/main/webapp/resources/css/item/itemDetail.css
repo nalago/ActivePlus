@@ -1,0 +1,81 @@
+@charset "UTF-8";
+@font-face { 
+	font-family: 'S-CoreDream-3Light'; 
+	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff'); 
+	font-weight: normal; 
+	font-style: normal; 
+}
+@font-face {
+     font-family: "S-CoreDream-5Medium";
+     src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff") format("woff");
+     font-weight: normal;
+     font-style: normal;
+}
+*{
+	font-family: "S-CoreDream-3Light", serif; 
+}
+table{
+		line-height : 1.5;
+		margin-top: 20px;
+		width: 100%;
+        border-collapse: collapse;
+        vertical-align: top;
+		
+	}
+	#title{
+		border: 1px solid white;
+		font-family: "S-CoreDream-5Medium", serif;
+	}
+	td {
+		border-bottom: 1px solid #ACBDB3;
+		padding-left : 15px;
+	}
+	
+	th:not(#title){
+		background-color: rgba(172,189,179,0.4);
+		border: 1px solid  rgba(172,189,179,0.4);
+	}
+	img {
+		border-radius: 5px;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		padding-top:10px;
+		padding-bottom: 10px;
+		width: 90%;
+		height: 400px;
+	}
+#btnArea{
+	position : relative;
+}
+.btn{
+	width:100px;
+	height:40px;
+	font-weight:bold;
+	font-size:15px;
+	margin-left:15px;
+	border:1px solid #113f36;
+	border-radius:5px;
+	background: white;
+	color:#113f36;
+	cursor:pointer;
+	
+	}
+	
+	.btn:hover{
+	background:#113f36;
+	color:#ffffff;
+	cursor:pointer;
+	}
+	
+	#deleteBtn{
+		color:red;
+		border-color:red;
+		cursor:pointer;
+	}
+	
+	#deleteBtn:hover{
+		background:red;
+		color:white;
+		cursor:pointer;
+	}

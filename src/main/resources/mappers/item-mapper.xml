@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="itemMapper">
+	<resultMap type="Item" id="itemResultSet">
+		<id property="i_no" column="INO"/>
+		<result property="i_id" column="IID"/>
+		<result property="i_name_k" column="INAME_K"/>
+		<result property="price" column="PRICE"/>
+		<result property="standard" column="STANDARD"/>
+		<result property="unit" column="UNIT"/>
+		<result property="material" column="MATERIAL"/>
+		<result property="perpose" column="PERPOSE"/>
+		<result property="production" column="PRODUCTION"/>
+		<result property="contract_date" column="CONTRACT_DATE"/>
+		<result property="stock" column="STOCK"/>
+		<result property="replacement" column="REPLACEMENT"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="category_k" column="C_NAME_K"/>
+		<result property="category_e" column="C_NAME_E"/>
+		<result property="regist_date" column="REGIST_DATE"/>
+		<result property="note" column="NOTE"/>
+		<result property="status" column="STATUS"/>
+		<result property="location" column="LOCATION"/>
+		<result property="emp_id" column="EMP_ID"/>
+		<result property="i_div" column="I_DIV"/>
+		<result property="i_div_name" column="I_DIV_NAME"/>
+		<result property="writer" column="NAME"/>
+		<result property="insurance" column="INSURANCE"/>
+		<result property="m_control" column="M_CONTROL"/>
+		<result property="kpic" column="KPIC"/>
+		<result property="add_m" column="ADD_M"/>
+		<result property="atc_code" column="atc_code"/>
+	</resultMap>
+	
+	<resultMap type="Attachment" id="attachmentRS">
+		<id property="atId" column="FID"/>
+		<result property="originalFile" column="A_ORIGINNAME"/>
+		<result property="renameFile" column="A_RENAME"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="refTable" column="REF_TABLE"/>
+		<result property="refId" column="REF_ID"/>
+		<result property="status" column="STATUS"/>
+	</resultMap>
+	
+	<select id="count" resultType="int">
+		SELECT COUNT(*)AS CNT
+		FROM ITEM_VW
+		WHERE I_DIV =#{i_div}
+		AND STATUS='Y'
+	</select>
+	
+	<select id="searchCount" resultType="int">
+		SELECT COUNT(*)AS CNT
+		FROM ITEM_VW
+		WHERE I_DIV =#{i_div}
+		AND STATUS = 'Y'
+		<choose>
+			<when test = "search_condition == 1">
+				AND INAME_K LIKE #{keyword} || '%'
+			</when>
+			<when test = "search_condition == 2">
+				AND C_NAME_K LIKE #{keyword} || '%'
+			</when>
+			<when test = "search_condition == 3">
+				AND LOCATION LIKE #{keyword} || '%'
+			</when>
+			<when test = "search_condition == 4">
+				AND PRODUCTION LIKE #{keyword} || '%'
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="listAll" resultMap="itemResultSet">
+		SELECT B.*
+		FROM (SELECT ROWNUM AS RNUM, A.*
+			FROM(SELECT INO,
+						IID,
+						INAME_K,
+						PRICE,
+						STANDARD,
+						UNIT,
+						MATERIAL,
+						PERPOSE,
+						PRODUCTION,
+						TO_CHAR(CONTRACT_DATE,'YYYY-MM-DD') as CONTRACT_DATE,
+						STOCK,
+						REPLACEMENT,
+						CATEGORY,
+						TO_CHAR(REGIST_DATE,'YYYY-MM-DD') as REGIST_DATE,
+						NOTE,
+						STATUS,
+						LOCATION,
+						EMP_ID,
+						I_DIV,
+						I_DIV_NAME,
+						NAME,
+						ATC_CODE,
+						INSURANCE,
+						M_CONTROL,
+						KPIC,
+						ADD_M ,
+						C_NAME_K,
+						C_NAME_E
+				 FROM ITEM_VW
+				 WHERE I_DIV = #{i_div}
+				 AND STATUS = 'Y'
+				 <choose>
+				 	<when test = "search_condition == 1">
+						AND INAME_K LIKE #{keyword} || '%'
+					</when>
+					<when test = "search_condition == 2">
+						AND CATEGORY LIKE #{keyword} || '%'
+					</when>
+					<when test = "search_condition == 3">
+						AND LOCATION LIKE #{keyword} || '%'
+					</when>
+					<when test = "search_condition == 4">
+						AND PRODUCTION LIKE #{keyword} || '%'
+					</when>
+					<otherwise>
+					</otherwise>	
+				 </choose>
+				 ORDER BY INO DESC)A
+			<![CDATA[
+	    		WHERE ROWNUM<=#{endCount})B
+			WHERE B.RNUM>=#{startCount}
+        	 ORDER BY RNUM ASC
+        
+ 		]]>
+	</select>
+	<select id="detailItem" resultMap="itemResultSet">
+		SELECT  INO, IID, INAME_K, PRICE, STANDARD, UNIT, MATERIAL, PERPOSE, PRODUCTION,
+				TO_CHAR(CONTRACT_DATE,'YYYY-MM-DD') as CONTRACT_DATE, STOCK,REPLACEMENT,
+				CATEGORY,TO_CHAR(REGIST_DATE,'YYYY-MM-DD') as REGIST_DATE,
+				NOTE,LOCATION,EMP_ID,I_DIV,I_DIV_NAME,NAME, ATC_CODE, INSURANCE,
+				M_CONTROL, KPIC, ADD_M, C_NAME_K, C_NAME_E 	
+		FROM ITEM_VW
+		WHERE INO = #{i_no}
+	</select>
+	
+	<select id="detailImg" parameterType="Attachment" resultMap="attachmentRS">
+		SELECT * 
+		FROM ATTACHMENT
+		WHERE REF_TABLE=#{refTable}
+		AND REF_ID=#{refId}
+		AND A_RENAME NOT LIKE '%pdf' AND A_RENAME NOT LIKE '%PDF'
+		AND STATUS='Y'
+	</select>
+	
+	<select id="detailPdf" parameterType="Attachment" resultMap="attachmentRS">
+		SELECT * 
+		FROM ATTACHMENT
+		WHERE REF_TABLE=#{refTable}
+		AND REF_ID=#{refId}
+		AND A_RENAME LIKE '%pdf' OR A_RENAME LIKE '%PDF'
+		AND STATUS='Y'
+	</select>
+	
+	<select id="iIdCheck" resultType="int">
+		SELECT COUNT(*)
+		FROM ITEM_VW
+		WHERE IID = #{i_id}
+		AND I_DIV = #{i_div}
+		AND STATUS='Y'
+	</select>
+	
+	<insert id="enrollItem" parameterType="Item" >
+		INSERT INTO ITEM
+		 VALUES(SEQ_ITEM.NEXTVAL,#{i_id}, #{i_name_k}, #{price}, #{standard},
+		 		 #{unit}, #{material}, #{perpose}, #{production}, #{contract_date},
+		 		  #{stock}, #{replacement}, #{category}, SYSDATE, #{note},'Y', #{location},
+		 		   #{emp_id},#{ i_div},NULL,NULL)
+		
+		<selectKey keyProperty="i_no" resultType="Integer" order="AFTER">
+			SELECT SEQ_ITEM.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<update id="updateItem" parameterType="Item">
+		UPDATE ITEM
+		SET CATEGORY=#{category},UNIT=#{unit}, STANDARD=#{standard}, MATERIAL=#{material}, PRICE=#{price},
+		STOCK=#{stock},LOCATION=#{location},PRODUCTION=#{production},REPLACEMENT=#{replacement},PERPOSE=#{perpose},NOTE=#{note},MODIFY_DATE=SYSDATE
+		WHERE INO=#{i_no}
+		
+	</update>
+	
+	<update id="updateMedi" parameterType="Item">
+		UPDATE MEDICINE
+		SET INSURANCE=#{insurance}, M_CONTROL=#{m_control},ADD_M=#{add_m}
+		WHERE INO=#{i_no}
+		
+	</update>
+	<insert id="enrollMedi" parameterType="Item">
+		INSERT INTO MEDICINE 
+		VALUES(SEQ_ITEM.CURRVAL,#{atc_code}, #{insurance},#{m_control},#{kpic},#{add_m})
+	</insert>
+	
+	<insert id="enrollFile" parameterType="Attachment">
+		INSERT INTO ATTACHMENT
+		VALUES (SEQ_FID.nextval, #{originalFile}, #{renameFile}, #{filePath}, #{refTable}, #{refId}, DEFAULT)
+	</insert>
+	
+	
+	
+	<update id="deleteFile" parameterType="Attachment">
+		UPDATE ATTACHMENT
+		SET STATUS='N'
+		WHERE REF_TABLE=#{refTable} AND REF_ID=#{refId}
+	</update>
+	<update id="updateFile" parameterType="Attachment">
+		UPDATE ATTACHMENT 
+		SET A_ORIGINNAME=#{originalFile}, A_RENAME=#{renameFile} , STATUS=DEFAULT
+		WHERE REF_TABLE=#{refTable} AND REF_ID=#{refId}
+	</update>
+	
+	<select id="fileCount" resultType="int">
+		SELECT COUNT(*)AS CNT
+		FROM ATTACHMENT
+		WHERE REF_TABLE= 'ITEM' 
+		AND REF_ID=#{i_no}
+		AND STATUS='Y'
+	</select>
+	
+</mapper>
