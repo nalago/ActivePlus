@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 <style>
     .wrap{
-        width: 50%;
+        width: 40%;
         margin: auto;
         font-size: 12px;
     }
@@ -26,7 +26,7 @@
     #div1{
     width:100%;	
     }
-    
+    table{border-collapse: collapse;}
 </style>
 </head>
 <body>
@@ -43,49 +43,53 @@
         <table id="table1" align="center" border="1" style="width:100%;">
         <!--1줄-->
         <tr id="tr1">
-           <td rowspan="5" align="center" width="120" height="40" bgcolor="#ccffff">
+           <td rowspan="5" align="center" width="120" height="40" bgcolor="lightgrey">
 	           <div style="width:115.52px;height:150.68px;">
-		           <img src="${ contextPath }/resources/uploadFiles/employee/${ loginUser.renameFileName }" style="width: 115.52px; height:150.68px; object-fit:cover;">
+	           <c:forEach var="at" items="${ Attachment }">
+               <c:if test="${ at.refTable eq  'Employee'}">
+		           <img src="${ contextPath }/resources/uploadFiles/employee/${ at.renameFile }" style="width: 115.52px; height:150.68px; object-fit:cover;">
+		            </c:if>
+             </c:forEach>
 		       </div>
 		   </td>
-           <td align="center" bgcolor="#c4ffe1">성 명</td>
-           <td align="center" bgcolor="#c4ffe1">한 글</td>
-           <td width="225">${ loginUser.name }</td>
-           <td align="center" width="120" bgcolor="#c4ffe1">휴 대 폰</td>
+           <td align="center" bgcolor="lightblue">성 명</td>
+           <td align="center" bgcolor="lightblue">한 글</td>
+           <td width="225">&nbsp;${ loginUser.name }</td>
+           <td align="center" width="120" bgcolor="lightblue">휴 대 폰</td>
            <td width="225">&nbsp;${ loginUser.phone }</td>
         </tr>
         <tr>
-           <td colspan="2" align="center" bgcolor="#c4ffe1">상태</td>
-           <td colspan="3" >${ loginUser.status }</td>
+           <td colspan="2" align="center" bgcolor="lightblue">상태</td>
+           <td colspan="3" >&nbsp;${ loginUser.status }</td>
         </tr>
         <tr>
-           <td colspan="2"  align="center" bgcolor="#c4ffe1">아이디</td>
+           <td colspan="2"  align="center" bgcolor="lightblue">아이디</td>
            <td colspan="2">&nbsp;${ loginUser.id }</td>
         </tr>
         <tr>
-           <td colspan="2"  align="center" bgcolor="#c4ffe1">비밀번호</td>
+           <td colspan="2"  align="center" bgcolor="lightblue">비밀번호</td>
            <td colspan="2">&nbsp;${ loginUser.pwd }</td>
         </tr>
         
         <!--2줄-->
         <tr>
-           <td colspan="2" align="center" bgcolor="#c4ffe1">생 년 월 일</td>
+           <td colspan="2" align="center" bgcolor="lightblue">생 년 월 일</td>
            <td colspan="3" >&nbsp;${ loginUser.birth }</td>
         </tr>
         <tr>
-           <td colspan="2" align="center" bgcolor="#c4ffe1">부 서</td>
+           <td colspan="2" align="center" bgcolor="lightblue">부 서</td>
            <td colspan="3" >&nbsp;${ loginUser.category }</td>
         </tr>
         
         <!--3줄-->
         <tr>
            <!--<td></td>-->
-           <td colspan="1" align="center" width="120" bgcolor="#c4ffe1">계 좌 번 호</td>
+           <td colspan="1" align="center" width="120" bgcolor="lightblue">계 좌 번 호</td>
            <!--<td></td>-->
            <td>&nbsp;${ loginUser.acc_no }</td>
         </tr>
         <tr>
-           <td colspan="1" align="center" width="120" bgcolor="#c4ffe1">급 여</td>
+           <td colspan="1" align="center" width="120" bgcolor="lightblue">급 여</td>
            <!--<td></td>-->
            <td>&nbsp;${ loginUser.salary }</td>
         </tr>
@@ -93,7 +97,7 @@
         <!--4줄-->
         <tr>
            <!--<td></td>-->
-           <td colspan="2"  align="center" bgcolor="#c4ffe1">E-Mail</td>
+           <td colspan="2"  align="center" bgcolor="lightblue">E-Mail</td>
            <!--<td></td>-->
            <td colspan="3" >&nbsp;${ loginUser.email }</td>
            <!--<td></td>-->
@@ -102,11 +106,11 @@
         
         <!--5줄-->
         <tr>
-           <td colspan="2" align="center" bgcolor="#c4ffe1">현 주 소</td>
+           <td colspan="2" align="center" bgcolor="lightblue">현 주 소</td>
            <td colspan="3">&nbsp;${ loginUser.address }</td>
         </tr>
         <tr>
-           <td colspan="2" align="center" bgcolor="#c4ffe1">입 사 일</td>
+           <td colspan="2" align="center" bgcolor="lightblue">입 사 일</td>
            <td colspan="3">&nbsp;${ loginUser.hire_date }</td>
         </tr>
         </table>
@@ -115,12 +119,12 @@
         <div >    
             <table border="1" align="center" style="width: 100%;">
                 <tr> 
-                    <td colspan="3" align="center" bgcolor="#c4ffe1">면허</td>
+                    <td colspan="3" align="center" bgcolor="lightblue">면허</td>
                 </tr>
                 <tr>
-                    <td align="center" width="125"  height="25" bgcolor="#c4ffe1">명칭</td>
-                    <td align="center" width="125"  height="25" bgcolor="#c4ffe1">인가번호</td>
-                    <td align="center" width="125"  height="25" bgcolor="#c4ffe1">인가년월일</td>
+                    <td align="center" width="125"  height="25" bgcolor="lightblue">명칭</td>
+                    <td align="center" width="125"  height="25" bgcolor="lightblue">인가번호</td>
+                    <td align="center" width="125"  height="25" bgcolor="lightblue">인가년월일</td>
                 </tr>
                 <tr align="center">
                     <td height="25">&nbsp;${ loginUser.license }</td>
@@ -129,6 +133,25 @@
                 </tr>
         </table>
         </div>
+        
+        <div>
+        		<table  border="1" align="center" style="width: 100%;">
+        			<tr>
+                        <td  align="center" width="125"  height="25" bgcolor="lightblue">전자 서명 이미지 첨부</td>
+                    </tr>
+                    <tr>
+                        <td  align="center" style="height:100px;">
+                            <div id="contentImgArea1" style="width:115.52px; height:150.68px; background-color:lightgrey;">
+                            <c:forEach var="at" items="${ Attachment }">
+              					<c:if test="${ at.refTable eq  'Approval'}">
+                                	<img id="signImg" style="width: 100%; object-fit:cover;" src="${ contextPath }/resources/uploadFiles/employee/${ at.renameFile }">
+                                </c:if>
+             				</c:forEach>
+                            </div>
+                        </td>
+                    </tr>
+        		</table>
+        	</div>
         <c:url var="eupView" value="eupView.ap">
         	<c:param name="id" value="${ loginUser.id }"/>
         	<c:param name="page" value="${ currentPage }"/>
@@ -136,7 +159,7 @@
         
         <c:url var="main" value="main.ap"/>
         
-        <button type="button" class="backlist" onclick="${ main }">메인으로</button>
+        <button type="button" class="backlist" onclick="location.href='${ main }'">메인으로</button>
         <button type="button" onclick="location.href='${ eupView }'">수정하기</button>
         <!-- <button id="deleteBtn" onclick="deleteBtn();">삭제하기</button> -->
     </div>

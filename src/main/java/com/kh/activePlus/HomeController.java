@@ -48,11 +48,15 @@ public class HomeController {
 		String tnaDay = null;
 		// 출-퇴근 확인
 		ArrayList<TNA> tList = eService.selectTNA(empId);
+
+
 		Attachment at = eService.selectImg(empId);
+
 		if(at != null) {
 			String photo = "resources\\uploadFiles\\employee\\"+at.getRenameFile();
 			model.addAttribute("img",photo);
 		}
+
 		if (tList != null && !tList.isEmpty()) {
 			tnaDay = sdf.format(tList.get(0).getStartDate());
 			// System.out.println("확인 : " + tnaDay.equals(today));

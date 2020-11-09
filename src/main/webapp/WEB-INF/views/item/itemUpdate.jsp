@@ -194,11 +194,12 @@
 						<div class="filebox">
  							<label for="i_image">사진 업로드</label>
  							<input type="hidden" id="up_img" value="${ img.originalFile }" name="up_img">
-							 <input type="file" id="i_image" name="i_image" accept="image/*" onchange="setThumbnail(event);"/> 
+							 <input type="file" id="i_image" name="i_image" accept="image/*" onchange="setThumbnail(this);"/> 
 							 <div id="image_container">
 							 	<c:if test="${ !empty img  }">
-							 		<img src="${contextPath }/resources/uploadFiles/item/image/${img.renameFile}">
+							 		<img id="file1" src="${contextPath }/resources/uploadFiles/item/image/${img.renameFile}">
 							 	</c:if>
+							 	<img id="LoadImg" style="visibility: hidden;">
 							 </div>
 						</div>
 						<div class="pdfbox">
@@ -425,18 +426,15 @@
 			}
 		});
 		
-		function setThumbnail(event) { 
-			var reader = new FileReader();
-			
-			reader.onload = function(event) { 
-				var img = document.createElement("img"); 
-				img.setAttribute("src", event.target.result);
-				document.querySelector("div#image_container").appendChild(img);
-				
-			};
-				
-				reader.readAsDataURL(event.target.files[0]);
-				
+		function setThumbnail(value) { 
+			if(value.files && value.files[0]){
+				var reader = new FileReader();
+				reader.onload = function(e){
+					$("#file1").hide();
+					$("#LoadImg").attr('src', e.target.result).css("visibility","visible");
+				}
+				reader.readAsDataURL(value.files[0]);
+			}
 		}
 		
 		$(document).ready(function(){ 

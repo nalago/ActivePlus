@@ -97,10 +97,18 @@ body{
 
 section{
 	/* border: solid 1px blue; */
-	margin-left:200px;
+
+	/*margin-left:200px;
 	width : 90%;
 	height : 100vh;
-	margin-top:-97px;
+	margin-top:-97px;*/
+
+	width : 78%;
+	height : 100%;
+	display: inline-block;
+	float: right;
+	margin-left:280px;
+
 }
 
 #subMenu{

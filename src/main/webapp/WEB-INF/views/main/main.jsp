@@ -7,9 +7,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Active Plus</title>
+
 <script src="https://code.jquery.com/jquery-3.5.1.js"
 	integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
 	crossorigin="anonymous"></script>
+
 <style>
 @font-face {
 	font-family: 'S-CoreDream-3Light';
@@ -124,9 +126,7 @@ table a:hover{
 </style>
 </head>
 <body>
-	<nav id="side">
 		<jsp:include page="../common/menubar.jsp" />
-	</nav>
 	<section>
 		<div id="userInfo">
 			<div id="basic">

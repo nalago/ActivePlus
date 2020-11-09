@@ -177,7 +177,7 @@
     }
     
     #docform{
-    	width:80%;
+    	
     	display:inline-block;
     	float:right;
     }
