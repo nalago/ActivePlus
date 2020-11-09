@@ -21,19 +21,5 @@ public class PageInfo {
 	private int startPage;
 	private int endPage;
 	private int boardLimit;
-	private int EmployeeLimit;
-	
-	public PageInfo(int currentPage, int listCount, int pageLimit, int maxPage, int startPage, int endPage,
-			int employeeLimit) {
-		super();
-		this.currentPage = currentPage;
-		this.listCount = listCount;
-		this.pageLimit = pageLimit;
-		this.maxPage = maxPage;
-		this.startPage = startPage;
-		this.endPage = endPage;
-		EmployeeLimit = employeeLimit;
-	}
-	
-	
+
 }

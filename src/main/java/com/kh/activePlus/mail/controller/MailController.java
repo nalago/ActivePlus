@@ -203,7 +203,7 @@ public class MailController {
 			ArrayList<String> reList = mService.selectReceiver(list.get(i));
 			String s = "";
 			for(String str : reList) {
-				s = s + str;
+				s = s + str+" ";
 			}
 			list.get(i).setMrName(s);
 		}
@@ -215,7 +215,6 @@ public class MailController {
 	public String mailSend(Email e,@RequestParam(name="refInput", required=false) String refEmp,@RequestParam(name="rInput") String rEmp,
 			@RequestParam(name="mId", required=false) Integer mNo, MultipartHttpServletRequest mReq) {
 			
-			System.out.println("controller : " + e);
 		
 		
 			Employee user = (Employee)mReq.getSession().getAttribute("loginUser");
@@ -233,7 +232,6 @@ public class MailController {
 				e.setAttStock(fList.size());
 			} 
 			int mId = mService.sendMail(e, receiver, refReceiver);
-			System.out.println(mId);
 			ArrayList<Attachment> aList = new ArrayList<>();
 			if(mId > 0 && fList != null) {
 				for(MultipartFile mf : fList) {
@@ -260,6 +258,7 @@ public class MailController {
 	public String openEmp() {
 		
 		ArrayList<Employee> eList = eService.selectEmpList();
+		System.out.println("eList : " + eList);
 		Gson gson = new GsonBuilder().create();
 		
 		return gson.toJson(eList);

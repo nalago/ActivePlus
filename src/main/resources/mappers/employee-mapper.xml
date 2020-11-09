@@ -4,71 +4,95 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="employeeMapper">
 	<resultMap id="employeeResultSet" type="Employee">
-		<id property="id" column="EMP_ID"/>
-		<result property="pwd" column="PWD"/>
-		<result property="email" column="EMAIL"/>
-		<result property="name" column="NAME"/>
-		<result property="phone" column="PHONE"/>		
-		<result property="birth" column="BIRTH"/>
-		<result property="category" column="CATEGORY"/>
-		<result property="salary" column="SALARY"/>
-		<result property="acc_no" column="ACC_NO"/>
-		<result property="address" column="ADDRESS"/>
-		<result property="hire_date" column="HIRE_DATE"/>		
-		<result property="status" column="STATUS"/>
-		<result property="license" column="LICENSE"/>
-		<result property="license_no" column="LICENSE_NO"/>
-		<result property="license_date" column="LICENSE_DATE"/>
+		<id property="id" column="EMP_ID" />
+		<result property="pwd" column="PWD" />
+		<result property="email" column="EMAIL" />
+		<result property="name" column="NAME" />
+		<result property="phone" column="PHONE" />
+		<result property="birth" column="BIRTH" />
+		<result property="category" column="CATEGORY" />
+		<result property="salary" column="SALARY" />
+		<result property="acc_no" column="ACC_NO" />
+		<result property="address" column="ADDRESS" />
+		<result property="hire_date" column="HIRE_DATE" />
+		<result property="status" column="STATUS" />
+		<result property="license" column="LICENSE" />
+		<result property="license_no" column="LICENSE_NO" />
+		<result property="license_date" column="LICENSE_DATE" />
 		<!-- 직급 -->
-		<result property="department" column="DEPARTMENT"/>
-		<result property="jobGrade" column="JOB_GRADE"/>
-		<result property="field" column="FIELD"/>
-		<result property="grade" column="GRADE"/>
+		<result property="department" column="DEPARTMENT" />
+		<result property="jobGrade" column="JOB_GRADE" />
+		<result property="field" column="FIELD" />
+		<result property="grade" column="GRADE" />
 	</resultMap>
-	
-	<resultMap type="TNA" id="TNAResultSet">
-		<id property="tid" column="TID"/>
-		<result property="startDate" column="START_DATE"/>
-		<result property="leaveDate" column="LEAVE_DATE"/>
-		<result property="reason" column="REASON"/>
-		<result property="empId" column="EMP_ID"/>
-	</resultMap>
-	
-	
 
-	<select id="selectOne" parameterType="Employee" resultMap="employeeResultSet">
+	<resultMap type="TNA" id="TNAResultSet">
+		<id property="tid" column="TID" />
+		<result property="startDate" column="START_DATE" />
+		<result property="leaveDate" column="LEAVE_DATE" />
+		<result property="reason" column="REASON" />
+		<result property="empId" column="EMP_ID" />
+	</resultMap>
+
+		
+	<resultMap id="AttachmentResultSet" type="Attachment">
+      <id property="atId" column="FID"/>
+      <result property="originalFile" column="A_ORIGINNAME"/>
+      <result property="renameFile" column="A_RENAME"/>
+      <result property="filePath" column="FILE_PATH"/>
+      <result property="status" column="STATUS"/>
+      <result property="refTable" column="REF_TABLE"/>
+      <result property="refId" column="REF_ID"/>
+   </resultMap>
+	<resultMap id="MedicalTeamResultSet" type="MedicalTeam">
+      <id property="emp_id" column="EMP_ID"/>
+      <result property="field" column="FIELD"/>
+      <result property="grade" column="GRADE"/>
+   </resultMap>
+
+
+	<select id="selectOne" parameterType="Employee"
+		resultMap="employeeResultSet">
 		SELECT *
 		FROM EMPLOYEE
 		WHERE EMP_ID=#{id}
 	</select>
-	
+
 	<select id="selectListCount" resultType="_int">
 		SELECT COUNT(*)
-		FROM EMPLOYEE
+		FROM
+		EMPLOYEE
 	</select>
-	
+
 	<select id="selectList" resultMap="employeeResultSet">
 		SELECT *
 		FROM EMPLOYEE
-		ORDER BY EMP_ID DESC
+		ORDER BY
+		EMP_ID DESC
 	</select>
-	
+
 	<insert id="insertEmployee" parameterType="Employee">
-		INSERT INTO EMPLOYEE VALUES(
+		INSERT INTO EMPLOYEE
+		VALUES(
 		#{id}, #{pwd}, #{email}, #{phone},
-		#{name}, #{birth}, #{category}, #{salary}, #{acc_no},
-		#{address}, #{hire_date}, #{status}, #{license}, #{license_no}, #{license_date},
-		#{originalFileName}, #{renameFileName})
+		#{name}, #{birth},
+		#{category}, #{salary}, #{acc_no},
+		#{address}, #{hire_date}, #{status},
+		#{license}, #{license_no}, #{license_date},
+		#{originalFileName},
+		#{renameFileName})
 	</insert>
-	
+
 	<select id="selectOne1" resultMap="employeeResultSet">
 		SELECT *
 		FROM EMPLOYEE
-		WHERE EMP_ID=#{id}
+		WHERE
+		EMP_ID=#{id}
 	</select>
-	
-<select id="searchList" parameterType="Search" resultMap="employeeResultSet">
-		<bind name="sv" value="'%' + _parameter.getSearchValue() + '%'"/>
+
+	<select id="searchList" parameterType="Search"
+		resultMap="employeeResultSet">
+		<bind name="sv" value="'%' + _parameter.getSearchValue() + '%'" />
 		SELECT *
 		FROM EMPLOYEE
 		<where>
@@ -84,61 +108,131 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 				</when>
 				<otherwise>
 					AND (NAME LIKE #{sv}
-						OR CATEGORY LIKE #{sv}
-						OR STATUS LIKE #{sv})
+					OR CATEGORY LIKE #{sv}
+					OR STATUS LIKE #{sv})
 				</otherwise>
 			</choose>
 		</where>
 		ORDER BY EMP_ID DESC
 	</select>
-	
+
 	<insert id="startWorking" parameterType="TNA">
 		INSERT INTO TNA (TID, START_DATE, EMP_ID)
-		VALUES(SEQ_TID.NEXTVAL, #{startDate}, #{empId})
-		
-		<selectKey keyProperty="tid" resultType="Integer" order="AFTER">
+		VALUES(SEQ_TID.NEXTVAL,
+		#{startDate}, #{empId})
+
+		<selectKey keyProperty="tid" resultType="Integer"
+			order="AFTER">
 			SELECT SEQ_TID.CURRVAL FROM DUAL
 		</selectKey>
 	</insert>
-	
-	<select id="selectTNA" parameterType="String" resultMap="TNAResultSet">
+
+	<select id="selectTNA" parameterType="String"
+		resultMap="TNAResultSet">
 	<![CDATA[
 		SELECT ROW_NUMBER() OVER( ORDER BY TID desc ) RNUM, TNA.*
 		FROM  TNA
 		WHERE EMP_ID = #{empId}
 		AND ROWNUM <= 5
-	]]>	
+	]]>
 	</select>
-	
+
 	<update id="endWorking" parameterType="hashMap">
 		UPDATE TNA
-		SET LEAVE_DATE = SYSDATE, 
-			<if test="kind == 'end'">
-				REASON='퇴근'
-			</if>
-			<if test="kind == 'half'">
-				REASON='반차'
-			</if>
-		
+		SET LEAVE_DATE = SYSDATE,
+		<if test="kind == 'end'">
+			REASON='퇴근'
+		</if>
+		<if test="kind == 'half'">
+			REASON='반차'
+		</if>
+
 		WHERE TID = #{tid}
 	</update>
 	<select id="selectEmpList" resultMap="employeeResultSet">
 		SELECT *
 		FROM EMP_TEAM 
-		WHERE STATUS = 'Y'
+		WHERE STATUS = '재직'
+
 	</select>
-	<select id="getHalfCount" parameterType="hashMap"  resultType="_int">
+	<select id="getHalfCount" parameterType="hashMap"
+		resultType="_int">
 		SELECT COUNT(*)
 		FROM TNA
-		WHERE LEAVE_DATE BETWEEN TO_DATE(#{startYear}, 'YYYY-MM-DD')
-		AND TO_DATE(#{endYear},'YYYY-MM-DD')
+		WHERE LEAVE_DATE BETWEEN
+		TO_DATE(#{startYear}, 'YYYY-MM-DD')
+		AND
+		TO_DATE(#{endYear},'YYYY-MM-DD')
 		AND EMP_ID=#{empId}
 		AND REASON='반차'
 	</select>
+	<select id="selectImg" parameterType="String" resultMap="AttachmentResultSet">
+		SELECT A_RENAME, FILE_PATH
+		FROM ATTACHMENT
+		WHERE REF_TABLE='EMPLOYEE' AND REF_ID=#{empId}
+	</select>
+
+	<update id="updateEmployee" parameterType="Employee"> UPDATE EMPLOYEE
+	SET
+		EMP_ID=#{id}, PWD=#{pwd}, EMAIL=#{email},
+		BIRTH=#{birth},CATEGORY=#{category}, SALARY=#{salary},
+		ACC_NO=#{acc_no},ADDRESS=#{address}, HIRE_DATE=#{hire_date},
+		STATUS=#{status},LICENSE=#{license}, LICENSE_NO=#{license_no},
+		LICENSE_DATE=#{license_date},ORIGINAL_FILENAME=#{originalFileName},
+		RENAME_FILENAME=#{renameFileName}WHERE EMP_ID=#{id}
+		 </update>
+
+	<update id="updateMediTeam" parameterType="MedicalTeam">UPDATE MEDICALTEAM
+	SET
+		FIELD=#{field}, GRADE=#{grade}WHERE EMP_ID=#{emp_id} </update>
+
+	<update id="deleteEmployee" parameterType="String">UPDATE EMPLOYEE
+	SET
+		STATUS='퇴직' WHERE EMP_ID=#{id} </update>
+
+	<update id="updatePass" parameterType="Employee">UPDATE EMPLOYEE
+	SET
+		PWD=#{pwd}
+		WHERE EMP_ID=#{id} </update>
+
+	<select id="selectmyInfo" resultMap="employeeResultSet"
+		parameterType="Employee">
+		SELECT *
+		FROM EMPLOYEE
+		WHERE EMP_ID=#{id} </select>
+
+	<insert id="insertempAttachment" parameterType="Attachment">INSERT INTO
+		ATTACHMENT
+		VALUES(SEQ_ATT.NEXTVAL,
+		#{originalFile},#{renameFile},#{filePath}, #{refTable} ,
+		''||SEQ_EMP_NO.CURRVAL, DEFAULT) </insert>
+
+	<update id="updateAttachment" parameterType="Attachment">UPDATE ATTACHMENT
+	SET
+		A_ORIGINNAME=#{originalFile}, A_RENAME=#{renameFile},
+		FILE_PATH=#{filePath}, REF_TABLE=#{refTable}, STATUS=DEFAULTWHERE
+		REF_ID = #{refId} </update>
+
+	<select id="getPWd" parameterType="java.util.Map"
+		resultType="java.lang.String">SELECT PWd FROM EMPLOYEE WHERE EMP_ID=#{id} AND
+		EMAIL=#{email} </select>
+
+	<select id="getUserPwd" parameterType="java.lang.String"
+		resultType="java.lang.String">SELECT PWd FROM EMPLOYEE WHERE EMP_ID = #{id} </select>
 
 
-
-
-
-
+<select id="selectAttachment" resultMap="AttachmentResultSet">
+      SELECT *
+      FROM ATTACHMENT
+      WHERE REF_ID = #{eid}
+   </select>
+   <select id="selectMediTeam" parameterType="MedicalTeam" resultMap="MedicalTeamResultSet">
+      SELECT * 
+      FROM MEDICALTEAM 
+      WHERE EMP_ID = #{emp_id}
+   </select>
+<insert id="insertMediTeam" parameterType="MedicalTeam">
+      INSERT INTO MEDICALTEAM VALUES(
+      #{emp_id}||SEQ_EMP_NO.CURRVAL, #{field}, #{grade})
+   </insert>
 </mapper>

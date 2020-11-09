@@ -203,7 +203,6 @@
     }
     #docform{
     	display:inline-block;
-    	width:80%;
     	float:right;
     }
     #docwrap{
@@ -245,8 +244,6 @@
                		${d.docContent }
 	               	<textarea id="editor" name="draftContent"></textarea>
                	</c:if> 
-               		<%-- ${d.docContent }
-               		<textarea id="editor" name="draftContent"></textarea> --%>
                	</div>
                	<input type="text" id="docNo" name="docNo" value="${ d.docNo }" readonly/>
                	<input type="text" id="docDiv" name="apvDocContent" readonly/>

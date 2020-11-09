@@ -1,6 +1,7 @@
 package com.kh.activePlus.approval.model.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,7 +74,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public ArrayList<Doc> selectAllDocTypeList(String eId, PageInfo pi) {
+	public List<Doc> selectAllDocTypeList(String eId, PageInfo pi) {
 		return aDao.selectAllDocTypeList(eId, pi);
 	}
 
