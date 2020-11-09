@@ -140,8 +140,8 @@ table a:hover{
 			<c:if test="${ !empty TNA }">
 				<c:if test="${ Tmsg ne 'END' }">
 					<!-- 출근 버튼 클릭 후 아래 버튼을 보이게한다. -->
-					<button type="button" class="TNABtn half" style="margin-left:20px; color:#ff4d4d" id="endWork">퇴근</button>
-					<button type="button" class="TNABtn half" id="halfWork">반차</button>
+					<button type="button" class="TNABtn half" style="margin-left:20px; color:#ff4d4d" id="endWork"onclick="endWork('end')">퇴근</button>
+					<button type="button" class="TNABtn half" id="halfWork" onclick="endWork('half')">반차</button>
 				</c:if>
 				<div align="center" style="border-bottom:1px solid #f6f6f6; border-top:1px solid #f6f6f6">
 				<a href="#" style="text-decoration:none; color:#2f2f2f">휴가 신청하기</a>
@@ -275,18 +275,20 @@ table a:hover{
 			});
 		});
 		
-		$("#endWork").on("click",function(){
+		function endWork(kind){
 			var tid = "${ tid }";
 			
 			$.ajax({
 				url:"workend.ap",
 				type:"POST",
-				data:{tid:tid},
+				data:{tid:tid, kind:kind},
 				success:function(data){
-					if(data != null){
+					if(data == "success"){
 						alert("퇴근 완료");
 						location.href="main.ap";
-					} else {
+					} else if("overHalf") {
+						alert("사용하실 수 있는 반차의 개수가 없습니다.(총 12개)");
+					}  else {
 						alert("퇴근 처리에 실패했습니다. 잠시후 다시 시도해주세요.");
 					}
 				},
@@ -295,7 +297,7 @@ table a:hover{
 				}
 			
 			});
-		});
+		}
 	
 	$(document).ready(function(){
 		console.log("TMsg = " + "${Tmsg}");

@@ -22,14 +22,14 @@ public class MailServiceImpl implements MailService{
 		return 0;
 	}
 
-	@Override
-	public ArrayList<Email> selectInList(String receiver, String kind,PageInfo pi) {
-		return mDao.selectInList(receiver, kind,pi);
-	}
 
 	@Override
 	public int getListCount(String receiver, String kind) {
 		return 0;
 	}
 
+	@Override
+	public ArrayList<Email> selectInList(String receiver, String kind,PageInfo pi) {
+		return mDao.selectInList(receiver, kind,pi);
+	}
 }

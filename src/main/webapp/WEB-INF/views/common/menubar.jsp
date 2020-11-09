@@ -13,10 +13,11 @@ scope="application"/>
 <link rel="stylesheet" href="${ contextPath }/resources/css/basic.css"/>
 </head>
 <body>
+		<c:url var="myinfo" value="myInfo.ap" scope="application"/>
 	
 		<div id="profile">
 			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님</span>
-			<span ><a id="info" class="profile" href="#">개인정보</a></span>
+			<span ><a id="info" class="profile" href="${ myinfo }">개인정보</a></span>
 			<a href="main.ap">
 			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">
 			</a>
@@ -33,7 +34,7 @@ scope="application"/>
 			<c:url var="goApproval" value="approvalMain.ap" scope="application"/>
 			<c:url var="goNotice" value="notice.ap" scope="application"/>
 			<c:url var="goMessenger" value="messenger.ap" scope="application"/>
-			<c:url var="goEmployeeSystem" value="goEmployeeSystem.ap"/>
+			<c:url var="goEmployeeSystem" value="goEmployeeSystem.ap" scope="application"/>
       
 			<a href="${ goSchd }">일정관리</a>
 			<a href="${ goApproval }">전자결재</a>
@@ -41,12 +42,18 @@ scope="application"/>
 			<a href="${ goNotice }">게시판</a>
 			<a href="${ goMessenger }">메신저</a> 
 			<a href="${ goMail }">메일</a>
-			<%-- <c:if test="${ loginUser.id eq 'admin' && loginUser.category eq '인사'}"> --%>
+			<c:if test="${ loginUser.id eq 'admin' && loginUser.category eq 'master'}">
 			<a href="${ goEmployeeSystem }">인사관리</a>
-			<%-- </c:if>
-			<c:if test="${ loginUser.id ne 'admin' && loginUser.category ne '인사' }">
-			<a href="#">인사관리</a>
-			</c:if> --%>
+			</c:if>
+			<c:if test="${ loginUser.id ne 'admin' && loginUser.category ne 'master'}">
+			<a href="#" id="employeeSys">인사관리</a>
+			</c:if>
 		</div>
+		
+<script>
+	$("#employeeSys").click(function(){
+		if(confirm("권한이 없습니다."));
+	});
+</script>
 </body>
 </html>

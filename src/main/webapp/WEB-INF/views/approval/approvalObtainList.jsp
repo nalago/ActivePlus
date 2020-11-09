@@ -431,7 +431,7 @@
    							console.log($atList);
    							for(var i = 0; i < $atList.length; i++){
    								apvfile.innerHTML += "<br>"+
-   								"<a href='${contextPath}/resources/approval/duploadFiles/"+$atList[i].renameFile+"' download='"+$atList[i].originalFile+"'>"+$atList[i].originalFile+"</a>";
+   								"<a href='${contextPath}/resources/uploadFiles/employee/"+$atList[i].renameFile+"' download='"+$atList[i].originalFile+"'>"+$atList[i].originalFile+"</a>";
    							}
    							
    							

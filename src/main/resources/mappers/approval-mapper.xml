@@ -368,6 +368,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<foreach collection="eList" item="item" separator="," open="(" close=")">
 			 #{item}
 		</foreach>
+		AND REF_TABLE = 'Approval'
 	</select>
 	
 	<update id="draftingRetrieve" parameterType="_int">
