@@ -16,7 +16,7 @@
 	integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
 	crossorigin="anonymous"></script>
 <script type="text/javascript">
-	var mailContent = "${mailContent}"
+	var mailContent = "${e.content}"
 	var oEditors = [];
 	$(function() {
 		nhn.husky.EZCreator
@@ -178,11 +178,12 @@ h4 {
 				href="${ goWastebox }">휴지통</a> <br>
 			<br>
 		</div>
-		<!-- switch문을 이용하여 변경 -->
+		<img alt="green-back-icon" src="${ contextPath }/resources/images/board/green-back-icon.png"
+		width="50px" height="50px" style="cursor:pointer" onclick="history.back()">
 		<h1 id="submenuTitle">메일작성</h1>
 		<div id="contentDiv">
 			<span>
-				<button type="button" id="send" class="mailBtn"
+				<button id="send" class="mailBtn"
 					onclick="validateForm('send')">보내기</button>
 				<button type="button" id="sendToMe" class="mailBtn"
 					onclick="validateForm('self')">내게쓰기</button>
@@ -192,21 +193,21 @@ h4 {
 			</span> <br>
 			<div id="mailForm">
 				<c:url var="mailSend" value="send.ap" />
+				<c:set var="category" value="발신"/>
 				<form name="mailForm" action="${ mailSend }" method="post"
-					enctype="multipart/from-date" onsubmit="">
-
+					enctype="multipart/form-data">
+					<input type="hidden" value="${ e.category }" name="category" id="category">
+					<input type="hidden" value="${ e.mailId }" name="mId" id="mId">
 					<div id="topContent" class="form-content">
 						<ul>
 							<li><label class="cont-label recipient" id="recipient">받는사람</label><input
 								type="text" class="input-text" onclick="inputClick('recipient')"
-								placeholder="직원을 입력하세요." id="rInput"> <input
-								type="hidden" name="receiver">
+								placeholder="직원을 입력하세요." id="rInput" name="rInput">
 								<button type="button" style="width: 45px" class="findEmp"
 									id="sendEmp">찾기</button></li>
 							<li><label class="cont-label ref-person">참조</label><input
 								type="text" class="input-text" onclick="inputClick('ref')"
-								placeholder="직원을 입력하세요." id="refInput"> <input
-								type="hidden" name="refReceiver">
+								placeholder="직원을 입력하세요." id="refInput" name="refInput" readonly>
 								<button type="button" style="width: 45px" class="findEmp"
 									id="refEmp">찾기</button></li>
 							<li><label class="cont-label title">제목</label><input
@@ -253,7 +254,6 @@ h4 {
 					<option value="간호과">간호과</option>
 					<option value="의료기과">의료기과</option>
 				</select>
-				<button type="button">조회하기</button>
 				<br>
 				<br> 
 				<select id="empSelect">
@@ -290,7 +290,7 @@ h4 {
 					fileName = '"' + files[i].name + '" ';
 				else
 					fileName += '"' + files[i].name + '" ';
-				console.log(fileName);
+				// console.log(fileName);
 			}
 			$("#attachment-content").val(fileName);
 		});
@@ -350,6 +350,11 @@ h4 {
 			oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 			if (kind == 'self') {
 				$("#rInput").val("${loginUser.id}");
+				$("#category").val("발신");
+			} else if(kind == 'send'){
+				$("#category").val("발신");
+			} else {
+				$("#category").val("임시");
 			}
 
 			var receiver = $("#rInput").val();
@@ -358,17 +363,23 @@ h4 {
 
 			if (receiver.trim() == "") {
 				alert("받는 사람이 지정되지 않았습니다.");
+					$("form").submit(false);
+				
 			} else if (title.trim() == "") {
 				if (confirm("제목이 입력되지 않았습니다. 메일을 보내시겠습니까?")) {
+					$("#title").val("제목없음");
 					$("form").submit();
 				}
 
 			} else if (content == "" || content == null || content == '&nbsp;'
 					|| content == '<p>&nbsp;</p>') {
 				if (confirm("내용이 입력되지 않았습니다. 메일을 보내시겠습니까?")) {
+					$("#content").val("제목없음");
 					$("form").submit();
 				}
 			}
+			$("form").submit();
+			
 
 		}
 
@@ -643,6 +654,29 @@ h4 {
 				$container.append($li);
 			}
 		}
+		
+		/* 답장, 전달 */
+		$(document).ready(function(){
+			var title = "${e.title}";
+			var kind = "${kind}";
+			var receiver = "";
+			if(kind == "reSend"){
+				receiver = "${e.writer}";
+				$("#rInput").val(receiver);
+				$("#rInput").attr("readonly",true);
+				$("#refInput").attr("readonly",true);
+				$(".findEmp").attr("disabled",true);
+				$("#title").val("RE : " + title);
+				$("#title").attr("readonly",true);
+			} else if(kind == "deliver"){
+				$("#title").val("DEL : " + title);
+				$("#title").attr("readonly",true);
+				
+			}
+			
+			
+		});
+		
 	</script>
 </body>
 </html>

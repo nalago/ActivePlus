@@ -78,11 +78,10 @@ thead {
 				</c:if>>상태</option>
 			</select>
 			<input type="search" name="searchValue" value="${ search.searchValue }">
-			<button>검색</button> &nbsp;
-		<button type="button" onclick="location.href='employeeInsertView.ap'">회원등록</button>
+			<button>검색</button>
 		</form>
+		<button onclick="location.href='memberInsertView.ap'">회원등록</button>
 	</div>
-	<br>
 	<div align="center" class="wrap">
 		<table align="center" id="memberTable">
 			<tr>
@@ -92,36 +91,29 @@ thead {
 				<th>상태</th>
 				<th>입사일</th>
 			</tr>
-			<c:forEach var="e" items="${ list }">
-			<c:if test="${ e.status ne '퇴직' }">
+			<c:forEach var="m" items="${ list }">
 			<tr>
-						<c:url var="edetail" value="edetail.ap">
-							<c:param name="id" value="${ e.id }"/>
+						<c:url var="mdetail" value="mdetail.ap">
+							<c:param name="id" value="${ m.id }"/>
 							<c:param name="page" value="${ pi.currentPage }"/>
 						</c:url>
-				<td><a style="text-decoration:none;" href="${ edetail }">${ e.id }</a></td>
-				<td>${ e.name }
+				<td><a href="${ mdetail }">${ m.id }</a></td>
+				<td>${ m.name }
 					<c:if test="${ !empty loginUesr }">
-						<c:url var="edetail" value="edetail.ap">
-							<c:param name="id" value="${ e.id }"/>
+						<c:url var="mdetail" value="mdetail.ap">
+							<c:param name="id" value="${ m.id }"/>
 							<c:param name="page" value="${ pi.currentPage }"/>
 						</c:url>
-						<a href="${ edetail }">${ e.id }</a>
+						<a href="${ mdetail }">${ m.id }</a>
 					</c:if>
 					<c:if test="${ empty loginUser }">
-						${ e.name }
+						${ m.name }
 					</c:if>
 				</td>
-				<td>${ e.category }</td>
-				<td>${ e.status }</td>
-				<td>
-				<%-- <fmt:parseDate var="dateFmt" pattern="yyyy-MM-dd" value="${ e.hire_date }">
-				dateFmt
-				</fmt:parseDate> --%>
-				${ e.hire_date }
-				</td>
+				<td>${ m.category }</td>
+				<td>${ m.status }</td>
+				<td>${ m.hire_date }</td>
 			</tr>
-			</c:if>
 			</c:forEach>
 			<!-- 페이징 처리 -->
 			<tr align="center" height="20">
@@ -131,7 +123,7 @@ thead {
 					[이전] &nbsp;
 				</c:if>
 				<c:if test="${ pi.currentPage > 1 }">
-					<c:url var="before" value="goEmployeeSystem.ap">
+					<c:url var="before" value="goMemberSystem.ap">
 						<c:param name="page" value="${ pi.currentPage - 1 }"/>
 					</c:url>
 					<a href="${ before }">[이전]</a> &nbsp;
@@ -142,7 +134,7 @@ thead {
 						<font color="red" size="4">[ ${ p } ]</font>
 					</c:if>
 					<c:if test="${ p ne pi.currentPage }">
-						<c:url var="pagination" value="goEmployeeSystem.ap">
+						<c:url var="pagination" value="goMemberSystem.ap">
 							<c:param name="page" value="${ p }"/>
 						</c:url>
 						<a href="${ pagination }">${ p }</a> &nbsp;
@@ -153,7 +145,7 @@ thead {
 					[다음]
 				</c:if>
 				<c:if test="${ pi.currentPage < pi.maxPage }">
-					<c:url var="after" value="goEmployeeSystem.ap">
+					<c:url var="after" value="mlist.do">
 						<c:param name="page" value="${ pi.currentPage + 1 }"/>
 					</c:url>
 					<a href="${ after }">[다음]</a>

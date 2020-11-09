@@ -6,9 +6,47 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Active Plus::보낸메일함</title>
 <link rel="stylesheet"
 	href="${ contextPath }/resources/css/mail/mail.css" />
+<style>
+/* paging box */
+li {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+.pagination {
+	padding: 30px 0;
+}
+
+.pagination ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+li a {
+	display: inline-block;
+	padding: 10px 18px;
+	color: #222;
+}
+
+.p9 a {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	padding: 0;
+	text-align: center;
+	margin: auto 5px;
+}
+
+.p9 a.is-active {
+	border: 3px solid #63ab68;
+	border-radius: 100%;
+}
+</style>
 </head>
 <body>
 	<nav id="side">
@@ -25,14 +63,51 @@
 			<br>
 		</div>
 		<h1 id="submenuTitle">보낸 메일함</h1>
+		<div id="pagingBox" align="center">
+		<c:url var="paging" value="sendbox.ap"/>
+				<div class="pagination p9" align="center">
+					<ul>
+						<c:if test="${ pi.currentPage <= 1 }">
+							<li><a href="#" style="color: lightgray">&lt;&nbsp;</a></li>
+						</c:if>
+						<c:if test="${ pi.currentPage > 1 }">
+							<c:url var="before" value="${ paging }">
+								<c:param name="page" value="${ pi.currentPage - 1 }" />
+							</c:url>
+							<li><a href="${ before }">&lt;&nbsp;</a>
+						</c:if>
+						<!-- 페이지 숫자 -->
+						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+							<c:if test="${ p eq pi.currentPage }">
+								<li><a class="is-active" href="#">${ p }</a></li>
+							</c:if>
+							<c:if test="${ p ne pi.currentPage }">
+								<c:url var="pagination" value="${ paging }">
+									<c:param name="page" value="${ p }" />
+								</c:url>
+								<li><a href="${ pagination }" style="color:gray">${ p }&nbsp;</a></li>
+							</c:if>
+						</c:forEach>
+						<c:if test="${ pi.currentPage >= pi.maxPage }">
+							<li><a href="#" style="color: lightgray">&gt;&nbsp;</a></li>
+						</c:if>
+						<c:if test="${ pi.currentPage < pi.maxPage }">
+							<c:url var="after" value="${ paging }">
+									<c:param name="page" value="${ pi.currentPage + 1 }" />
+							</c:url>
+							<li><a href="${ after }">&gt;&nbsp;</a></li>
+						</c:if>
+					</ul>
+				</div>
+			</div>
 		<div id="contentDiv">
 			<div id="buttonDiv">
 				<input type="checkbox" id="allCheck" class="check" value="all"
 					name="allCheck"> <label for="allCheck">전체선택</label>
-				<button id="deleteBtn" class="btn red">삭제</button>
-				<button id="deliverBtn" class="btn">전달</button>
-				<button id="importantBtn" class="btn">보관</button>
-				<button id="sendBtn" class="long">메일쓰기</button>
+				<button id="deleteBtn" class="btn red" onclick="checkedMore(1,'send');">삭제</button>
+				<button id="deliverBtn" class="btn" onclick="checkedOne(1);">전달</button>
+				<button id="importantBtn" class="btn" onclick="checkedMore(0,'send');">보관</button>
+				<button id="sendBtn" class="long" onclick="location.href='mailsend.ap'">메일쓰기</button>
 
 			</div>
 			<div id="mailTable">
@@ -50,22 +125,23 @@
 					</thead>
 					<tbody align="center">
 						<c:forEach var="send" items="${ sendList }">
+						<fmt:formatDate var="sendDate" value="${ send.sendDate }" pattern="yyyy-MM-dd"/>
 						<tr>
 							<td><input type="checkbox" value="${ send.mailId }" class="check" name="checkList"></td>
-							<td>${ send.mrName }</td>
-							<td><a href="${contextPath}/mailread.ap?mNo=${send.mailId}">${ send.title }</a></td>
+							<td>${send.mrName }</td>
+							<td><a href="${contextPath}/mailread.ap?mId=${send.mailId}&eId=${loginUser.id}">${ send.title }</a></td>
 							<c:if test="${ send.attStock > 0 }">
 								<td><img src="${contextPath}/resources/images/mail/clip.png" style="width:20px; height:20px"></td>
 							</c:if>
 							<c:if test="${ send.attStock <= 0 }">
 								<td></td>
 							</c:if>
-							<td>${ send.sendDate }</td>
+							<td>${ sendDate }</td>
 							<td>${ send.readValue }</td>
-							<c:if test="${ send.rIptMark eq 'Y'  }">
+							<c:if test="${ send.iptMark eq 'I'  }">
 								<td><img src="${contextPath}/resources/images/mail/impMark.jpg" style="width:20px; height:20px"></td>
 							</c:if>
-							<c:if test="${ send.rIptMark ne 'N' }">
+							<c:if test="${ send.iptMark eq 'N' }">
 								<td></td>
 							</c:if>
 						</tr>

@@ -16,7 +16,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class Employee {
+public class Employee extends Job{
    private String id;
    private String pwd;
    private String email;

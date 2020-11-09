@@ -79,10 +79,10 @@ h1, h5, #attachment-content a {
 	padding:10px;
 	border: 1px solid #e2e2e2;
 	border-radius: 1px;
-	width: 30%;
+	width: 50%;
 	height: 100px;
 	margin-bottom: 0;
-	overflow:scroll;
+	overflow-y:scroll;
 }
 
 #send {
@@ -97,7 +97,6 @@ h1, h5, #attachment-content a {
 }
 
 #contentBox {
-	border: 1px solid black;
 	width: 100%;
 	height: 400px;
 }
@@ -113,41 +112,45 @@ h1, h5, #attachment-content a {
 				href="${ goSendbox }">보낸메일함</a> <a class="menu" href="${ goImbox }">보관함</a>
 			<a class="menu" href="${ goTembox }">임시보관함</a> <a class="menu"
 				href="${ goWastebox }">휴지통</a>
+		<br><br>
 		</div>
+		<img alt="green-back-icon" src="${ contextPath }/resources/images/board/green-back-icon.png"
+		width="50px" height="50px" style="cursor:pointer" onclick="history.back()">
 		<div id="contentDiv">
+		<c:url var="addStatus" value="mStatus.ap">
+			<c:param name="eId" value="${ loginUser }"/>
+			<c:param name="mId" value="${ m.mailId }"/>
+		</c:url>
 			<span>
 				<button type="button" id="writeBack" class="mailBtn">답장</button>
 				<button type="button" id="" class="mailBtn">전달하기</button>
 				<button type="button" id="importantSave" class="mailBtn">보관하기</button>
-				<button type="button" class="mailBtn">삭제</button>
+				<button type="button" class="mailBtn" id="deleteBtn">삭제</button>
 			</span> <br>
 			<div id="mailForm">
 				<form name="mailForm" action="" method="post">
 
 					<div id="topContent" class="form-content">
 						<ul>
-							<li><h1>제목이 출력되는 곳</h1></li>
-							<li><h5>보낸사람</h5>
-								<a></a></li>
-							<li><h5>받는사람</h5>
-								<a></a></li>
-							<li><h5>참조</h5>
-								<a></a></li>
+							<li><h1>${ m.title }</h1></li>
+							<li><h5>보낸사람 : ${ m.mwName }</h5></li>
+							<li><h5>받는사람 : ${ m.mrName }</h5></li>
+							<li><h5>참조</h5></li>
 						</ul>
 						<hr style="border-bottom: gray; margin-bottom:10px;">
 						<h5>첨부파일</h5>
 						<div id="attachment-content">
-							<c:forEach var="file" items="${ fileList }">
-								<c:if test="file != null">
-									<a href="/download.ap?fNo=${ file.fNo }">${ file.originalName }</a><button>다운로드</button>
-								</c:if>
-							</c:forEach>
-							<a href="/download.ap?fNo=${ file.fNo }">${ file.originalName }파일이름</a><button>다운로드</button>
+							<c:if test="${ !empty fileList }">
+								<c:forEach var="file" items="${ fileList }">
+										<a href="/download.ap?fNo=${ file.atId }">${ file.originalFile }</a><button>다운로드</button>
+										<br>
+								</c:forEach>
+							</c:if>
 						</div>
 						<br>
 					</div>
 					<div id="contentBox" class="form-content">
-						<p></p>
+						${ m.content }
 					</div>
 					<br>
 				</form>
