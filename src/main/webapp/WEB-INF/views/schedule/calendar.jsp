@@ -705,32 +705,10 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 		</script>
 	</c:if>
 	<!-- jquery 충돌 때문에 include 못함 -->
+	
 	<nav id="side">
-		
-		<div id="profile">
-			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님</span>
-
-			<span ><a id="info" class="profile" href="#">개인정보</a></span>
-			<a href="main.ap">
-			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">
-			</a>
-		</div>
-		<div class="sidenav">
-			<c:url var="goSchd" value="calendar.ap">
-				<c:param name="scd_sq" value="1"/>
-			</c:url>
-			<c:url var="goItem" value="itemList.ap"/>
-			<c:url var="goMail" value="mail.ap"/>
-			<c:url var="goTask" value="diagnosisList.ap"/>
-			<a href="${ goSchd }">일정관리</a>
-			<a href="${ goTask }">업무관리</a>
-			<a href="${ goItem }">물품관리</a>
-			<a href="#">게시판</a>
-			<a href="#">메신저</a> 
-			<a href="${ goMail }">메일</a>
-		</div>
+		<jsp:include page="../common/menubar.jsp"/>
 	</nav>
-
 	<section>
 		<div id="subMenu">
 			<c:url var="cal1" value="calendar.ap">

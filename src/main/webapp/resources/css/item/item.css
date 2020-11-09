@@ -1,0 +1,128 @@
+@charset "UTF-8";
+@font-face { 
+	font-family: 'S-CoreDream-3Light'; 
+	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff'); 
+	font-weight: normal; 
+	font-style: normal; 
+}
+	
+	
+	menu{
+		padding-left: 20px; 
+	}
+	
+	#searchArea{
+		float: left;
+		padding-left: 20px; 
+	}
+	
+	#func{
+		float: right;
+		margin-right: 85px;
+		margin-top: 60px;
+		display: flex;
+    	align-items: center;
+	}
+	
+	/* 버튼 속성 */
+	.btn{
+	width:60px;
+	height:30px;
+	font-size:12px;
+	margin-left:9px;
+	border:1px solid #113f36;
+	border-radius:5px;
+	background: white;
+	color:#113f36;
+	cursor:pointer;
+	}
+	
+	.btn:hover{
+	background:#113f36;
+	color:#ffffff;
+	cursor:pointer;
+	}
+	
+	/*라지사이즈 btn*/
+	.btn_L{
+	width:150px;
+	height:50px;
+	font-weight:bold;
+	font-size:15px;
+	margin-left:15px;
+	border:1px solid #113f36;
+	border-radius:5px;
+	background: white;
+	color:#113f36;
+	cursor:pointer;
+	
+	}
+	
+	.btn_L:hover{
+	background:#113f36;
+	color:#ffffff;
+	cursor:pointer;
+	}
+	
+	#deleteBtn{
+		color:red;
+		border-color:red;
+		cursor:pointer;
+	}
+	
+	#deleteBtn:hover{
+		background:red;
+		color:white;
+		cursor:pointer;
+	}
+	
+	#excelBtn{
+		font-weight:lighter;
+		color:white;
+		background:#107C41;
+		cursor:pointer;
+	}
+	
+	#excelBtn:hover{
+		background:#113f36;
+		color:#ffffff;
+		cursor:pointer;
+	}
+	
+	
+	/* select 속성 */
+	select{
+		margin-left: 10px;
+	}
+	
+	/* 테이블 속성 */
+	#list{
+		padding-left: 20px;
+		text-align: left;
+		line-height : 1.5;
+		vertical-align: top;
+		border-collapse: collapse;
+	}
+	
+	thead th{
+		font-weight: bold;
+		border-bottom: 4px solid #ACBDB3;
+		padding: 10px;
+	}	
+	
+	tbody th{
+		border-bottom: 1px solid #ACBDB3;
+		backgroud: #E2E6DD;
+	}
+	
+	#list > tbody tr:hover{
+		background-color: rgba(172,189,179,0.4);
+		cursor : pointer;
+	}
+	
+	td{
+		border-bottom: 1px solid #ACBDB3;
+		padding: 10px;
+	}	
+	
+	
