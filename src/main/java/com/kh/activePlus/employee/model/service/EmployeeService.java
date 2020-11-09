@@ -3,6 +3,7 @@ package com.kh.activePlus.employee.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.kh.activePlus.common.attachment.Attachment;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.vo.Employee;
@@ -37,6 +38,8 @@ public interface EmployeeService {
 	public ArrayList<Employee> selectEmpList();
 
 	public int halfEnd(String now, String empId);
+
+	public Attachment selectImg(String empId);
 
 
 }

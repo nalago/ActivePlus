@@ -84,7 +84,7 @@ public class ApprovalController {
 		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5, 10);
 		
 		System.out.println(pi);
-		ArrayList<Doc> dList = aService.selectAllDocTypeList(eId, pi);
+		List<Doc> dList = aService.selectAllDocTypeList(eId, pi);
 		
 		if(dList != null) {
 			mv.addObject("dList",dList);

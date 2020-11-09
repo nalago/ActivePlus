@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.kh.activePlus.common.attachment.Attachment;
 import com.kh.activePlus.employee.model.service.EmployeeService;
 import com.kh.activePlus.employee.model.vo.Employee;
 import com.kh.activePlus.employee.model.vo.TNA;
@@ -47,8 +48,9 @@ public class HomeController {
 		String tnaDay = null;
 		// 출-퇴근 확인
 		ArrayList<TNA> tList = eService.selectTNA(empId);
-
-		if (tList != null) {
+		Attachment at = eService.selectImg(empId);
+		String photo = "resources\\uploadFiles\\employee\\"+at.getRenameFile();
+		if (tList != null && !tList.isEmpty()) {
 			tnaDay = sdf.format(tList.get(0).getStartDate());
 			// System.out.println("확인 : " + tnaDay.equals(today));
 			// System.out.println("퇴근 시간 : "+tList.get(0).getLeaveDate());
@@ -68,7 +70,8 @@ public class HomeController {
 
 		HashMap<String, ArrayList> mainList = new HashMap<>();
 		mainList = eService.selectMainList(empId);
-
+		
+		model.addAttribute("img",photo);
 		model.addAttribute("mList", mainList.get("mList"));
 		model.addAttribute("nList", mainList.get("nList"));
 		model.addAttribute("hbList", mainList.get("hbList"));

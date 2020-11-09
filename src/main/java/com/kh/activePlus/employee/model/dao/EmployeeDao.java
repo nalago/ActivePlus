@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.activePlus.common.attachment.Attachment;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.vo.Employee;
@@ -76,6 +77,10 @@ public class EmployeeDao {
 		System.out.println(empId);
 		return sqlSession.selectOne("employeeMapper.getHalfCount",hmap);
 		
+	}
+
+	public Attachment selectImg(String empId) {
+		return sqlSession.selectOne("employeeMapper.selectImg",empId);
 	}
 
 }
