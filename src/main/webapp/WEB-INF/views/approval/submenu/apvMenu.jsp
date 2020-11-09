@@ -7,7 +7,7 @@
 <style>
 /* 문서 결재선 메뉴바 */
     #apvmenuwrap {
-        width: 250px;
+        width: 235px;
         height: 93.5vh;
         float: right;
         border: 1px solid black;

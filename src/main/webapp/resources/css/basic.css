@@ -79,9 +79,11 @@
 
 section{
 	/* border: solid 1px blue; */
-	margin-left:150px;
-	width : 90%;
-	height : 100vh;
+	width : 78%;
+	height : 100%;
+	display: inline-block;
+	float: right;
+	margin-left:280px;
 }
 
 #subMenu{

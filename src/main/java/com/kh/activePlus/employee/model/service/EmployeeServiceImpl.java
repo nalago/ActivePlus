@@ -2,6 +2,7 @@ package com.kh.activePlus.employee.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,10 +11,12 @@ import org.springframework.stereotype.Service;
 import com.kh.activePlus.board.model.dao.BoardDao;
 import com.kh.activePlus.board.model.vo.HosBoard;
 import com.kh.activePlus.board.model.vo.Notice;
+import com.kh.activePlus.common.attachment.Attachment;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.dao.EmployeeDao;
 import com.kh.activePlus.employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.MedicalTeam;
 import com.kh.activePlus.employee.model.vo.TNA;
 import com.kh.activePlus.mail.model.dao.MailDao;
 import com.kh.activePlus.mail.model.vo.Email;
@@ -47,9 +50,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
-	public int updateEmployee(Employee m) {
-		return 0;
-	}
+	   public int updateEmployee(Employee e) {
+	      return eDao.updateEmployee(e);
+	   }
 
 	@Override
 	public int selectListCount() {
@@ -122,6 +125,64 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public int halfEnd(String now, String empId) {
 		return eDao.halfCount(now, empId);
 	}
+
+	@Override
+	public int updatePass(Employee e) {
+		return eDao.updatePass(e);
+
+	}
+
+	@Override
+	public Employee selectmyEmployee(Employee e) {
+		return eDao.selectmyEmployee(e);
+	}
+
+	@Override
+	public int insertEmployeeAttachment(Attachment at) {
+		return eDao.insertEmployeeAttachment(at);
+	}
+
+	@Override
+	public int insertMedicalTeam(MedicalTeam mt) {
+		return eDao.insertMedicalTeam(mt);
+	}
+
+	@Override
+	public String getPw(Map<String, Object> paramMap) {
+		return eDao.getPw(paramMap);
+	}
+	
+	@Override
+	public String getUserPwd(String id) {
+		return eDao.getUserPwd(id);
+	}
+
+	@Override
+	public int updateMedicalTeam(MedicalTeam mt) {
+		return eDao.updateMedicalTeam(mt);
+	}
+
+	@Override
+	public int updateEmployeeAttachment(Attachment at) {
+		return eDao.updateAttachment(at);
+	}
+
+	@Override
+	public MedicalTeam selectMediTeam(String eid) {
+		return eDao.selectMediTeam(eid);
+	}
+
+	@Override
+	public ArrayList<Attachment> selectAttachment(String id) {
+		return eDao.selectAttachment(id);
+	}
+	
+	@Override
+	public int deleteEmployee(String id) {
+		return eDao.deleteEmployee(id);
+	}
+
+	
 	
 }
 

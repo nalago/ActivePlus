@@ -15,10 +15,13 @@
 <title>Insert title here</title>
 <style>
 #docListwrap{
-        width: 1165px;
+       display: inline-block;
+        width: 65%;
         height: 70%;
-        float: right;
-        display: inline-block;
+        margin-left: 50px;
+        margin-top:100px;
+        position: absolute;
+        border: 1px solid black;
         
     }
 

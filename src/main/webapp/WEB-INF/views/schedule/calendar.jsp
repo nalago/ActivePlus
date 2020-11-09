@@ -706,9 +706,8 @@ integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="ano
 	</c:if>
 	<!-- jquery 충돌 때문에 include 못함 -->
 	
-	<nav id="side">
 		<jsp:include page="../common/menubar.jsp"/>
-	</nav>
+
 	<section>
 		<div id="subMenu">
 			<c:url var="cal1" value="calendar.ap">

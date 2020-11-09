@@ -31,7 +31,7 @@ public class Employee extends Job{
    private String status;
    private String license;
    private String license_no;
-   private Date license_date;
+   private String license_date;
    private String originalFileName;
    private String renameFileName;
    /*private int m_no;*/

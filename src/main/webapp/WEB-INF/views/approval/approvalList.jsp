@@ -351,6 +351,9 @@
         </form>
  
     <script>
+    function closeconfirm(){
+        $("#confirmwrap").css("display", "none");
+    }
    		var confirmStatus = false;
         /* modal창 닫기 */
         $(function(){
@@ -424,6 +427,11 @@
                 });
            	}
            	if(message.includes("반려")){
+           		console.log($("#apvComment").text() == "");
+           		if($("#apvComment").text() == ""){
+           			alert("반려 사유를 적어주십시오.");
+           			closeconfirm();
+           		}
            		apvResult = 2;
            		$("#confirmOk").on("click", function () {
            			$("#apvForm").attr("action","approval.ap?apvResult="+apvResult+"&&apvDocNo="+apvDocNo);

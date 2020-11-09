@@ -2,15 +2,18 @@ package com.kh.activePlus.employee.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.activePlus.common.attachment.Attachment;
 import com.kh.activePlus.common.paging.PageInfo;
 import com.kh.activePlus.common.search.Search;
 import com.kh.activePlus.employee.model.vo.Employee;
+import com.kh.activePlus.employee.model.vo.MedicalTeam;
 import com.kh.activePlus.employee.model.vo.TNA;
 
 @Repository("eDao")
@@ -77,5 +80,52 @@ public class EmployeeDao {
 		return sqlSession.selectOne("employeeMapper.getHalfCount",hmap);
 		
 	}
+	
+	public int updatePass(Employee e) {
+		return sqlSession.update("employeeMapper.updatePass", e);
 
+	}
+
+	public Employee selectmyEmployee(Employee e) {
+		return sqlSession.selectOne("employeeMapper.selectmyInfo", e);
+	}
+
+	public int insertEmployeeAttachment(Attachment at) {
+		return sqlSession.insert("employeeMapper.insertempAttachment", at);
+	}
+
+	public int insertMedicalTeam(MedicalTeam mt) {
+		return sqlSession.insert("employeeMapper.insertMediTeam", mt);
+	}
+
+	public String getPw(Map<String, Object> paramMap) {
+		return sqlSession.selectOne("employeeMapper.getPWd", paramMap);
+	}
+	
+	public String getUserPwd(String id) {
+		return (String)sqlSession.selectOne("employeeMapper.getUserPwd",id);
+	}
+
+	public int updateMedicalTeam(MedicalTeam mt) {
+		return sqlSession.update("employeeMapper.updateMediTeam", mt);
+	}
+
+	public int updateAttachment(Attachment at) {
+		return sqlSession.update("employeeMapper.updateAttachment", at);
+	}
+
+	public MedicalTeam selectMediTeam(String eid) {
+		return sqlSession.selectOne("employeeMapper.selectMediTeam", eid);
+	}
+	
+	public ArrayList<Attachment> selectAttachment(String eid) {
+		return (ArrayList)sqlSession.selectList("employeeMapper.selectAttachment", eid);
+	}
+	public int deleteEmployee(String id) {
+		return sqlSession.update("employeeMapper.deleteEmployee", id);
+	}
+	public int updateEmployee(Employee e) {
+	      return sqlSession.update("employeeMapper.updateEmployee", e);
+	   }
+	
 }
