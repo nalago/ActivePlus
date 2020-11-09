@@ -19,16 +19,11 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="license" column="LICENSE"/>
 		<result property="license_no" column="LICENSE_NO"/>
 		<result property="license_date" column="LICENSE_DATE"/>
-
 		<!-- 직급 -->
 		<result property="department" column="DEPARTMENT"/>
 		<result property="jobGrade" column="JOB_GRADE"/>
 		<result property="field" column="FIELD"/>
 		<result property="grade" column="GRADE"/>
-
-		<result property="originalFileName" column="ORIGINAL_FILENAME"/>
-		<result property="renameFileName" column="RENAME_FILENAME"/>
-
 	</resultMap>
 	
 	<resultMap type="TNA" id="TNAResultSet">
@@ -39,43 +34,12 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		<result property="empId" column="EMP_ID"/>
 	</resultMap>
 	
-	<resultMap id="AttachmentResultSet" type="Attachment">
-		<id property="atId" column="FID"/>
-		<result property="originalFile" column="A_ORIGINNAME"/>
-		<result property="renameFile" column="A_RENAME"/>
-		<result property="filePath" column="FILE_PATH"/>
-		<result property="status" column="STATUS"/>
-		<result property="refTable" column="REF_TABLE"/>
-		<result property="refId" column="REF_ID"/>
-	</resultMap>
-	
-	<resultMap id="MedicalTeamResultSet" type="MedicalTeam">
-		<id property="emp_id" column="EMP_ID"/>
-		<result property="field" column="FIELD"/>
-		<result property="grade" column="GRADE"/>
-	</resultMap>
-	
 	
 
 	<select id="selectOne" parameterType="Employee" resultMap="employeeResultSet">
 		SELECT *
 		FROM EMPLOYEE
 		WHERE EMP_ID=#{id}
-	</select>
-	
-	<select id="selectAttachment" resultMap="AttachmentResultSet">
-		<!-- SELECT E.EMP_ID=#{emp_id}, A_RENAME
-		FROM EMPLOYEE E
-		JOIN ATTACHMENT A ON E.EMP_ID = A.
-		WHERE A.REF_TABLE = 'Employee' -->
-		<!-- SELECT  E.EMP_ID, A.A_RENAME, a.ref_id
-		FROM ATTACHMENT A
-        JOIN EMPLOYEE E ON A.REF_ID = E.EMP_ID
-		WHERE A.REF_TABLE = 'Employee' -->
-		SELECT *
-		FROM ATTACHMENT
-		WHERE REF_ID = #{eid}
-		AND REF_TABLE = 'Employee'
 	</select>
 	
 	<select id="selectListCount" resultType="_int">
@@ -89,17 +53,12 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		ORDER BY EMP_ID DESC
 	</select>
 	
-	<insert id="insertemployee" parameterType="Employee">
+	<insert id="insertEmployee" parameterType="Employee">
 		INSERT INTO EMPLOYEE VALUES(
-		''||SEQ_EMP_NO.NEXTVAL, #{pwd}<!-- '||SEQ_EMP_NO.CURRVAL -->, #{email}, #{phone},
+		#{id}, #{pwd}, #{email}, #{phone},
 		#{name}, #{birth}, #{category}, #{salary}, #{acc_no},
 		#{address}, #{hire_date}, #{status}, #{license}, #{license_no}, #{license_date},
 		#{originalFileName}, #{renameFileName})
-	</insert>
-	
-	<insert id="insertMediTeam" parameterType="MedicalTeam">
-		INSERT INTO MEDICALTEAM VALUES(
-		#{emp_id}||SEQ_EMP_NO.CURRVAL, #{field}, #{grade})
 	</insert>
 	
 	<select id="selectOne1" resultMap="employeeResultSet">
@@ -108,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		WHERE EMP_ID=#{id}
 	</select>
 	
-	<select id="searchList" parameterType="Search" resultMap="employeeResultSet">
+<select id="searchList" parameterType="Search" resultMap="employeeResultSet">
 		<bind name="sv" value="'%' + _parameter.getSearchValue() + '%'"/>
 		SELECT *
 		FROM EMPLOYEE
@@ -163,7 +122,6 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		
 		WHERE TID = #{tid}
 	</update>
-
 	<select id="selectEmpList" resultMap="employeeResultSet">
 		SELECT *
 		FROM EMP_TEAM 
@@ -177,40 +135,6 @@ PUBLIC "-//mybatis.org//DTD Mapepr 3.0//EN"
 		AND EMP_ID=#{empId}
 		AND REASON='반차'
 	</select>
-
-	<update id="updateEmployee" parameterType="Employee">
-		UPDATE EMPLOYEE
-		SET EMP_ID=#{id}, PWD=#{pwd}, EMAIL=#{email}, BIRTH=#{birth},
-			CATEGORY=#{category}, SALARY=#{salary}, ACC_NO=#{acc_no},
-			ADDRESS=#{address}, HIRE_DATE=#{hire_date}, STATUS=#{status},
-			LICENSE=#{license}, LICENSE_NO=#{license_no}, LICENSE_DATE=#{license_date},
-			ORIGINAL_FILENAME=#{originalFileName}, RENAME_FILENAME=#{renameFileName}
-		WHERE EMP_ID=#{id}
-	</update>
-	
-	<update id="deleteEmployee" parameterType="String">
-		UPDATE EMPLOYEE
-		SET STATUS='퇴직'
-		WHERE EMP_ID=#{id}
-	</update>
-	
-	<update id="updatePass" parameterType="Employee">
-		UPDATE EMPLOYEE
-		SET PWD=#{pwd}
-	</update>
-
-	<select id="selectmyInfo" parameterType="Employee" resultMap="employeeResultSet">
-		SELECT *
-		FROM EMPLOYEE
-		WHERE EMP_ID=#{id}
-	</select>
-	
-	<insert id="insertempAttachment" parameterType="Attachment">
-		INSERT INTO ATTACHMENT
-		VALUES(SEQ_ATT.NEXTVAL, #{originalFile},#{renameFile},#{filePath}, #{refTable} , ''||SEQ_EMP_NO.CURRVAL, DEFAULT)
-	</insert>
-
-
 
 
 

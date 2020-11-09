@@ -109,8 +109,18 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	// 퇴근
 	@Override
-	public int endWorking(int tid) {
-		return eDao.endWorking(tid);
+	public int endWorking(int tid, String kind) {
+		return eDao.endWorking(tid, kind);
+	}
+
+	@Override
+	public ArrayList<Employee> selectEmpList() {
+		return eDao.selectEmpList();
+	}
+
+	@Override
+	public int halfEnd(String now, String empId) {
+		return eDao.halfCount(now, empId);
 	}
 	
 }

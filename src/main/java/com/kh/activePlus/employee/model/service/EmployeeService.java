@@ -32,7 +32,11 @@ public interface EmployeeService {
 
 	public HashMap<String, ArrayList> selectMainList(String empId);
 
-	public int endWorking(int tid);
+	public int endWorking(int tid, String kind);
+
+	public ArrayList<Employee> selectEmpList();
+
+	public int halfEnd(String now, String empId);
 
 
 }
