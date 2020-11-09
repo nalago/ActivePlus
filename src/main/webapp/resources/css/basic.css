@@ -18,13 +18,22 @@
 	margin:0;
 	padding:0;
 }
+body{
+	font-size:16px;
+	
+}
+#side{
+	width:200px;
+	margin:0px;
+	
+}
 
 /* ========== menubar =========== */
 #user{
     padding-left: 10px;
     width: 120px;
     font-size: 13px;
-    color : black;
+    color : white;
     
 }
 
@@ -38,23 +47,30 @@
 #info{
     margin-left: 15px;
     text-decoration: none;
-    color : black;
+    color : #54546c;
     font-size: 11px;
+}
+#info:hover{
+    color : #404146;
 }
 
 #profile{
-	width: 100%;
+	width: 200px;
 	/* border: 1px solid black; */
-    height: 55px;
+    height: 150px;
+    background:#8283a7;
+    float:left;
+    box-shadow:5px 2px 5px lightgray;
+    padding-top: 120px;
+    padding-left: 30px;
 }
 #profile span{
-	/* border: 1px solid green; */
 	margin: 0;
 }
 .sidenav {
 	overflow-x: hidden;
-	background-color: #63ab68;
-	width: 150px;
+	background-color: #404146;
+	width: 200px;
 	height: 130vh;
 	display: inline-block;
 	padding-right:20px;
@@ -69,23 +85,26 @@
 	text-decoration: none;
 	display: block;
 	margin-top: 50px;
+	
 }
 
 .sidenav a:hover {
-	color: #f1f1f1;
+	transition:all 0.5s;
+	border-bottom:2px solid #54546c;
 }
 
 /* === content ===*/
 
 section{
 	/* border: solid 1px blue; */
-	margin-left:150px;
+	margin-left:200px;
 	width : 90%;
 	height : 100vh;
+	margin-top:-97px;
 }
 
 #subMenu{
-	border-bottom: 2px solid #63ab68;
+	border-bottom: 2px solid #8283a7;
 }
 	
 #submenuTitle{
@@ -108,7 +127,59 @@ section{
 .menu{
 	text-decoration: none;
 	margin-left: 50px;
-	color : #232425;
+	color : #a5d296;
 	
 }
+
+/* 영관 */
+.navi{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+.navi>li{
+    display:inline-block;
+    width:170px;
+    height: 100%;
+    margin: 0;
+    text-align: center;
+}
+
+.navi li a { 
+    display: inline-block; 
+    box-sizing: border-box;
+    line-height: 30px;
+    text-decoration: none; 
+    font-weight:900; 
+    font-size:18px;
+    padding: 5px 25px;
+    width:170px;
+    
+}
+.navi li>ul {
+    list-style-type: none;
+    width: 170px;
+    padding: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+.navi li:hover ul{
+    opacity: 1;
+    visibility: visible;
+}
+.navi li ul { 
+    position: relative;
+    transition: all 0.5s; 
+    z-index: 99;
+}
+.navi li ul li {
+    transition: all 0.5s; 
+    height : 0;
+    width:170px;
+}
+.navi li:hover ul li {
+    height : 30px;
+ } 
 

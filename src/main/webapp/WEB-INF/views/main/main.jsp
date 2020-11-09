@@ -21,10 +21,11 @@
 }
 
 #userInfo {
-	margin-left:10%;
+	margin-left:5%;
 	width: 300px;
-	height: 370px;
+	height: 500px;
 	border: 3px solid white;
+	box-shadow: 2px 0px 5px gray;
 	background:#fafafa;
 	margin-top:100px;
 	float: left;
@@ -33,6 +34,9 @@
 #mainT {
 	margin: 30px;
 	margin-left:40%;
+	margin-right:10px;
+	float:left;
+	margin-top:-550px;
 }
 h3{
 	margin-top:70px;
@@ -73,7 +77,7 @@ thead {
 #TNA{
 	width:300px;
 	height:50px;
-	margin-left:10%;
+	float:left;
 }
 #work{
 	width:250px;
@@ -132,8 +136,7 @@ table a:hover{
 
 				<div class="user">${ loginUser.id } ${ loginUser.category }, ${ loginUser.name }</div>
 			</div>
-		</div>
-		<div id="TNA"> 
+			<div id="TNA"> 
 			<c:if test="${ empty TNA }">
 				<button type="button" class="TNABtn" id="work">출근</button>
 			</c:if>
@@ -175,6 +178,8 @@ table a:hover{
 				</table>
 			</c:if>
 		</div>
+		</div>
+		
 		<div id="mainT">
 			<h3>메일</h3>
 			<a href="${ goMail }" style="float:right; text-decoration:none; color:#63ab68">더보기</a>

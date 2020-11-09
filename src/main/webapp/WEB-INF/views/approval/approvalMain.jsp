@@ -5,8 +5,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="${contextPath }/resources/approval/css/base.css"/>
-<link rel="stylesheet" href="${contextPath }/resources/approval/css/submenu.css"/>
 <title>Insert title here</title>
 <style>
     .Wrap{
@@ -33,9 +31,33 @@
 <body>
     <jsp:include page="../common/menubar.jsp"/>
     <section>
-            <jsp:include page="submenu/topMenu.jsp"/>
-            
-        <br><br><br><br>
+            <div id="submenu">
+        	 <ul class="navi">
+                <li>
+                <c:url var="goDrafting" value="draftingList.ap"/>
+                <c:url var="goPrivate" value="privateList.ap"/>
+                <c:url var="goTemporary" value="temporaryList.ap"/>
+                    <a class="menu" href="${goDrafting }">기안</a>
+                    <ul>
+                        <li><a class="menu" href="${goDrafting }">문서 양식</a></li>
+                        <li><a class="menu" href="${goTemporary }">임시 문서</a></li>
+                        <li><a class="menu" href="${goPrivate }">개인 양식</a></li>
+                    </ul>
+                </li>
+                <li>
+                <c:url var="goApprovalObtain" value="approvalObtainList.ap"/>
+                <c:url var="goApproval" value="approvalList.ap"/>
+                <c:url var="goApprovalComplete" value="approvalCompleteList.ap"/>
+                    <a class="menu" href="${goApprovalObtain }">결재</a>
+                    <ul>
+                        <li><a class="menu" href="${goApprovalObtain }">결재 받을 문서</a></li>
+                        <li><a class="menu" href="${goApproval }">결재 예정 문서</a></li>
+                        <li><a class="menu" href="${goApprovalComplete }">결재 완료 양식</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- <br><br><br><br> -->
         
         <div class="temporaryList Wrap">
             <h4 class="title">임시 저장 문서</h4>

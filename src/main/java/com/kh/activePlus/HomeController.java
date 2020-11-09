@@ -49,7 +49,10 @@ public class HomeController {
 		// 출-퇴근 확인
 		ArrayList<TNA> tList = eService.selectTNA(empId);
 		Attachment at = eService.selectImg(empId);
-		String photo = "resources\\uploadFiles\\employee\\"+at.getRenameFile();
+		if(at != null) {
+			String photo = "resources\\uploadFiles\\employee\\"+at.getRenameFile();
+			model.addAttribute("img",photo);
+		}
 		if (tList != null && !tList.isEmpty()) {
 			tnaDay = sdf.format(tList.get(0).getStartDate());
 			// System.out.println("확인 : " + tnaDay.equals(today));
@@ -71,7 +74,6 @@ public class HomeController {
 		HashMap<String, ArrayList> mainList = new HashMap<>();
 		mainList = eService.selectMainList(empId);
 		
-		model.addAttribute("img",photo);
 		model.addAttribute("mList", mainList.get("mList"));
 		model.addAttribute("nList", mainList.get("nList"));
 		model.addAttribute("hbList", mainList.get("hbList"));

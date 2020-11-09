@@ -16,12 +16,14 @@ scope="application"/>
 		<c:url var="myinfo" value="myInfo.ap" scope="application"/>
 	
 		<div id="profile">
-			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님</span>
-			<span ><a id="info" class="profile" href="${ myinfo }">개인정보</a></span>
-			<a href="main.ap">
-			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:right;">
-			</a>
+			<span id="user" class="profile">${ loginUser.category }, ${ loginUser.name }님
+			<a id="info" class="profile" href="${ myinfo }">개인정보</a></span>
 		</div>
+		<br clear="all">
+		<a href="main.ap">
+			<img id="logo" src="${ contextPath }/resources/images/ActivePlus_Logo.png" style="float:left;">
+		</a>
+		<br clear="all">
 		<div class="sidenav">
 			<c:url var="goSchd" value="calendar.ap">
 				<c:param name="scd_sq" value="1"/>
